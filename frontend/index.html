@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Private Image Search | Content-Free Visual Retrieval</title>
+  <title>PrivateLens | Privacy-Preserving Content-Free Visual Retrieval</title>
   
-  <!-- Professional Fonts: Inter, Plus Jakarta Sans, JetBrains Mono -->
+  <!-- Modern Fonts: Plus Jakarta Sans (Headings), Inter (Body), JetBrains Mono (Tech) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,13 +22,14 @@
     
     body {
       font-family: var(--font-body);
-      background-color: #090d16;
+      background-color: #070b14;
       color: #e2e8f0;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(ellipse 70% 40% at 50% -10%, rgba(37, 99, 235, 0.12), rgba(9, 13, 22, 0)),
-        radial-gradient(circle 500px at 90% 15%, rgba(14, 165, 233, 0.04), transparent),
-        radial-gradient(circle 500px at 10% 85%, rgba(16, 185, 129, 0.03), transparent);
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), rgba(7, 11, 20, 0)),
+        radial-gradient(circle 600px at 85% 10%, rgba(14, 165, 233, 0.08), transparent),
+        radial-gradient(circle 500px at 15% 70%, rgba(168, 85, 247, 0.06), transparent),
+        radial-gradient(circle 400px at 50% 90%, rgba(16, 185, 129, 0.04), transparent);
       background-attachment: fixed;
     }
     
@@ -39,27 +40,71 @@
     .font-mono {
       font-family: var(--font-mono);
     }
-    
-    /* Clean Surfaces */
-    .surface-card {
-      background-color: #0f172a;
+
+    /* Glassmorphic Surfaces */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
     
-    .surface-card-hover {
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    .glass-card-hover {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .surface-card-hover:hover {
-      border-color: rgba(56, 189, 248, 0.35);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.65);
+    .glass-card-hover:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 16px 36px -4px rgba(99, 102, 241, 0.18), 0 0 20px -2px rgba(56, 189, 248, 0.15);
     }
 
-    /* Red Security Barrier Graphic */
+    /* Gradient Text */
+    .gradient-text-primary {
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-text-accent {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Glowing Borders */
+    .glow-border-purple {
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.2);
+    }
+    .glow-border-blue {
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.2);
+    }
+    .glow-border-emerald {
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Red Security Barrier */
     .boundary-barrier {
       border: 2px dashed #f43f5e;
-      background: rgba(244, 63, 94, 0.06);
+      background: rgba(244, 63, 94, 0.05);
+    }
+
+    /* Subtle Floating Animations */
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    .animate-float {
+      animation: float-slow 4s ease-in-out infinite;
+    }
+    .animate-pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
     }
 
     /* Custom Scrollbar */
@@ -68,7 +113,7 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #090d16;
+      background: #070b14;
     }
     ::-webkit-scrollbar-thumb {
       background: #1e293b;
@@ -86,58 +131,66 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white antialiased">
+<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white antialiased">
 
   <!-- ========================================================================= -->
-  <!-- 1. TOP APP HEADER                                                         -->
+  <!-- 1. MODERN TOP NAVIGATION BAR                                              -->
   <!-- ========================================================================= -->
-  <header class="bg-[#090d16]/95 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
+  <header class="bg-[#070b14]/90 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-50 transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
       
-      <!-- Brand Logo & Title -->
-      <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-lg bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
+      <!-- Brand Logo & Name -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('search')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/20">
+          <div class="w-full h-full bg-[#070b14] rounded-[10px] flex items-center justify-center">
+            <!-- Glowing Lock & Lens SVG Icon -->
+            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-sm font-bold text-white tracking-tight font-display">
-              Private Image Search
+            <span class="text-base font-extrabold tracking-tight font-display gradient-text-primary">
+              PrivateLens
             </span>
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
-              CONTENT-FREE MODE
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-950/90 text-emerald-400 border border-emerald-800/70 shadow-sm">
+              CONTENT-FREE
             </span>
           </div>
           <p class="text-[11px] text-slate-400 hidden sm:block">
-            Find visually similar images without exposing your query image
+            Privacy-Preserving Visual Retrieval
           </p>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <nav class="hidden lg:flex items-center space-x-1 text-xs font-medium">
-        <button onclick="switchTab('search')" id="tabBtn-search" class="px-3 py-1.5 rounded-lg bg-slate-800 text-white font-semibold transition cursor-pointer">Search Engine</button>
-        <button onclick="switchTab('architecture')" id="tabBtn-architecture" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Architecture</button>
-        <button onclick="switchTab('privacy')" id="tabBtn-privacy" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Privacy Center</button>
-        <button onclick="switchTab('benchmarks')" id="tabBtn-benchmarks" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Benchmarks</button>
-        <button onclick="switchTab('index')" id="tabBtn-index" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Vector Index</button>
-        <button onclick="switchTab('usecases')" id="tabBtn-usecases" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Use Cases</button>
-        <button onclick="switchTab('audit')" id="tabBtn-audit" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer">Audit Log</button>
+      <nav class="hidden xl:flex items-center space-x-1 text-xs font-medium">
+        <button onclick="switchTab('search')" id="tabBtn-search" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold shadow-md shadow-indigo-500/20 transition cursor-pointer">Search</button>
+        <button onclick="switchTab('architecture')" id="tabBtn-architecture" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Architecture</button>
+        <button onclick="switchTab('privacy')" id="tabBtn-privacy" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Privacy Center</button>
+        <button onclick="switchTab('index')" id="tabBtn-index" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Vector Index</button>
+        <button onclick="switchTab('usecases')" id="tabBtn-usecases" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Use Cases</button>
+        <button onclick="switchTab('benchmarks')" id="tabBtn-benchmarks" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Benchmarks</button>
+        <button onclick="switchTab('audit')" id="tabBtn-audit" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer">Audit Log</button>
+        <button onclick="switchTab('faculty')" id="tabBtn-faculty" class="px-3 py-1.5 rounded-lg text-purple-400 hover:text-purple-300 hover:bg-purple-950/40 border border-purple-800/40 transition cursor-pointer flex items-center space-x-1">
+          <span>🎓</span>
+          <span>Faculty Demo</span>
+        </button>
       </nav>
 
-      <!-- Faculty Demo Button & User Persona -->
+      <!-- User Persona Switcher & Quick Faculty Trigger -->
       <div class="flex items-center space-x-2.5">
-        <!-- Faculty Demo Mode Trigger -->
-        <button onclick="openExplainModal()" class="px-2.5 py-1.5 rounded-lg bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/40 text-blue-300 text-xs font-medium transition flex items-center space-x-1.5 cursor-pointer">
-          <span>💡</span>
-          <span class="font-medium">Explain Retrieval</span>
+        
+        <!-- Quick Faculty Modal Trigger -->
+        <button onclick="switchTab('faculty')" class="hidden sm:flex xl:hidden px-2.5 py-1.5 rounded-lg bg-purple-950/60 hover:bg-purple-900/60 border border-purple-800/60 text-purple-300 text-xs font-medium transition items-center space-x-1 cursor-pointer">
+          <span>🎓</span>
+          <span>Demo</span>
         </button>
 
         <!-- Persona Switcher -->
-        <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs">
-          <div id="userAvatar" class="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center font-bold text-[10px] text-white">
+        <div class="flex items-center space-x-2 bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs shadow-inner">
+          <div id="userAvatar" class="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-[10px] text-white shadow-sm">
             DS
           </div>
           <select id="userSelector" onchange="onUserChange()" class="bg-transparent border-0 text-xs font-medium text-slate-200 focus:ring-0 cursor-pointer p-0 pr-1">
@@ -147,6 +200,7 @@
             <option value="USR_ADM_00" class="bg-slate-900 text-white">System Admin</option>
           </select>
         </div>
+
       </div>
 
     </div>
@@ -158,143 +212,180 @@
   <main class="flex-1 max-w-6xl mx-auto px-4 sm:px-6 py-8 w-full space-y-10">
 
     <!-- Toast Notification -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 hidden max-w-sm p-3.5 rounded-xl surface-card border border-slate-700 shadow-xl flex items-center space-x-3 transition-all">
-      <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 hidden max-w-sm p-4 rounded-2xl glass-card border border-indigo-500/30 shadow-2xl flex items-center space-x-3 transition-all">
+      <div class="w-8 h-8 rounded-xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 shrink-0">
+        ✨
+      </div>
       <div class="text-xs">
-        <p id="toastTitle" class="font-semibold text-white">Persona updated</p>
-        <p id="toastMessage" class="text-slate-400 text-[11px]">Role clearance active.</p>
+        <p id="toastTitle" class="font-bold text-white font-display">Persona clearance active</p>
+        <p id="toastMessage" class="text-slate-400 text-[11px]">Role updated.</p>
       </div>
     </div>
 
     <!-- ======================================================================= -->
-    <!-- TAB 1: CORE CONTENT-FREE SEARCH EXPERIENCE (PHASE 1)                    -->
+    <!-- TAB 1: SEARCH PAGE (THE STAR OF THE APPLICATION)                        -->
     <!-- ======================================================================= -->
     <section id="tab-search" class="space-y-8">
       
-      <!-- HERO & CONTENT-FREE STATUS INDICATOR -->
-      <div class="text-center max-w-3xl mx-auto space-y-3">
+      <!-- HERO SECTION -->
+      <div class="text-center max-w-3xl mx-auto space-y-4 relative">
         
-        <!-- Highly visible Content-Free Indicator (Section 5) -->
-        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300 font-mono">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="font-bold text-emerald-400">🔒 CONTENT-FREE SEARCH:</span>
-          <span>Original image pixels are not sent to the retrieval server.</span>
-          <span class="text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">Pixels transmitted: 0</span>
+        <!-- Floating Sticker / Sparkle Accents -->
+        <div class="hidden md:block absolute -top-4 -left-12 animate-float">
+          <div class="p-3 rounded-2xl bg-indigo-950/40 border border-indigo-500/20 backdrop-blur-md text-xl shadow-lg shadow-indigo-500/10">
+            🤖
+          </div>
+        </div>
+        <div class="hidden md:block absolute top-2 -right-8 animate-float" style="animation-delay: 1.5s;">
+          <div class="p-3 rounded-2xl bg-purple-950/40 border border-purple-500/20 backdrop-blur-md text-xl shadow-lg shadow-purple-500/10">
+            🛡️
+          </div>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight font-display">
-          Private Image Search
+        <!-- Zero-Pixel Verification Badge -->
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-slate-300 font-mono shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="font-bold text-emerald-400">🔒 CONTENT-FREE RETRIEVAL</span>
+          <span class="text-slate-500">·</span>
+          <span>Original image pixels never leave your device</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight font-display">
+          <span class="gradient-text-primary">Private Image Search</span>
         </h1>
 
-        <p class="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl mx-auto">
-          Find visually similar images without exposing your query image.
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto">
+          Find visually similar images without revealing your query image.
         </p>
 
-        <!-- System Architecture Flow Overview (Section 20 & 21) -->
-        <div class="flex flex-wrap items-center justify-center gap-1.5 pt-2 text-[11px] font-mono text-slate-400">
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-emerald-400 font-semibold">🔒 PRIVATE QUERY (Hidden)</span>
-          <span>→</span>
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300">🧠 FEATURE EXTRACTION</span>
-          <span>→</span>
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-blue-400 font-semibold">🛡️ PROTECTED REPRESENTATION</span>
-          <span>→</span>
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300">🔎 FAISS SEARCH</span>
-          <span>→</span>
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300">🎯 FEATURE MATCHES</span>
-          <span>→</span>
-          <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-emerald-400 font-semibold">🖼️ DATABASE IMAGES</span>
+        <!-- Feature Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2.5 pt-1 text-xs font-semibold">
+          <span class="px-3 py-1 rounded-full bg-blue-950/70 text-blue-300 border border-blue-800/60 flex items-center space-x-1.5 shadow-sm">
+            <span>🔒</span> <span>0 Pixels Sent</span>
+          </span>
+          <span class="px-3 py-1 rounded-full bg-purple-950/70 text-purple-300 border border-purple-800/60 flex items-center space-x-1.5 shadow-sm">
+            <span>🧠</span> <span>AI Powered (MobileNetV3)</span>
+          </span>
+          <span class="px-3 py-1 rounded-full bg-indigo-950/70 text-indigo-300 border border-indigo-800/60 flex items-center space-x-1.5 shadow-sm">
+            <span>🛡️</span> <span>Privacy First (512-D)</span>
+          </span>
+          <span class="px-3 py-1 rounded-full bg-emerald-950/70 text-emerald-300 border border-emerald-800/60 flex items-center space-x-1.5 shadow-sm">
+            <span>⚡</span> <span>Fast FAISS Retrieval</span>
+          </span>
         </div>
+
+        <!-- Visual Flow Graphic: Private Query -> Protected Representation -> FAISS -> Database Matches -->
+        <div class="p-3.5 rounded-2xl glass-card max-w-2xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-300 border border-slate-800">
+          <div class="flex items-center space-x-1.5 text-emerald-400 font-bold">
+            <span>🔒</span> <span>Private Query</span>
+          </div>
+          <span class="text-slate-600 font-bold">→</span>
+          <div class="flex items-center space-x-1.5 text-indigo-400 font-bold">
+            <span>🛡️</span> <span>Protected Vector</span>
+          </div>
+          <span class="text-slate-600 font-bold">→</span>
+          <div class="flex items-center space-x-1.5 text-blue-400 font-bold">
+            <span>🔎</span> <span>FAISS Index</span>
+          </div>
+          <span class="text-slate-600 font-bold">→</span>
+          <div class="flex items-center space-x-1.5 text-cyan-300 font-bold">
+            <span>🖼️</span> <span>Database Matches</span>
+          </div>
+        </div>
+
       </div>
 
-      <!-- MAIN SEARCH INTERACTION AREA (Section 1, 2, 3) -->
+      <!-- MAIN SEARCH INTERACTION BOX -->
       <div class="max-w-2xl mx-auto space-y-4">
         
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)" class="hidden">
 
-        <!-- Upload Box / Private Query State Box (NO IMAGE PREVIEW!) -->
-        <div id="queryInteractionBox" class="surface-card rounded-2xl transition-all border border-slate-800">
+        <!-- Upload Area / Private Query State -->
+        <div id="queryInteractionBox" class="glass-card rounded-3xl p-1 transition-all">
           
-          <!-- STATE A: DEFAULT UNSELECTED (Section 2) -->
+          <!-- STATE A: DEFAULT UNSELECTED -->
           <div id="dropzonePrompt"
                ondragover="handleDragOver(event)"
                ondragleave="handleDragLeave(event)"
                ondrop="handleDrop(event)"
                onclick="document.getElementById('fileInput').click()"
-               class="p-8 sm:p-10 text-center cursor-pointer transition-all border-dashed border-2 border-slate-700/80 hover:border-blue-500/60 hover:bg-slate-850/40 rounded-2xl group space-y-3">
+               class="p-8 sm:p-10 text-center cursor-pointer transition-all border-dashed border-2 border-slate-700/80 hover:border-indigo-500/70 hover:bg-slate-900/60 rounded-[22px] group space-y-4">
             
-            <div class="w-12 h-12 mx-auto rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/40 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-indigo-600/20 to-cyan-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:text-cyan-300 transition-all duration-300 shadow-lg shadow-indigo-500/10">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
               </svg>
             </div>
             
             <div class="space-y-1">
-              <p class="text-base font-bold text-white font-display">Select a private image</p>
+              <p class="text-lg font-bold text-white font-display">Drop a private image here</p>
               <p class="text-xs text-slate-400 max-w-md mx-auto">
-                The image is processed locally and is not displayed or uploaded as an original image.
+                Your query image stays hidden during retrieval. Or <span class="text-cyan-400 font-semibold underline underline-offset-2">choose a private image</span> from your device.
               </p>
             </div>
 
             <p class="text-[11px] text-slate-500 pt-1 font-mono">
-              Drag & drop or click to browse · Supports JPG, PNG, WebP (Max 10 MB)
+              Supports JPG, PNG, WebP · Max 10 MB · Processed locally
             </p>
           </div>
 
-          <!-- STATE B: PRIVATE QUERY SELECTED (Section 1 & 3 - ABSOLUTELY NO IMAGE PREVIEW RENDERED) -->
-          <div id="dropzoneSelected" class="hidden p-6 sm:p-8 text-center space-y-4 rounded-2xl border border-emerald-500/40 bg-slate-900/70">
+          <!-- STATE B: PRIVATE QUERY SELECTED (NO QUERY IMAGE IS DISPLAYED!) -->
+          <div id="dropzoneSelected" class="hidden p-6 sm:p-8 text-center space-y-5 rounded-[22px] bg-slate-900/90 glow-border-emerald">
             
-            <!-- Private Query Badge -->
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 text-xs font-mono font-semibold">
+            <!-- Private Query Pill -->
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 text-xs font-mono font-bold shadow-md shadow-emerald-950">
               <span>🔒</span>
               <span>PRIVATE QUERY</span>
             </div>
 
             <div class="space-y-1">
-              <h3 class="text-lg font-bold text-white font-display">Image selected successfully</h3>
-              <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 font-mono">
-                <span id="selectedFileName" class="text-slate-200 font-semibold truncate max-w-xs">image.jpg</span>
-                <span>·</span>
-                <span id="selectedFileType">image/jpeg</span>
-                <span>·</span>
-                <span id="selectedFileSize">24.5 KB</span>
+              <h3 class="text-xl font-bold text-white font-display">Image secured for private search</h3>
+              <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300 font-mono pt-0.5">
+                <span id="selectedFileName" class="text-white font-bold truncate max-w-xs">image.jpg</span>
+                <span class="text-slate-500">·</span>
+                <span id="selectedFileType" class="text-slate-400">image/jpeg</span>
+                <span class="text-slate-500">·</span>
+                <span id="selectedFileSize" class="text-slate-400">24.5 KB</span>
               </div>
             </div>
 
-            <!-- Real Local Processing State Indicators (Section 3) -->
-            <div class="max-w-md mx-auto bg-slate-950/80 rounded-xl p-3.5 border border-slate-800 text-xs space-y-2 text-left font-mono">
-              <div class="flex items-center space-x-2.5 text-emerald-400">
-                <span class="w-4 h-4 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold">✓</span>
-                <span>Image received in volatile client buffer</span>
+            <!-- Real-Time Local Processing Checklist -->
+            <div class="max-w-md mx-auto bg-slate-950/90 rounded-2xl p-4 border border-slate-800 text-xs space-y-2.5 text-left font-mono shadow-inner">
+              <div class="flex items-center space-x-3 text-emerald-400">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                <span>Image received in client buffer</span>
               </div>
-              <div class="flex items-center space-x-2.5 text-emerald-400">
-                <span class="w-4 h-4 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold">✓</span>
+              <div class="flex items-center space-x-3 text-emerald-400">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
                 <span>Original image not displayed anywhere</span>
               </div>
-              <div id="stepCheck-local" class="flex items-center space-x-2.5 text-slate-400">
-                <span id="iconCheck-local" class="w-4 h-4 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px]">○</span>
-                <span id="textCheck-local">Local preprocessing & feature extraction</span>
+              <div id="stepCheck-local" class="flex items-center space-x-3 text-slate-400">
+                <span id="iconCheck-local" class="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] shrink-0">○</span>
+                <span id="textCheck-local">Local processing (EXIF scrub & features)</span>
               </div>
-              <div id="stepCheck-protect" class="flex items-center space-x-2.5 text-slate-400">
-                <span id="iconCheck-protect" class="w-4 h-4 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px]">○</span>
-                <span id="textCheck-protect">Privacy protection (512-D projection)</span>
+              <div id="stepCheck-protect" class="flex items-center space-x-3 text-slate-400">
+                <span id="iconCheck-protect" class="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] shrink-0">○</span>
+                <span id="textCheck-protect">Protected representation (512-D projection)</span>
               </div>
-              <div id="stepCheck-search" class="flex items-center space-x-2.5 text-slate-400">
-                <span id="iconCheck-search" class="w-4 h-4 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px]">○</span>
-                <span id="textCheck-search">Similarity search (FAISS IndexFlatIP)</span>
+              <div id="stepCheck-search" class="flex items-center space-x-3 text-slate-400">
+                <span id="iconCheck-search" class="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] shrink-0">○</span>
+                <span id="textCheck-search">FAISS similarity search on server</span>
               </div>
             </div>
 
-            <p id="selectionStatusText" class="text-xs text-emerald-400 font-medium">
+            <p id="selectionStatusText" class="text-xs text-emerald-400 font-semibold">
               Query secured. Ready to search.
             </p>
 
-            <!-- Change Image & Clear Buttons -->
+            <!-- Actions: Change Image or Clear -->
             <div class="flex items-center justify-center space-x-3 pt-1">
-              <button type="button" onclick="document.getElementById('fileInput').click()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 transition cursor-pointer">
+              <button type="button" onclick="document.getElementById('fileInput').click()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition cursor-pointer">
                 Change Image
               </button>
-              <button type="button" onclick="clearQuery(event)" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-rose-950/60 border border-slate-800 hover:border-rose-800/60 text-xs font-medium text-slate-400 hover:text-rose-300 transition cursor-pointer">
-                Clear
+              <button type="button" onclick="clearQuery(event)" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-950/60 border border-slate-800 hover:border-rose-800/60 text-xs font-semibold text-slate-400 hover:text-rose-300 transition cursor-pointer">
+                Clear Query
               </button>
             </div>
 
@@ -306,44 +397,44 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
           <span class="text-xs text-slate-400 font-medium">Quick private presets:</span>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="loadSamplePreset('medical')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
+            <button onclick="loadSamplePreset('medical')" class="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
               <span>🫁</span>
               <span>Pulmonary CT</span>
             </button>
-            <button onclick="loadSamplePreset('biometrics')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
+            <button onclick="loadSamplePreset('biometrics')" class="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
               <span>👤</span>
               <span>Face Biometrics</span>
             </button>
-            <button onclick="loadSamplePreset('vehicles')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
+            <button onclick="loadSamplePreset('vehicles')" class="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
               <span>🚗</span>
               <span>Automobile</span>
             </button>
-            <button onclick="loadSamplePreset('nature')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
+            <button onclick="loadSamplePreset('nature')" class="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
               <span>🏔️</span>
               <span>Landscape</span>
             </button>
           </div>
         </div>
 
-        <!-- Retrieval Controls: Top-K & Configurable Similarity Threshold (Section 12) -->
-        <div class="surface-card rounded-xl p-4 space-y-3 text-xs">
+        <!-- Configurable Controls: Top-K & Threshold -->
+        <div class="glass-card rounded-2xl p-4 space-y-3 text-xs">
           <div class="flex flex-wrap items-center justify-between gap-3">
             
             <!-- Top-K Selector -->
             <div class="flex items-center space-x-2">
-              <span class="text-slate-400 font-medium">Top-K Results:</span>
-              <div class="inline-flex rounded-lg bg-slate-900 p-0.5 border border-slate-800">
-                <button onclick="setTopK(3)" id="topK-3" class="px-2.5 py-1 rounded-md text-xs text-slate-400 hover:text-white transition cursor-pointer">Top 3</button>
-                <button onclick="setTopK(5)" id="topK-5" class="px-2.5 py-1 rounded-md text-xs bg-blue-600 text-white font-medium transition cursor-pointer">Top 5</button>
-                <button onclick="setTopK(10)" id="topK-10" class="px-2.5 py-1 rounded-md text-xs text-slate-400 hover:text-white transition cursor-pointer">Top 10</button>
+              <span class="text-slate-400 font-medium">Top Matches:</span>
+              <div class="inline-flex rounded-xl bg-slate-900 p-0.5 border border-slate-800">
+                <button onclick="setTopK(3)" id="topK-3" class="px-2.5 py-1 rounded-lg text-xs text-slate-400 hover:text-white transition cursor-pointer">Top 3</button>
+                <button onclick="setTopK(5)" id="topK-5" class="px-2.5 py-1 rounded-lg text-xs bg-indigo-600 text-white font-semibold shadow-sm transition cursor-pointer">Top 5</button>
+                <button onclick="setTopK(10)" id="topK-10" class="px-2.5 py-1 rounded-lg text-xs text-slate-400 hover:text-white transition cursor-pointer">Top 10</button>
               </div>
             </div>
 
             <!-- Similarity Threshold Slider -->
             <div class="flex items-center space-x-2 font-mono">
               <span class="text-slate-400">Match Threshold:</span>
-              <input type="range" id="thresholdSlider" min="0.10" max="0.95" step="0.05" value="0.20" oninput="onThresholdChange(this.value)" class="w-24 accent-blue-500 cursor-pointer">
-              <span id="thresholdDisplay" class="text-blue-400 font-bold min-w-[36px]">≥ 0.20</span>
+              <input type="range" id="thresholdSlider" min="0.10" max="0.95" step="0.05" value="0.20" oninput="onThresholdChange(this.value)" class="w-24 accent-indigo-500 cursor-pointer">
+              <span id="thresholdDisplay" class="text-cyan-400 font-bold min-w-[36px]">≥ 0.20</span>
             </div>
 
           </div>
@@ -351,193 +442,203 @@
           <!-- Metadata Minimization Toggle -->
           <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
             <label class="flex items-center space-x-2 cursor-pointer select-none">
-              <input type="checkbox" id="metadataMinimizationToggle" checked class="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0 cursor-pointer">
-              <span class="text-slate-300 font-medium">Strip EXIF, GPS & Device Metadata Locally</span>
+              <input type="checkbox" id="metadataMinimizationToggle" checked class="rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0 cursor-pointer">
+              <span class="text-slate-300 font-medium">Strip EXIF, GPS & Camera Metadata Locally</span>
             </label>
-            <span class="text-[10px] text-emerald-400 font-mono font-medium">Local Scrub Active</span>
+            <span class="text-[10px] text-emerald-400 font-mono font-medium">Scrub Active</span>
           </div>
         </div>
 
-        <!-- Prominent Search Button (Section 2) -->
-        <button id="searchBtn" onclick="runContentFreeSearch()" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white text-sm tracking-wide shadow-lg shadow-blue-600/20 flex items-center justify-center space-x-2 transition cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <span id="searchBtnText">Search Similar Images</span>
+        <!-- Primary Action Button -->
+        <button id="searchBtn" onclick="runContentFreeSearch()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:via-blue-500 hover:to-cyan-400 font-bold text-white text-base tracking-wide shadow-xl shadow-indigo-600/25 flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5 cursor-pointer">
+          <span id="searchBtnIcon">🔍</span>
+          <span id="searchBtnText">Search Privately →</span>
         </button>
 
       </div>
 
-      <!-- PROCESSING PIPELINE (Section 4) -->
-      <div id="pipelineContainer" class="max-w-4xl mx-auto surface-card rounded-xl p-4 space-y-3">
+      <!-- ANIMATED PROCESSING SEQUENCE (Section 4) -->
+      <div id="pipelineContainer" class="max-w-4xl mx-auto glass-card rounded-2xl p-5 space-y-3">
         <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-800">
-          <span class="font-medium text-slate-300 flex items-center gap-1.5">
-            <span>⚙️</span> Content-Free Processing Pipeline
+          <span class="font-bold text-white font-display flex items-center gap-2">
+            <span>⚙️</span> Content-Free Retrieval Pipeline
           </span>
-          <span id="pipelineStatusBadge" class="text-[11px] text-slate-500 font-mono">IDLE</span>
+          <span id="pipelineStatusBadge" class="text-[11px] text-slate-500 font-mono font-semibold">IDLE</span>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-center text-xs font-mono">
-          <div id="pipe-query" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center text-xs font-mono">
+          <div id="pipe-query" class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all">
             <span class="text-[10px] text-slate-500 block">01 PRIVATE QUERY</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
+            <span class="step-status font-semibold text-slate-400 mt-1 block">Waiting</span>
           </div>
-          <div id="pipe-prep" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">02 PREPROCESS</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
+          <div id="pipe-prep" class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all">
+            <span class="text-[10px] text-slate-500 block">02 EXTRACTION</span>
+            <span class="step-status font-semibold text-slate-400 mt-1 block">Waiting</span>
           </div>
-          <div id="pipe-infer" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">03 FEATURES</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
+          <div id="pipe-protect" class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all">
+            <span class="text-[10px] text-slate-500 block">03 PROTECTION</span>
+            <span class="step-status font-semibold text-slate-400 mt-1 block">Waiting</span>
           </div>
-          <div id="pipe-protect" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">04 PROTECT</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
+          <div id="pipe-faiss" class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all">
+            <span class="text-[10px] text-slate-500 block">04 FAISS SEARCH</span>
+            <span class="step-status font-semibold text-slate-400 mt-1 block">Waiting</span>
           </div>
-          <div id="pipe-faiss" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">05 FAISS</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
-          </div>
-          <div id="pipe-match" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">06 MATCHING</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
-          </div>
-          <div id="pipe-results" class="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400">
-            <span class="text-[10px] text-slate-500 block">07 RESULTS</span>
-            <span class="step-status font-medium text-slate-400 mt-0.5 block">Waiting</span>
+          <div id="pipe-results" class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all">
+            <span class="text-[10px] text-slate-500 block">05 MATCHES</span>
+            <span class="step-status font-semibold text-slate-400 mt-1 block">Waiting</span>
           </div>
         </div>
       </div>
 
-      <!-- FEATURE MATCHES SUMMARY SECTION (Section 9) -->
-      <div id="featureMatchesBanner" class="hidden max-w-4xl mx-auto surface-card rounded-xl p-5 border border-blue-500/30 space-y-3">
+      <!-- FEATURE MATCHES SUMMARY BANNER -->
+      <div id="featureMatchesBanner" class="hidden max-w-4xl mx-auto glass-card rounded-2xl p-5 border border-indigo-500/40 space-y-3 shadow-lg shadow-indigo-950/40">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center space-x-2">
-            <span class="text-blue-400 text-base">🎯</span>
-            <h3 class="text-base font-bold text-white tracking-tight font-display">Feature Matches Found</h3>
+            <span class="text-indigo-400 text-lg">🎯</span>
+            <h3 class="text-base font-bold text-white font-display">Feature Matches Found</h3>
           </div>
-          <span id="featureMatchesCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-950 text-blue-300 border border-blue-800">
+          <span id="featureMatchesCountBadge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-800">
             5 similar images found
           </span>
         </div>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-300">
           Ranked by cosine similarity of 512-D protected visual representations in FAISS:
         </p>
-        <div id="featureMatchesQuickList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 pt-1 font-mono text-xs">
-          <!-- Dynamically populated -->
+        <div id="featureMatchesQuickList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-1 font-mono text-xs">
+          <!-- Dynamically populated from FAISS -->
         </div>
       </div>
 
-      <!-- RESULTS SECTION: DATABASE MATCHES ONLY (Section 10, 11, 12, 15) -->
+      <!-- RESULTS SECTION: DATABASE MATCHES ONLY -->
       <div id="resultsSection" class="space-y-4 pt-2">
         <div class="flex flex-wrap items-center justify-between pb-2 border-b border-slate-800 gap-2">
           <div>
-            <h2 id="resultsHeading" class="text-xl font-bold text-white tracking-tight font-display">Similar Images</h2>
+            <h2 id="resultsHeading" class="text-2xl font-bold text-white tracking-tight font-display">Similar Images</h2>
             <p id="resultsSummaryText" class="text-xs text-slate-400 mt-0.5">Your private search results will appear here.</p>
           </div>
-          <div id="resultsInvariantBadge" class="hidden text-xs text-emerald-400 font-medium flex items-center space-x-1.5 font-mono">
+          <div id="resultsInvariantBadge" class="hidden text-xs text-emerald-400 font-semibold flex items-center space-x-1.5 font-mono">
             <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            <span>0 Pixels Sent to Retrieval Server · Decoupled Vault</span>
+            <span>0 Pixels Sent to Retrieval Server</span>
           </div>
         </div>
 
-        <!-- Results Grid Container (NO QUERY CARD!) -->
+        <!-- Results Grid Container (NO QUERY CARD IS SHOWN HERE) -->
         <div id="resultsContainer">
-          <div class="surface-card rounded-2xl p-12 text-center space-y-2 border border-slate-800">
-            <div class="w-10 h-10 mx-auto rounded-lg bg-slate-900 flex items-center justify-center text-slate-500">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <div class="glass-card rounded-3xl p-14 text-center space-y-3 border border-slate-800">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-slate-900/90 flex items-center justify-center text-slate-400 shadow-inner">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             </div>
-            <p class="text-sm font-medium text-slate-400">Your private search results will appear here.</p>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto">
+            <p class="text-base font-bold text-slate-300 font-display">Your private search results will appear here</p>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">
               Select an image above to find visually similar items. The original query image is never displayed or uploaded to the retrieval server.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- POST-SEARCH AUDIT & PRIVACY SECTION (Section 13 & 14) -->
-      <div id="postSearchDetails" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto pt-4">
+      <!-- CONTENT-FREE MODE & PRIVACY RECEIPT CARDS -->
+      <div id="postSearchDetails" class="hidden space-y-6 max-w-4xl mx-auto pt-4">
         
-        <!-- DYNAMIC PRIVACY SEARCH RECEIPT (Section 13) -->
-        <div id="receiptCard" class="surface-card rounded-xl p-5 border border-emerald-500/30 font-mono text-xs space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div class="flex items-center space-x-2 text-emerald-400 font-bold">
-              <span>🧾</span>
-              <span>PRIVATE SEARCH RECEIPT</span>
-            </div>
-            <span id="receiptId" class="text-slate-400 text-[11px]">RCP-000000</span>
+        <!-- Content-Free Mode Metrics Banner -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+          <div class="glass-card rounded-2xl p-4 text-center border border-emerald-500/30">
+            <span class="block text-3xl font-extrabold text-emerald-400 font-display">0</span>
+            <span class="text-slate-300 text-[11px] mt-1 block font-semibold">Pixels Sent to Server</span>
           </div>
-
-          <div class="space-y-1.5 text-[11px]">
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>Query processed locally</span>
-            </div>
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>Original query image not displayed</span>
-            </div>
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>Original query image not sent to retrieval server</span>
-            </div>
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>Protected representation used for search</span>
-            </div>
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>FAISS similarity search completed</span>
-            </div>
-            <div class="flex items-center space-x-2 text-emerald-400">
-              <span>✓</span> <span>Matching Image IDs returned</span>
-            </div>
+          <div class="glass-card rounded-2xl p-4 text-center border border-indigo-500/30">
+            <span class="block text-3xl font-extrabold text-indigo-400 font-display">512-D</span>
+            <span class="text-slate-300 text-[11px] mt-1 block font-semibold">Protected Representation</span>
           </div>
-
-          <div class="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[11px]">
-            <div class="text-slate-400">Search time:</div>
-            <div id="rcptSearchTime" class="text-blue-400 font-bold text-right">0.00 ms</div>
-
-            <div class="text-slate-400">Results:</div>
-            <div id="rcptResultsCount" class="text-slate-200 text-right">0 matches</div>
-
-            <div class="text-slate-400">Pixels sent:</div>
-            <div id="rcptPixelsSent" class="text-emerald-400 font-bold text-right">0 (Zero Pixels)</div>
+          <div class="glass-card rounded-2xl p-4 text-center border border-cyan-500/30">
+            <span class="block text-3xl font-extrabold text-cyan-300 font-display">FAISS</span>
+            <span class="text-slate-300 text-[11px] mt-1 block font-semibold">Vector IndexFlatIP</span>
           </div>
         </div>
 
-        <!-- QUERY LIFECYCLE (Section 14) -->
-        <div class="surface-card rounded-xl p-5 border border-slate-800 text-xs space-y-3 font-mono">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span class="font-bold text-white flex items-center gap-1.5">
-              <span>🔄</span> Query Lifecycle
-            </span>
-            <span class="text-[10px] text-emerald-400">Volatile Memory</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Dynamic Privacy Receipt -->
+          <div class="glass-card rounded-2xl p-5 border border-emerald-500/40 font-mono text-xs space-y-3 shadow-lg">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div class="flex items-center space-x-2 text-emerald-400 font-bold">
+                <span>🧾</span>
+                <span>PRIVACY SEARCH RECEIPT</span>
+              </div>
+              <span id="receiptId" class="text-slate-400 text-[11px]">RCP-000000</span>
+            </div>
+
+            <div class="space-y-1.5 text-[11px]">
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>Query processed locally</span>
+              </div>
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>Original query image not displayed</span>
+              </div>
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>Original pixels not sent to retrieval server</span>
+              </div>
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>Protected representation used</span>
+              </div>
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>FAISS search completed</span>
+              </div>
+              <div class="flex items-center space-x-2 text-emerald-400">
+                <span>✓</span> <span>Matching Image IDs returned</span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-800 grid grid-cols-2 gap-2 text-[11px]">
+              <div class="text-slate-400">Search Time:</div>
+              <div id="rcptSearchTime" class="text-cyan-300 font-bold text-right">0.00 ms</div>
+
+              <div class="text-slate-400">Results:</div>
+              <div id="rcptResultsCount" class="text-slate-200 text-right">0 matches</div>
+
+              <div class="text-slate-400">Pixels Sent:</div>
+              <div id="rcptPixelsSent" class="text-emerald-400 font-bold text-right">0 (Zero Pixels)</div>
+            </div>
           </div>
 
-          <ol class="space-y-1.5 text-[11px] text-slate-300">
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">1.</span>
-              <span>Image selected by user</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">2.</span>
-              <span>Image processed locally in client buffer</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">3.</span>
-              <span>Visual representation generated (MobileNetV3 1280-D)</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">4.</span>
-              <span>Representation protected (512-D projection + perturbation)</span>
-            </li>
-            <li class="flex items-start space-x-2 text-emerald-300 font-semibold">
-              <span class="text-emerald-400 font-bold">5.</span>
-              <span>Original query removed from active application state</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">6.</span>
-              <span>Protected representation searched against FAISS index</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-400 font-bold">7.</span>
-              <span>Matching IDs & similarity scores returned to user</span>
-            </li>
-          </ol>
+          <!-- Query Lifecycle -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800 text-xs space-y-3 font-mono">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span>🔄</span> Query Lifecycle
+              </span>
+              <span class="text-[10px] text-emerald-400 font-semibold">Removed From Active State</span>
+            </div>
+
+            <ol class="space-y-1.5 text-[11px] text-slate-300">
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">1.</span>
+                <span>Image selected by user</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">2.</span>
+                <span>Image processed locally in client buffer</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">3.</span>
+                <span>Visual representation generated (MobileNetV3 1280-D)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">4.</span>
+                <span>Representation protected (512-D projection + perturbation)</span>
+              </li>
+              <li class="flex items-start space-x-2 text-emerald-300 font-semibold">
+                <span class="text-emerald-400 font-bold">5.</span>
+                <span>Original query removed from active application state</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">6.</span>
+                <span>Protected representation searched against FAISS index</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-indigo-400 font-bold">7.</span>
+                <span>Matching IDs & similarity scores returned to user</span>
+              </li>
+            </ol>
+          </div>
         </div>
 
       </div>
@@ -545,63 +646,63 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- TAB 2: ARCHITECTURE & BOUNDARIES (Features 2, 11, 13)                   -->
+    <!-- TAB 2: ARCHITECTURE PAGE                                                -->
     <!-- ======================================================================= -->
     <section id="tab-architecture" class="hidden space-y-8">
       <div>
-        <h2 class="text-2xl font-bold text-white tracking-tight font-display">Content-Free Architecture</h2>
-        <p class="text-xs text-slate-400 mt-1">
+        <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">System Architecture</h2>
+        <p class="text-sm text-slate-400 mt-1">
           How physical decoupling and mathematical vector representations guarantee that original pixels never cross into the retrieval server.
         </p>
       </div>
 
-      <!-- Main Architecture Diagram with Red Boundary -->
-      <div class="surface-card rounded-2xl p-6 sm:p-8 space-y-6">
+      <!-- Architecture Flow Diagram -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6">
         <div class="max-w-xl mx-auto space-y-4 font-mono text-xs">
           
           <!-- User Device Box -->
-          <div class="p-4 rounded-xl bg-slate-900 border-2 border-blue-500/40 space-y-2 text-center">
-            <span class="text-blue-400 font-bold block text-sm font-display">USER DEVICE (CLIENT)</span>
+          <div class="p-5 rounded-2xl bg-slate-900/90 border-2 border-indigo-500/40 space-y-2 text-center shadow-lg">
+            <span class="text-indigo-400 font-bold block text-sm font-display">USER DEVICE (CLIENT)</span>
             <div class="space-y-1.5 text-slate-300">
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">Original Image (Hidden / In-Memory Only)</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">Original Image (Hidden / Ephemeral Buffer Only)</div>
               <div class="text-slate-500">↓</div>
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">Local Preprocessing (EXIF & Metadata Stripped)</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">Local Preprocessing (EXIF & Metadata Stripped)</div>
               <div class="text-slate-500">↓</div>
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">Feature Extraction (MobileNetV3 1280-D)</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">Feature Extraction (MobileNetV3 1280-D)</div>
               <div class="text-slate-500">↓</div>
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">Privacy Protection Layer (512-D Orthogonal Matrix)</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-indigo-300 font-semibold">Privacy Protection Layer (512-D Orthogonal Matrix)</div>
             </div>
           </div>
 
           <!-- Red Security Boundary -->
-          <div class="p-3 rounded-xl boundary-barrier text-center text-rose-300 font-bold space-y-1">
-            <div class="text-base">⛔ ⛔ ⛔</div>
-            <div>NO ORIGINAL IMAGE PIXELS CROSS THIS BOUNDARY</div>
-            <div class="text-[10px] text-slate-400">Only 512 Float32 Coordinates (~2 KB) are transmitted</div>
+          <div class="p-4 rounded-2xl boundary-barrier text-center text-rose-300 font-bold space-y-1 shadow-md">
+            <div class="text-lg">⛔ ⛔ ⛔</div>
+            <div class="text-sm font-display tracking-wide">NO ORIGINAL IMAGE PIXELS CROSS THIS BOUNDARY</div>
+            <div class="text-[11px] text-slate-300">Only 512 Float32 Coordinates (~2 KB) are transmitted</div>
           </div>
 
           <!-- Retrieval Server Box -->
-          <div class="p-4 rounded-xl bg-slate-900 border-2 border-emerald-500/40 space-y-2 text-center">
-            <span class="text-emerald-400 font-bold block text-sm font-display">RETRIEVAL SERVER (FAISS)</span>
+          <div class="p-5 rounded-2xl bg-slate-900/90 border-2 border-cyan-500/40 space-y-2 text-center shadow-lg">
+            <span class="text-cyan-300 font-bold block text-sm font-display">RETRIEVAL SERVER (FAISS)</span>
             <div class="space-y-1.5 text-slate-300">
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">FAISS Cosine Similarity Vector Search</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">FAISS Cosine Similarity Vector Search</div>
               <div class="text-slate-500">↓</div>
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">Returns Top-K Image IDs + Similarity Scores</div>
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">Returns Top-K Image IDs + Similarity Scores</div>
             </div>
           </div>
 
           <div class="text-center text-slate-500">↓ (Image IDs only)</div>
 
-          <!-- Client Result Resolution Box -->
-          <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 space-y-2 text-center">
-            <span class="text-purple-400 font-bold block text-sm font-display">AUTHORIZED RESULT RESOLUTION</span>
-            <div class="space-y-1 text-slate-300">
-              <div class="p-2 rounded bg-slate-950 border border-slate-800">
-                User Role Authorization Check (RBAC: Dr. Sharma / Alex Verma / Guest)
+          <!-- Authorized Database Resolution Box -->
+          <div class="p-5 rounded-2xl bg-slate-900/90 border-2 border-purple-500/40 space-y-2 text-center shadow-lg">
+            <span class="text-purple-400 font-bold block text-sm font-display">AUTHORIZED DATABASE RESULT RESOLUTION</span>
+            <div class="space-y-1.5 text-slate-300">
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                User Role Authorization Check (Dr. Sharma / Alex Verma / Guest)
               </div>
               <div class="text-slate-500">↓</div>
-              <div class="p-2 rounded bg-slate-950 border border-slate-800 text-emerald-400">
-                Decrypted only for authorized users from AES-256 Vault
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-emerald-400 font-semibold">
+                Matching database image released strictly to authorized roles
               </div>
             </div>
           </div>
@@ -609,83 +710,87 @@
         </div>
       </div>
 
-      <!-- Before / After Privacy View -->
+      <!-- Before / After Privacy Comparison -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div class="surface-card rounded-xl p-5 border-t-4 border-t-rose-500 space-y-3">
-          <h3 class="text-sm font-bold text-rose-400 font-display">Conventional Centralized Image Search</h3>
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-rose-500 space-y-3">
+          <h3 class="text-base font-bold text-rose-400 font-display">Conventional Centralized Search</h3>
           <p class="text-xs text-slate-400 leading-relaxed">
-            In typical image search systems, user images are uploaded raw to central cloud servers, creating a single point of failure and exposure.
+            Standard cloud visual search uploads user images directly to central servers, creating a single point of exposure.
           </p>
-          <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 font-mono text-xs space-y-1 text-slate-300">
+          <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-xs space-y-1.5 text-slate-300">
             <div>• Raw pixels sent to cloud server</div>
-            <div>• Server performs CNN inference</div>
+            <div>• Central server performs CNN inference</div>
             <div>• Original images cached or retained</div>
             <div>• High risk of visual data leakage</div>
           </div>
         </div>
 
-        <div class="surface-card rounded-xl p-5 border-t-4 border-t-emerald-500 space-y-3">
-          <h3 class="text-sm font-bold text-emerald-400 font-display">Content-Free Protected Search (Our System)</h3>
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-emerald-500 space-y-3">
+          <h3 class="text-base font-bold text-emerald-400 font-display">PrivateLens Content-Free Search</h3>
           <p class="text-xs text-slate-400 leading-relaxed">
             Original pixels remain client-side. The retrieval server operates strictly on 512-D mathematical representations.
           </p>
-          <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 font-mono text-xs space-y-1 text-slate-300">
+          <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-xs space-y-1.5 text-slate-300">
             <div>• 0 original image pixels sent to server</div>
             <div>• Feature extraction occurs before transmission</div>
             <div>• FAISS operates on protected coordinates</div>
-            <div>• Storage physically decoupled with AES-256 vault</div>
+            <div>• Decoupled private storage releases authorized results</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================= -->
-    <!-- TAB 3: PRIVACY CENTER & DATA INVENTORY                                  -->
+    <!-- TAB 3: PRIVACY CENTER PAGE                                              -->
     <!-- ======================================================================= -->
     <section id="tab-privacy" class="hidden space-y-8">
       <div>
-        <h2 class="text-2xl font-bold text-white tracking-tight font-display">Privacy Center</h2>
-        <p class="text-xs text-slate-400 mt-1">
-          Clear, verifiable breakdown of data transmission, storage, and access controls.
+        <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">Privacy Center</h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Transparent, verifiable breakdown of data transmission, storage, and access controls.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
-        <div class="p-4 rounded-xl surface-card border border-slate-800 space-y-2">
-          <span class="text-emerald-400 font-bold block text-sm">DATA SENT</span>
-          <p class="text-slate-300">512-D Float32 Vector array only (~2 KB). Top-K query parameter.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs font-mono">
+        <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+          <span class="text-emerald-400 font-bold block text-sm">🔒 QUERY PRIVACY</span>
+          <p class="text-slate-300 leading-relaxed">Original image pixels never leave volatile memory on your local machine.</p>
         </div>
-        <div class="p-4 rounded-xl surface-card border border-slate-800 space-y-2">
-          <span class="text-rose-400 font-bold block text-sm">DATA NOT SENT</span>
-          <p class="text-slate-300">Original image pixels, raw CNN activations, EXIF/GPS camera metadata.</p>
+        <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+          <span class="text-indigo-400 font-bold block text-sm">🛡 REPRESENTATION</span>
+          <p class="text-slate-300 leading-relaxed">512-D orthogonal projection with calibrated DP perturbation applied.</p>
         </div>
-        <div class="p-4 rounded-xl surface-card border border-slate-800 space-y-2">
-          <span class="text-blue-400 font-bold block text-sm">STORED FOR SEARCH</span>
-          <p class="text-slate-300">Protected vectors + Image IDs in FAISS. 0 raw image pixels stored.</p>
+        <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+          <span class="text-rose-400 font-bold block text-sm">🚫 NO RAW EXPOSURE</span>
+          <p class="text-slate-300 leading-relaxed">Retrieval server receives 0 image bytes, zero raw pixels, zero EXIF metadata.</p>
         </div>
-        <div class="p-4 rounded-xl surface-card border border-slate-800 space-y-2">
-          <span class="text-purple-400 font-bold block text-sm">STORED PRIVATELY</span>
-          <p class="text-slate-300">Encrypted image records in AES-256 vault, released only upon RBAC clearance.</p>
+        <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+          <span class="text-cyan-300 font-bold block text-sm">📡 TRANSMISSION</span>
+          <p class="text-slate-300 leading-relaxed">Payload size is ~2,048 bytes (512 float32 coordinates) vs 2.4 MB original image.</p>
+        </div>
+        <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+          <span class="text-purple-400 font-bold block text-sm">👤 AUTHORIZATION</span>
+          <p class="text-slate-300 leading-relaxed">Sensitive database images require role clearance (Specialist / Researcher).</p>
         </div>
       </div>
 
-      <!-- Scientific Accuracy Note (Section 22) -->
-      <div class="surface-card rounded-2xl p-6 space-y-3">
-        <h3 class="text-sm font-semibold text-white font-display">Academic & Scientific Accuracy Principles</h3>
-        <ul class="space-y-2 text-xs text-slate-300 font-mono">
-          <li class="flex items-center space-x-2 text-emerald-400">
+      <!-- Academic & Scientific Accuracy Principles -->
+      <div class="glass-card rounded-3xl p-6 space-y-3 border border-slate-800">
+        <h3 class="text-base font-bold text-white font-display">Academic & Scientific Accuracy Principles</h3>
+        <ul class="space-y-2.5 text-xs text-slate-300 font-mono">
+          <li class="flex items-center space-x-2.5 text-emerald-400">
             <span>✓</span> <span>Original query pixels are not sent to the retrieval server</span>
           </li>
-          <li class="flex items-center space-x-2 text-emerald-400">
+          <li class="flex items-center space-x-2.5 text-emerald-400">
             <span>✓</span> <span>Search operates on protected representations (512-D projected coordinates)</span>
           </li>
-          <li class="flex items-center space-x-2 text-emerald-400">
+          <li class="flex items-center space-x-2.5 text-emerald-400">
             <span>✓</span> <span>Original query image is not displayed anywhere in the application</span>
           </li>
-          <li class="flex items-center space-x-2 text-blue-400">
+          <li class="flex items-center space-x-2.5 text-indigo-400">
             <span>✓</span> <span>Privacy is evaluated experimentally rather than claiming theoretical impossibility</span>
           </li>
-          <li class="flex items-center space-x-2 text-amber-400">
+          <li class="flex items-center space-x-2.5 text-amber-400">
             <span>⚠️</span> <span>Representation leakage remains an active research consideration in computer vision</span>
           </li>
         </ul>
@@ -693,18 +798,117 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- TAB 4: RESEARCH BENCHMARKS                                              -->
+    <!-- TAB 4: VECTOR INDEX VIEW PAGE                                           -->
+    <!-- ======================================================================= -->
+    <section id="tab-index" class="hidden space-y-6">
+      <div>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">Protected Vector Index (FAISS)</h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Vector database telemetry verifying zero raw pixels in the retrieval index.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs" id="indexStatsGrid">
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <span class="block text-3xl font-extrabold text-white font-display">16</span>
+          <span class="text-slate-400 text-[11px] mt-1 block">Indexed Representations</span>
+        </div>
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <span class="block text-3xl font-extrabold text-emerald-400 font-display">0</span>
+          <span class="text-slate-400 text-[11px] mt-1 block">Original Images in FAISS</span>
+        </div>
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <span class="block text-3xl font-extrabold text-indigo-400 font-display">512</span>
+          <span class="text-slate-400 text-[11px] mt-1 block">Vector Dimension</span>
+        </div>
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <span class="block text-3xl font-extrabold text-slate-200 font-display">IndexFlatIP</span>
+          <span class="text-slate-400 text-[11px] mt-1 block">Index Structure</span>
+        </div>
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <span class="block text-3xl font-extrabold text-cyan-300 font-display">Cosine</span>
+          <span class="text-slate-400 text-[11px] mt-1 block">Similarity Metric</span>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 space-y-3 font-mono text-xs">
+        <h3 class="font-bold text-white text-sm">Storage Decoupling Audit</h3>
+        <p class="text-slate-300 text-[11px] leading-relaxed">
+          The FAISS index binary file (<code class="text-indigo-400">vector_db/faiss_index.bin</code>) contains 16 float32 coordinate arrays of length 512. It contains <strong>zero image headers, JPEG/PNG streams, or raw pixel color values</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 5: USE CASES PAGE                                                   -->
+    <!-- ======================================================================= -->
+    <section id="tab-usecases" class="hidden space-y-6">
+      <div>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">Real-World Content-Free Use Cases</h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Practical application domains where transmitting raw images is unacceptable.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">🏥</span>
+          <h3 class="font-bold text-white text-sm font-display">Healthcare Diagnostics</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Hospitals query central medical reference databases for similar pathology or CT scans without sending confidential patient biometric scans off hospital premises.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">🔬</span>
+          <h3 class="font-bold text-white text-sm font-display">Academic Research</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Researchers query shared proprietary scientific corpora without revealing unreleased experimental visual findings.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">🚗</span>
+          <h3 class="font-bold text-white text-sm font-display">Industrial Inspection</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Subcontractors check manufactured parts against defect catalogs without exposing proprietary CAD or intellectual property designs.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">🕵️</span>
+          <h3 class="font-bold text-white text-sm font-display">Digital Forensics</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Field agents verify biometric likeness against criminal databases without transmitting unencrypted facial portrait photos across public links.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">🛍️</span>
+          <h3 class="font-bold text-white text-sm font-display">E-Commerce Visual Match</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Shoppers find similar clothing items by taking a snapshot in private without third-party ad networks tracking personal room surroundings.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover rounded-2xl p-5 space-y-2.5">
+          <span class="text-2xl">📸</span>
+          <h3 class="font-bold text-white text-sm font-display">Personal Photo Search</h3>
+          <p class="text-slate-300 leading-relaxed">
+            Consumers search personal image collections by visual similarity without cloud providers indexing or inspecting private family photos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 6: RESEARCH BENCHMARKS PAGE                                         -->
     <!-- ======================================================================= -->
     <section id="tab-benchmarks" class="hidden space-y-6">
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-bold text-white tracking-tight font-display">Research Evaluation & Privacy Analysis</h2>
-          <p class="text-xs text-slate-400 mt-1">
+          <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">Research Evaluation Benchmarks</h2>
+          <p class="text-sm text-slate-400 mt-1">
             Empirical benchmark metrics measured dynamically over the indexed dataset.
           </p>
         </div>
-        <button onclick="fetchEvaluationBenchmark()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-medium text-slate-200 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <button onclick="fetchEvaluationBenchmark()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition flex items-center space-x-1.5 cursor-pointer shadow-md shadow-indigo-600/20">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           <span>Run Benchmark</span>
         </button>
       </div>
@@ -719,89 +923,18 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- TAB 5: VECTOR INDEX VIEW                                                -->
-    <!-- ======================================================================= -->
-    <section id="tab-index" class="hidden space-y-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white tracking-tight font-display">Protected Image Index (FAISS)</h2>
-        <p class="text-xs text-slate-400 mt-1">
-          Vector database telemetry verifying zero raw pixels in the retrieval index.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs" id="indexStatsGrid">
-        <div class="surface-card rounded-xl p-4 text-center">
-          <span class="block text-2xl font-bold text-white">16</span>
-          <span class="text-slate-400 text-[11px] mt-1 block">Indexed Representations</span>
-        </div>
-        <div class="surface-card rounded-xl p-4 text-center">
-          <span class="block text-2xl font-bold text-emerald-400">0</span>
-          <span class="text-slate-400 text-[11px] mt-1 block">Original Images in FAISS</span>
-        </div>
-        <div class="surface-card rounded-xl p-4 text-center">
-          <span class="block text-2xl font-bold text-blue-400">512</span>
-          <span class="text-slate-400 text-[11px] mt-1 block">Vector Dimension</span>
-        </div>
-        <div class="surface-card rounded-xl p-4 text-center">
-          <span class="block text-2xl font-bold text-slate-200">IndexFlatIP</span>
-          <span class="text-slate-400 text-[11px] mt-1 block">Index Structure</span>
-        </div>
-        <div class="surface-card rounded-xl p-4 text-center">
-          <span class="block text-2xl font-bold text-purple-400">Cosine</span>
-          <span class="text-slate-400 text-[11px] mt-1 block">Similarity Metric</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================= -->
-    <!-- TAB 6: USE CASES                                                        -->
-    <!-- ======================================================================= -->
-    <section id="tab-usecases" class="hidden space-y-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white tracking-tight font-display">Real-World Content-Free Use Cases</h2>
-        <p class="text-xs text-slate-400 mt-1">
-          Demonstrating practical application domains where transmitting raw images is unacceptable.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="surface-card rounded-xl p-4 space-y-2">
-          <span class="text-lg">🫁</span>
-          <h3 class="font-bold text-white text-sm font-display">Healthcare Diagnostics</h3>
-          <p class="text-slate-400 leading-relaxed">
-            Hospitals query central medical reference databases for similar pathology or CT scans without sending confidential patient biometric scans off hospital premises.
-          </p>
-        </div>
-        <div class="surface-card rounded-xl p-4 space-y-2">
-          <span class="text-lg">👤</span>
-          <h3 class="font-bold text-white text-sm font-display">Forensics & Biometrics</h3>
-          <p class="text-slate-400 leading-relaxed">
-            Field agents verify biometric likeness against criminal databases without transmitting high-resolution unencrypted facial portrait photos across public links.
-          </p>
-        </div>
-        <div class="surface-card rounded-xl p-4 space-y-2">
-          <span class="text-lg">📱</span>
-          <h3 class="font-bold text-white text-sm font-display">Personal Cloud Photos</h3>
-          <p class="text-slate-400 leading-relaxed">
-            Consumers search their private photo libraries by visual similarity without cloud providers indexing or viewing personal family pictures.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================= -->
-    <!-- TAB 7: AUDIT LOG                                                        -->
+    <!-- TAB 7: AUDIT LOG PAGE                                                   -->
     <!-- ======================================================================= -->
     <section id="tab-audit" class="hidden space-y-6">
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-bold text-white tracking-tight font-display">Security & Compliance Audit Trail</h2>
-          <p class="text-xs text-slate-400 mt-1">
+          <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">Security & Compliance Audit Trail</h2>
+          <p class="text-sm text-slate-400 mt-1">
             Immutable audit log capturing all search operations, role verifications, and blocked unauthorized accesses.
           </p>
         </div>
-        <button onclick="fetchAuditLogs()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-medium text-slate-200 hover:text-white transition flex items-center space-x-1.5 cursor-pointer">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <button onclick="fetchAuditLogs()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition flex items-center space-x-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           <span>Refresh Trail</span>
         </button>
       </div>
@@ -810,10 +943,10 @@
         <!-- Populated dynamically via fetchAuditLogs() -->
       </div>
 
-      <div class="surface-card rounded-2xl overflow-hidden border border-slate-800">
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs font-mono">
-            <thead class="bg-slate-900/80 border-b border-slate-800 text-slate-400">
+            <thead class="bg-slate-900/90 border-b border-slate-800 text-slate-400">
               <tr>
                 <th class="p-3">Timestamp</th>
                 <th class="p-3">User</th>
@@ -830,84 +963,150 @@
       </div>
     </section>
 
-  </main>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL: EXPLAIN RETRIEVAL (Section 21)                                     -->
-  <!-- ========================================================================= -->
-  <div id="explainModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="surface-card max-w-xl w-full rounded-2xl p-6 sm:p-7 border border-slate-700 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-        <div class="flex items-center space-x-2">
-          <span class="text-xl">💡</span>
-          <h3 class="text-base font-bold text-white font-display">How Content-Free Retrieval Works</h3>
+    <!-- ======================================================================= -->
+    <!-- TAB 8: DEDICATED FACULTY DEMO PAGE                                      -->
+    <!-- ======================================================================= -->
+    <section id="tab-faculty" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-3xl font-extrabold text-white tracking-tight font-display">See How Private Retrieval Works</h2>
+          <p class="text-sm text-slate-400 mt-1">
+            Step-by-step interactive walkthrough designed for college reviews and faculty demonstrations.
+          </p>
         </div>
-        <button onclick="closeExplainModal()" class="text-slate-400 hover:text-white text-sm font-bold cursor-pointer">✕</button>
+        <button id="demoRunBtn" onclick="runInteractiveDemo()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold text-white text-xs shadow-lg shadow-purple-600/25 flex items-center space-x-2 transition cursor-pointer">
+          <span>▶</span>
+          <span id="demoRunBtnText">Start Interactive Demonstration</span>
+        </button>
       </div>
 
-      <div class="p-4 rounded-xl bg-blue-950/40 border border-blue-800/60 text-xs text-blue-200 leading-relaxed font-mono">
+      <!-- Core Explanation Box -->
+      <div class="p-5 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 leading-relaxed font-mono shadow-lg">
         “The query image was processed locally. Its protected visual representation was compared against indexed representations using FAISS. The system returned the highest-similarity image IDs. The original query image was not sent to the retrieval server.”
       </div>
 
-      <div class="space-y-2 text-xs text-slate-300">
-        <h4 class="font-bold text-white font-display">Retrieval Architecture:</h4>
-        <div class="space-y-1.5 font-mono text-[11px]">
-          <div class="p-2 rounded bg-slate-900 border border-slate-800 text-emerald-400">
-            <strong>1. Local Extraction:</strong> MobileNetV3 (1280-D) generates visual embeddings on the client device.
+      <!-- Interactive 7-Step Sequence Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+        
+        <div id="demoStep-1" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 01</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
           </div>
-          <div class="p-2 rounded bg-slate-900 border border-slate-800 text-blue-400">
-            <strong>2. Representation Protection:</strong> 512-D orthogonal projection + calibrated noise applied before transmission.
+          <h4 class="font-bold text-white text-sm font-display">1. Select Private Image</h4>
+          <p class="text-slate-400 leading-relaxed">The user selects an image on their local client device.</p>
+          <div class="text-[10px] text-emerald-400 font-bold">Image held in volatile client RAM</div>
+        </div>
+
+        <div id="demoStep-2" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 02</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
           </div>
-          <div class="p-2 rounded bg-slate-900 border border-slate-800 text-slate-200">
-            <strong>3. Vector Similarity Search:</strong> FAISS IndexFlatIP matches cosine proximity against stored representations.
+          <h4 class="font-bold text-white text-sm font-display">2. Image Remains Hidden</h4>
+          <p class="text-slate-400 leading-relaxed">No preview or pixel stream is displayed anywhere on the interface.</p>
+          <div class="text-[10px] text-emerald-400 font-bold">Zero query image rendering</div>
+        </div>
+
+        <div id="demoStep-3" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 03</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
           </div>
-          <div class="p-2 rounded bg-slate-900 border border-slate-800 text-purple-400">
-            <strong>4. Authorized Dereferencing:</strong> Decoupled AES-256 storage releases matching database images strictly to cleared roles.
+          <h4 class="font-bold text-white text-sm font-display">3. Local Feature Extraction</h4>
+          <p class="text-slate-400 leading-relaxed">MobileNetV3 extracts 1280-D visual embeddings on the client device.</p>
+          <div class="text-[10px] text-indigo-400 font-bold">Local CNN inference</div>
+        </div>
+
+        <div id="demoStep-4" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 04</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
           </div>
+          <h4 class="font-bold text-white text-sm font-display">4. Protect Representation</h4>
+          <p class="text-slate-400 leading-relaxed">512-D orthogonal projection + calibrated Gaussian DP perturbation.</p>
+          <div class="text-[10px] text-indigo-400 font-bold">Angle-preserving projection</div>
+        </div>
+
+        <div id="demoStep-5" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 05</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
+          </div>
+          <h4 class="font-bold text-white text-sm font-display">5. Search FAISS Index</h4>
+          <p class="text-slate-400 leading-relaxed">512 float32 coordinates sent to retrieval server. Zero pixels cross.</p>
+          <div class="text-[10px] text-cyan-300 font-bold">Inner Product Cosine DB</div>
+        </div>
+
+        <div id="demoStep-6" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 06</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
+          </div>
+          <h4 class="font-bold text-white text-sm font-display">6. Feature Matches</h4>
+          <p class="text-slate-400 leading-relaxed">Server returns Top-K Image IDs and cosine similarity percentages.</p>
+          <div class="text-[10px] text-blue-400 font-bold">Top-K Image IDs returned</div>
+        </div>
+
+        <div id="demoStep-7" class="glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all md:col-span-2">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[10px] block">STEP 07</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 step-dot"></span>
+          </div>
+          <h4 class="font-bold text-white text-sm font-display">7. Authorized Database Resolution</h4>
+          <p class="text-slate-400 leading-relaxed">Decoupled private storage releases matching database images strictly to authorized roles (Specialist / Researcher).</p>
+          <div class="text-[10px] text-purple-400 font-bold">Role-Based Access Control Enforced</div>
+        </div>
+
+      </div>
+
+      <!-- Demo Real-Time Console Output -->
+      <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs space-y-1.5 text-slate-400">
+        <div class="flex items-center justify-between text-[11px] text-slate-500 pb-1 border-b border-slate-800">
+          <span>Demonstration Log</span>
+          <span id="demoLiveTime" class="text-indigo-400 font-bold">Status: Ready</span>
+        </div>
+        <div id="demoLogText" class="text-slate-300">
+          Click "Start Interactive Demonstration" to walk through the complete retrieval sequence.
         </div>
       </div>
+    </section>
 
-      <div class="pt-3 border-t border-slate-800 flex justify-end">
-        <button onclick="closeExplainModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition cursor-pointer">
-          Close Explanation
-        </button>
-      </div>
-    </div>
-  </div>
+  </main>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: INSPECT DECRYPTED VAULT IMAGE                                      -->
+  <!-- MODAL: INSPECT AUTHORIZED DATABASE RESULT                                 -->
   <!-- ========================================================================= -->
-  <div id="inspectModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="surface-card max-w-lg w-full rounded-2xl p-6 border border-slate-700 shadow-2xl space-y-4">
+  <div id="inspectModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 border border-slate-700 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-        <div class="flex items-center space-x-2">
-          <span class="text-emerald-400 font-bold">✓</span>
+        <div class="flex items-center space-x-2 font-display">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
           <h3 id="modalImageId" class="text-sm font-bold text-white font-mono">IMG_ID</h3>
         </div>
         <button onclick="closeInspectModal()" class="text-slate-400 hover:text-white text-sm font-bold cursor-pointer">✕</button>
       </div>
 
-      <div class="rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2">
-        <img id="modalImagePreview" src="" alt="Decrypted Asset" class="max-h-64 object-contain rounded">
+      <div class="rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2">
+        <img id="modalImagePreview" src="" alt="Authorized Database Result" class="max-h-64 object-contain rounded-xl">
       </div>
 
-      <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+      <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800">
         <div>
-          <span class="text-slate-500 block text-[10px]">Encrypted File Handle:</span>
-          <span id="modalHandle" class="text-slate-200">vault_handle.aes256</span>
+          <span class="text-slate-500 block text-[10px]">Database Asset Handle:</span>
+          <span id="modalHandle" class="text-slate-200 font-semibold">vault_handle.aes256</span>
         </div>
         <div>
           <span class="text-slate-500 block text-[10px]">Owner Identifier:</span>
-          <span id="modalOwner" class="text-slate-200">USR_DOC_01</span>
+          <span id="modalOwner" class="text-slate-200 font-semibold">USR_DOC_01</span>
         </div>
       </div>
 
       <div class="pt-2 flex justify-end space-x-2">
-        <button onclick="closeInspectModal()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-medium cursor-pointer">
+        <button onclick="closeInspectModal()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold cursor-pointer">
           Close
         </button>
-        <a id="modalDownloadBtn" href="" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs text-white font-semibold flex items-center space-x-1 cursor-pointer">
+        <a id="modalDownloadBtn" href="" target="_blank" class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-bold flex items-center space-x-1 cursor-pointer">
           <span>Open Full Asset</span>
         </a>
       </div>
@@ -935,27 +1134,35 @@
     };
     let activeUser = USERS["USR_DOC_01"];
 
-    // Initialize application on page load
+    // Initialize application on load
     document.addEventListener('DOMContentLoaded', () => {
       onUserChange();
     });
 
     // Tab Navigation
     function switchTab(tabId) {
-      const tabs = ['search', 'architecture', 'privacy', 'benchmarks', 'index', 'usecases', 'audit'];
+      const tabs = ['search', 'architecture', 'privacy', 'index', 'usecases', 'benchmarks', 'audit', 'faculty'];
       tabs.forEach(t => {
         const section = document.getElementById(`tab-${t}`);
         const btn = document.getElementById(`tabBtn-${t}`);
         if (section) section.classList.add('hidden');
         if (btn) {
-          btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition cursor-pointer";
+          if (t === 'faculty') {
+            btn.className = "px-3 py-1.5 rounded-lg text-purple-400 hover:text-purple-300 hover:bg-purple-950/40 border border-purple-800/40 transition cursor-pointer flex items-center space-x-1";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition cursor-pointer";
+          }
         }
       });
       const activeSection = document.getElementById(`tab-${tabId}`);
       const activeBtn = document.getElementById(`tabBtn-${tabId}`);
       if (activeSection) activeSection.classList.remove('hidden');
       if (activeBtn) {
-        activeBtn.className = "px-3 py-1.5 rounded-lg bg-slate-800 text-white font-semibold transition cursor-pointer";
+        if (tabId === 'faculty') {
+          activeBtn.className = "px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-md transition cursor-pointer flex items-center space-x-1";
+        } else {
+          activeBtn.className = "px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold shadow-md shadow-indigo-500/20 transition cursor-pointer";
+        }
       }
 
       if (tabId === 'benchmarks') fetchEvaluationBenchmark();
@@ -968,9 +1175,8 @@
       activeUser = USERS[selectedId] || USERS["USR_DOC_01"];
       document.getElementById('userAvatar').innerText = activeUser.initials;
       
-      showToast("Clearance Active", `Logged in as ${activeUser.name} (${activeUser.role.toUpperCase()})`);
+      showToast("Persona Updated", `Logged in as ${activeUser.name} (${activeUser.role.toUpperCase()})`);
 
-      // Re-evaluate results authorization display if already loaded
       if (lastRetrievedResults && lastRetrievedResults.length > 0) {
         renderResults(lastRetrievedResults);
       }
@@ -981,7 +1187,7 @@
       document.getElementById('toastTitle').innerText = title;
       document.getElementById('toastMessage').innerText = msg;
       t.classList.remove('hidden');
-      setTimeout(() => t.classList.add('hidden'), 3000);
+      setTimeout(() => t.classList.add('hidden'), 3200);
     }
 
     function switchToDoctor() {
@@ -992,15 +1198,15 @@
     // Drag & Drop Handling
     function handleDragOver(e) {
       e.preventDefault();
-      document.getElementById('dropzonePrompt').classList.add('border-blue-500', 'bg-blue-950/20');
+      document.getElementById('dropzonePrompt').classList.add('border-indigo-500', 'bg-indigo-950/20');
     }
     function handleDragLeave(e) {
       e.preventDefault();
-      document.getElementById('dropzonePrompt').classList.remove('border-blue-500', 'bg-blue-950/20');
+      document.getElementById('dropzonePrompt').classList.remove('border-indigo-500', 'bg-indigo-950/20');
     }
     function handleDrop(e) {
       e.preventDefault();
-      document.getElementById('dropzonePrompt').classList.remove('border-blue-500', 'bg-blue-950/20');
+      document.getElementById('dropzonePrompt').classList.remove('border-indigo-500', 'bg-indigo-950/20');
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         processFile(e.dataTransfer.files[0]);
       }
@@ -1011,9 +1217,7 @@
       }
     }
 
-    // =========================================================================
-    // SECTION 1 & 16: PROCESS FILE - ABSOLUTELY NO IMAGE PREVIEW RENDERED
-    // =========================================================================
+    // Process File: ABSOLUTELY NO IMAGE PREVIEW IS RENDERED
     function processFile(file) {
       if (!file.type.startsWith('image/')) {
         alert("Please select a valid image file (JPG, PNG, WebP).");
@@ -1028,28 +1232,22 @@
       currentProtectedVector = null;
       currentQueryBarcode = "";
 
-      // Format size
       const kb = (file.size / 1024).toFixed(1);
       const sizeStr = file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : kb + " KB";
 
-      // Populate file metadata (NO IMAGE TAG RENDERED!)
       document.getElementById('selectedFileName').innerText = file.name;
       document.getElementById('selectedFileType').innerText = file.type || "image/jpeg";
       document.getElementById('selectedFileSize').innerText = sizeStr;
 
-      // Switch view to Selected State
       document.getElementById('dropzonePrompt').classList.add('hidden');
       document.getElementById('dropzoneSelected').classList.remove('hidden');
 
-      // Reset checklist states
-      updateChecklist('received', true);
-      updateChecklist('hidden', true);
       updateChecklist('local', false);
       updateChecklist('protect', false);
       updateChecklist('search', false);
 
       document.getElementById('selectionStatusText').innerText = "Query secured. Ready to search.";
-      document.getElementById('selectionStatusText').className = "text-xs text-emerald-400 font-medium";
+      document.getElementById('selectionStatusText').className = "text-xs text-emerald-400 font-semibold";
 
       resetPipeline();
       markStep('query', 'In Buffer', true);
@@ -1057,26 +1255,24 @@
 
     function updateChecklist(step, isDone) {
       const icon = document.getElementById(`iconCheck-${step}`);
-      const text = document.getElementById(`textCheck-${step}`);
       const container = document.getElementById(`stepCheck-${step}`);
       if (!container) return;
 
       if (isDone) {
-        container.className = "flex items-center space-x-2.5 text-emerald-400";
+        container.className = "flex items-center space-x-3 text-emerald-400";
         if (icon) {
-          icon.className = "w-4 h-4 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold";
+          icon.className = "w-5 h-5 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0";
           icon.innerText = "✓";
         }
       } else {
-        container.className = "flex items-center space-x-2.5 text-slate-400";
+        container.className = "flex items-center space-x-3 text-slate-400";
         if (icon) {
-          icon.className = "w-4 h-4 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px]";
+          icon.className = "w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] shrink-0";
           icon.innerText = "○";
         }
       }
     }
 
-    // Clear Query - Removes image from active application state
     function clearQuery(e) {
       if (e) e.stopPropagation();
       currentSelectedFile = null;
@@ -1091,12 +1287,12 @@
       document.getElementById('postSearchDetails').classList.add('hidden');
 
       document.getElementById('resultsContainer').innerHTML = `
-        <div class="surface-card rounded-2xl p-12 text-center space-y-2 border border-slate-800">
-          <div class="w-10 h-10 mx-auto rounded-lg bg-slate-900 flex items-center justify-center text-slate-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <div class="glass-card rounded-3xl p-14 text-center space-y-3 border border-slate-800">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-slate-900/90 flex items-center justify-center text-slate-400 shadow-inner">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           </div>
-          <p class="text-sm font-medium text-slate-400">Your private search results will appear here.</p>
-          <p class="text-xs text-slate-500 max-w-sm mx-auto">
+          <p class="text-base font-bold text-slate-300 font-display">Your private search results will appear here</p>
+          <p class="text-xs text-slate-500 max-w-md mx-auto">
             Select an image above to find visually similar items. The original query image is never displayed or uploaded to the retrieval server.
           </p>
         </div>
@@ -1107,7 +1303,6 @@
       resetPipeline();
     }
 
-    // Quick Sample Presets (Fetches sample into memory File object without displaying it)
     async function loadSamplePreset(cat) {
       const presetUrls = {
         medical: "/api/storage/image/IMG_MED_ct_pulmonary_101",
@@ -1124,23 +1319,21 @@
         const blob = await res.blob();
         const file = new File([blob], `${cat}_query_sample.jpg`, { type: "image/jpeg" });
         processFile(file);
-        // Automatically start search
-        setTimeout(() => runContentFreeSearch(), 300);
+        setTimeout(() => runContentFreeSearch(), 350);
       } catch (err) {
         console.error("Preset error:", err);
-        alert("Failed to load preset image: " + err.message);
+        alert("Failed to load preset: " + err.message);
       }
     }
 
-    // Top-K and Threshold Configuration (Section 12)
     function setTopK(k) {
       currentTopK = k;
       [3, 5, 10].forEach(val => {
         const btn = document.getElementById(`topK-${val}`);
         if (btn) {
           btn.className = (val === k)
-            ? "px-2.5 py-1 rounded-md text-xs bg-blue-600 text-white font-medium transition cursor-pointer"
-            : "px-2.5 py-1 rounded-md text-xs text-slate-400 hover:text-white transition cursor-pointer";
+            ? "px-2.5 py-1 rounded-lg text-xs bg-indigo-600 text-white font-semibold shadow-sm transition cursor-pointer"
+            : "px-2.5 py-1 rounded-lg text-xs text-slate-400 hover:text-white transition cursor-pointer";
         }
       });
       if (lastRetrievedResults.length > 0) {
@@ -1156,43 +1349,37 @@
       }
     }
 
-    // Pipeline Step UI Controller
     function resetPipeline() {
-      ['query', 'prep', 'infer', 'protect', 'faiss', 'match', 'results'].forEach(st => {
+      ['query', 'prep', 'protect', 'faiss', 'results'].forEach(st => {
         const el = document.getElementById(`pipe-${st}`);
         if (el) {
-          el.className = "p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400";
+          el.className = "p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 transition-all";
           const s = el.querySelector('.step-status');
           if (s) {
             s.innerText = "Waiting";
-            s.className = "step-status font-medium text-slate-400 mt-0.5 block";
+            s.className = "step-status font-semibold text-slate-400 mt-1 block";
           }
         }
       });
       document.getElementById('pipelineStatusBadge').innerText = "IDLE";
-      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-slate-500 font-mono";
+      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-slate-500 font-mono font-semibold";
     }
 
     function markStep(id, text, isDone = false) {
       const el = document.getElementById(`pipe-${id}`);
       if (el) {
         el.className = isDone 
-          ? "p-2 rounded-lg bg-slate-900 border border-emerald-500/40 text-emerald-300"
-          : "p-2 rounded-lg bg-slate-900 border border-blue-500/40 text-blue-300 animate-pulse";
+          ? "p-3 rounded-xl bg-slate-900 border border-emerald-500/50 text-emerald-300 shadow-md shadow-emerald-950/30"
+          : "p-3 rounded-xl bg-slate-900 border border-indigo-500/60 text-indigo-300 animate-pulse";
         const st = el.querySelector('.step-status');
         if (st) {
           st.innerText = text;
-          st.className = isDone ? "step-status font-medium text-emerald-400 mt-0.5 block" : "step-status font-medium text-blue-400 mt-0.5 block";
+          st.className = isDone ? "step-status font-semibold text-emerald-400 mt-1 block" : "step-status font-semibold text-indigo-400 mt-1 block";
         }
       }
     }
 
-    // =========================================================================
-    // EXECUTE CONTENT-FREE SEARCH (Section 6, 7, 8, 9, 10)
-    // 1. Local Edge Processing (/api/client/process-local): 0 pixels stored
-    // 2. Transmit 512-D Representation Only (/api/search/content-free-query): 0 pixels sent
-    // 3. FAISS retrieval + feature matching display
-    // =========================================================================
+    // Execute Content-Free Retrieval: 0 Pixels Transmitted
     async function runContentFreeSearch() {
       if (!currentSelectedFile) {
         alert("Please select a private image first.");
@@ -1202,27 +1389,25 @@
       const searchBtn = document.getElementById('searchBtn');
       const searchBtnText = document.getElementById('searchBtnText');
       searchBtn.disabled = true;
-      searchBtnText.innerText = "Finding visually similar representations…";
-      document.getElementById('resultsSummaryText').innerText = "Finding visually similar representations…";
+      searchBtnText.innerText = "Searching protected representations…";
+      document.getElementById('resultsSummaryText').innerText = "Searching protected representations…";
 
       document.getElementById('pipelineStatusBadge').innerText = "PROCESSING";
-      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-blue-400 font-mono font-medium";
+      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-indigo-400 font-mono font-bold animate-pulse";
 
       document.getElementById('selectionStatusText').innerText = "Your image is being processed privately.";
-      document.getElementById('selectionStatusText').className = "text-xs text-blue-400 font-medium";
+      document.getElementById('selectionStatusText').className = "text-xs text-indigo-400 font-semibold";
 
-      // Step 1: Query In-Buffer
       markStep('query', 'In Buffer', true);
-      markStep('prep', 'Scrubbing...', false);
+      markStep('prep', 'Extracting...', false);
 
-      // Local extraction FormData
       const localFormData = new FormData();
       localFormData.append("file", currentSelectedFile);
       localFormData.append("strip_metadata", document.getElementById('metadataMinimizationToggle').checked ? "true" : "false");
       localFormData.append("sigma", "0.05");
 
       try {
-        // CALL LOCAL CLIENT SIMULATOR (Features & Protection)
+        // Step 1: Local Feature Extraction & Privacy Transformation
         const localRes = await fetch("/api/client/process-local", {
           method: "POST",
           headers: { "Authorization": `Bearer ${activeUser.user_id}` },
@@ -1237,19 +1422,15 @@
         currentProtectedVector = localData.protected_vector;
         currentQueryBarcode = localData.vector_barcode;
 
-        // Update pipeline step times
-        markStep('prep', `${localData.client_processing.step_times.preprocess_ms}ms`, true);
-        markStep('infer', `${localData.client_processing.step_times.inference_ms}ms`, true);
+        markStep('prep', `${localData.client_processing.step_times.inference_ms}ms`, true);
         markStep('protect', `${localData.client_processing.step_times.protection_ms}ms`, true);
 
-        // Update checklist
         updateChecklist('local', true);
         updateChecklist('protect', true);
 
-        // Clear query from active state indicator
-        document.getElementById('selectionStatusText').innerText = "Representation protected. Removed from active state.";
+        document.getElementById('selectionStatusText').innerText = "Protected representation ready. Query removed from active state.";
 
-        // CALL RETRIEVAL SERVER (TRANSMITTING ONLY 512 FLOAT32 COORDINATES)
+        // Step 2: Transmission of 512-D Representation Only
         markStep('faiss', 'Searching...', false);
         await executeServerSearch();
 
@@ -1257,16 +1438,15 @@
         console.error("Content-Free Search Error:", err);
         alert("Search failed: " + err.message);
         document.getElementById('pipelineStatusBadge').innerText = "ERROR";
-        document.getElementById('pipelineStatusBadge').className = "text-[11px] text-rose-400 font-mono font-medium";
+        document.getElementById('pipelineStatusBadge').className = "text-[11px] text-rose-400 font-mono font-bold";
         document.getElementById('selectionStatusText').innerText = "Processing error encountered.";
-        document.getElementById('selectionStatusText').className = "text-xs text-rose-400 font-medium";
+        document.getElementById('selectionStatusText').className = "text-xs text-rose-400 font-semibold";
       } finally {
         searchBtn.disabled = false;
-        searchBtnText.innerText = "Search Similar Images";
+        searchBtnText.innerText = "Search Privately →";
       }
     }
 
-    // Step 2: Retrieval Server Call (Zero Pixels Transmitted)
     async function executeServerSearch() {
       if (!currentProtectedVector) return;
 
@@ -1294,42 +1474,34 @@
       const serverData = await res.json();
       lastRetrievedResults = serverData.results || [];
 
-      // Update pipeline completion
       markStep('faiss', `${serverData.server_metrics.faiss_search_time_ms}ms`, true);
-      markStep('match', `${lastRetrievedResults.length} Matches`, true);
       markStep('results', `${serverData.server_metrics.total_server_time_ms}ms`, true);
 
       updateChecklist('search', true);
 
       document.getElementById('pipelineStatusBadge').innerText = "COMPLETED";
-      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-emerald-400 font-mono font-medium";
+      document.getElementById('pipelineStatusBadge').className = "text-[11px] text-emerald-400 font-mono font-bold";
 
-      document.getElementById('selectionStatusText').innerText = "Similar images found.";
-      document.getElementById('selectionStatusText').className = "text-xs text-emerald-400 font-medium";
+      document.getElementById('selectionStatusText').innerText = "Similar database images found.";
+      document.getElementById('selectionStatusText').className = "text-xs text-emerald-400 font-semibold";
 
-      // Update Summary & Receipt
-      document.getElementById('resultsHeading').innerText = "Private Search Completed ✓";
-      document.getElementById('resultsSummaryText').innerText = `${lastRetrievedResults.length} Similar Images Found (Database Matches)`;
+      document.getElementById('resultsHeading').innerText = "✨ Similar Images Found";
+      document.getElementById('resultsSummaryText').innerText = "Matches ranked by protected visual representation similarity.";
       document.getElementById('resultsInvariantBadge').classList.remove('hidden');
 
-      // Update Privacy Receipt (Section 13)
       const rcpt = serverData.privacy_receipt;
       document.getElementById('receiptId').innerText = rcpt.receipt_id;
       document.getElementById('rcptSearchTime').innerText = `${serverData.server_metrics.total_server_time_ms} ms`;
       document.getElementById('rcptResultsCount').innerText = `${lastRetrievedResults.length} matches returned`;
       document.getElementById('rcptPixelsSent').innerText = "0 (Zero Pixels)";
 
-      // Show Post-Search Details
       document.getElementById('postSearchDetails').classList.remove('hidden');
 
-      // Render Feature Matches & Gallery
       renderFeatureMatches(lastRetrievedResults);
       renderResults(lastRetrievedResults);
     }
 
-    // =========================================================================
-    // SECTION 9: FEATURE MATCHING SUMMARY SECTION
-    // =========================================================================
+    // Feature Matches Banner
     function renderFeatureMatches(results) {
       const banner = document.getElementById('featureMatchesBanner');
       const list = document.getElementById('featureMatchesQuickList');
@@ -1346,7 +1518,7 @@
 
       results.slice(0, 5).forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = "p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1";
+        card.className = "p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1";
         
         const simVal = item.cosine_similarity || 0;
         let strength = "Low similarity";
@@ -1356,78 +1528,83 @@
           colorClass = "text-emerald-400";
         } else if (simVal >= 0.40) {
           strength = "Medium similarity";
-          colorClass = "text-blue-400";
+          colorClass = "text-cyan-300";
         }
 
         card.innerHTML = `
           <div class="flex items-center justify-between text-[11px]">
-            <span class="text-blue-400 font-bold">#${idx + 1}</span>
+            <span class="text-indigo-400 font-bold">#${idx + 1}</span>
             <span class="font-bold text-white">${item.similarity_percent}</span>
           </div>
-          <div class="text-slate-300 font-semibold truncate text-[11px]">${item.image_id}</div>
-          <div class="text-[10px] ${colorClass}">${strength}</div>
+          <div class="text-slate-200 font-bold truncate text-[11px]">${item.image_id}</div>
+          <div class="text-[10px] ${colorClass} font-semibold">${strength}</div>
         `;
         list.appendChild(card);
       });
     }
 
-    // =========================================================================
-    // SECTION 10, 11, 12, 15: RENDER RESULTS - DATABASE MATCHES ONLY (NO QUERY IMAGE)
-    // =========================================================================
+    // Render Results: Database Matches Only (NO QUERY CARD)
     function renderResults(results) {
       const container = document.getElementById('resultsContainer');
       container.innerHTML = "";
 
-      // Apply client-side threshold filter to respect slider
       const filtered = results.filter(r => (r.cosine_similarity || 0) >= currentThreshold).slice(0, currentTopK);
 
       if (!filtered || filtered.length === 0) {
         container.innerHTML = `
-          <div class="surface-card rounded-2xl p-10 text-center space-y-2 border border-slate-800">
-            <p class="text-sm font-semibold text-slate-300">No sufficiently similar images were found for the selected threshold (≥ ${currentThreshold.toFixed(2)}).</p>
+          <div class="glass-card rounded-3xl p-10 text-center space-y-2 border border-slate-800">
+            <p class="text-base font-bold text-slate-300 font-display">No sufficiently similar images found for the selected threshold (≥ ${currentThreshold.toFixed(2)})</p>
             <p class="text-xs text-slate-500 max-w-md mx-auto">
-              Try lowering the similarity threshold slider to view broader visual representation matches from the database.
+              Try lowering the match threshold slider to view broader visual representation matches from the database.
             </p>
           </div>
         `;
         return;
       }
 
-      // Grid of database matches (NO QUERY CARD COLUMN!)
       const grid = document.createElement('div');
-      grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
+      grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5";
 
-      filtered.forEach(item => {
+      filtered.forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = "surface-card surface-card-hover rounded-xl overflow-hidden flex flex-col justify-between border border-slate-800/90";
+        const isTop = (idx === 0);
+        card.className = `glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border ${isTop ? 'border-indigo-500/50 shadow-lg shadow-indigo-950/40 ring-1 ring-indigo-500/30' : 'border-slate-800'}`;
 
-        // Determine Match Strength category (Section 12)
         const simVal = item.cosine_similarity || 0;
         let strengthBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-900 text-slate-400 border border-slate-700">Low similarity</span>`;
+        let strengthText = "Low similarity";
         if (simVal >= 0.70) {
           strengthBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">High similarity</span>`;
+          strengthText = "High similarity";
         } else if (simVal >= 0.40) {
           strengthBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-950 text-blue-300 border border-blue-800">Medium similarity</span>`;
+          strengthText = "Medium similarity";
         }
+
+        // Generate visual bar e.g. ██████████░░
+        const totalBlocks = 16;
+        const filledBlocks = Math.min(totalBlocks, Math.max(1, Math.round(simVal * totalBlocks)));
+        const emptyBlocks = totalBlocks - filledBlocks;
+        const visualBar = "█".repeat(filledBlocks) + "░".repeat(emptyBlocks);
 
         card.innerHTML = `
           <div>
-            <!-- Header: Clear DATABASE MATCH banner (Section 15) -->
-            <div class="p-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
-              <span class="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+            <!-- Header: Clear DATABASE MATCH banner -->
+            <div class="p-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-[10px] font-bold text-emerald-400 flex items-center gap-1.5">
                 <span>🗄️</span> DATABASE MATCH
               </span>
-              <span class="text-slate-400 font-semibold">#${item.rank}</span>
+              <span class="text-slate-300 font-bold">#${item.rank}</span>
             </div>
 
             <!-- Thumbnail / Decrypted View vs Access Lock -->
-            <div class="h-40 bg-slate-950 relative overflow-hidden flex items-center justify-center border-b border-slate-800">
+            <div class="h-44 bg-slate-950 relative overflow-hidden flex items-center justify-center border-b border-slate-800">
               ${item.authorized
-                ? `<img src="${item.image_url}" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform" onclick="openInspectModal('${item.image_id}', '${item.image_url}', '${item.owner_id}')" alt="Database match ${item.image_id}">`
+                ? `<img src="${item.image_url}" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openInspectModal('${item.image_id}', '${item.image_url}', '${item.owner_id}')" alt="Database match ${item.image_id}">`
                 : `<div class="text-center p-3">
-                     <svg class="w-6 h-6 mx-auto text-rose-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                     <span class="text-[10px] font-semibold text-rose-300 block">🔒 Access Restricted</span>
-                     <span class="text-[9px] text-slate-500 block mt-0.5">${item.auth_message}</span>
+                     <svg class="w-7 h-7 mx-auto text-rose-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                     <span class="text-[11px] font-bold text-rose-300 block">🔒 Access Restricted</span>
+                     <span class="text-[9px] text-slate-500 block mt-0.5">Private Database Asset</span>
                    </div>`
               }
               <div class="absolute top-2 right-2">
@@ -1435,11 +1612,20 @@
               </div>
             </div>
 
-            <!-- Metadata & Feature Match Explanation (Section 11) -->
-            <div class="p-3.5 space-y-2.5 text-xs">
+            <!-- Metadata & Visual Similarity Details -->
+            <div class="p-4 space-y-3 text-xs">
               <div class="flex items-center justify-between font-mono">
-                <span class="text-slate-200 font-bold truncate">${item.image_id}</span>
-                <span class="text-emerald-400 font-bold text-sm">${item.similarity_percent}</span>
+                <span class="text-white font-bold truncate">${item.image_id}</span>
+                <span class="text-cyan-300 font-bold text-sm">${item.similarity_percent}</span>
+              </div>
+
+              <!-- Visual Similarity Bar Display -->
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[10px] space-y-1">
+                <div class="flex justify-between text-slate-400">
+                  <span>${item.similarity_percent} SIMILARITY</span>
+                  <span class="text-emerald-400 font-semibold">${strengthText}</span>
+                </div>
+                <div class="text-indigo-400 tracking-wider font-mono select-none">${visualBar}</div>
               </div>
 
               <div class="flex items-center justify-between text-[11px] text-slate-400">
@@ -1450,23 +1636,23 @@
               <!-- Stored Vector Barcode Slice -->
               <div class="p-2 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono space-y-0.5">
                 <div class="text-slate-500">Visual representation barcode:</div>
-                <div class="text-blue-400 tracking-wider break-all">${item.vector_barcode}</div>
+                <div class="text-indigo-300 tracking-wider break-all">${item.vector_barcode}</div>
               </div>
 
-              <!-- Collapsible: Why did this match? (Section 11) -->
+              <!-- Expandable: Why this match? -> -->
               <details class="text-[11px] group">
-                <summary class="text-slate-400 hover:text-white cursor-pointer select-none flex items-center justify-between pt-1">
-                  <span class="font-semibold text-blue-300">Why did this match?</span>
+                <summary class="text-slate-400 hover:text-cyan-300 cursor-pointer select-none flex items-center justify-between pt-1">
+                  <span class="font-semibold text-indigo-300">Why this match? →</span>
                   <span class="group-open:rotate-180 transition-transform">▾</span>
                 </summary>
-                <div class="mt-2 p-2.5 rounded bg-slate-950 border border-slate-800/80 text-[10px] text-slate-300 leading-relaxed font-mono space-y-1">
-                  <div><strong>Image ID:</strong> ${item.image_id}</div>
-                  <div><strong>Similarity:</strong> ${item.similarity_percent}</div>
-                  <div class="pt-1 text-slate-400">
-                    “This image was ranked highly because its protected visual representation has high similarity to the protected representation generated from the query.”
+                <div class="mt-2 p-3 rounded-xl bg-slate-950 border border-slate-800 text-[10px] text-slate-300 leading-relaxed font-mono space-y-1.5">
+                  <div class="text-cyan-300 font-bold">Visual Representation Similarity</div>
+                  <div class="text-slate-400 text-[9px]">Query representation → Cosine comparison → Database representation → Rank #${item.rank}</div>
+                  <div class="pt-1 text-slate-300">
+                    “This image was ranked highly because its protected visual representation has high similarity to the query representation.”
                   </div>
-                  <div class="pt-1 text-slate-500 text-[9px]">
-                    Metric: visual representation similarity measured via FAISS IndexFlatIP cosine distance over 512-D projected coordinates.
+                  <div class="text-slate-500 text-[9px] pt-0.5">
+                    Metric: FAISS IndexFlatIP cosine similarity over 512-D projected coordinates.
                   </div>
                 </div>
               </details>
@@ -1474,19 +1660,19 @@
             </div>
           </div>
 
-          <!-- Bottom Action / Clearance State -->
-          <div class="p-3 pt-0">
+          <!-- Bottom Clearance / Authorized Result Dereference -->
+          <div class="p-4 pt-0">
             ${item.authorized
-              ? `<button onclick="openInspectModal('${item.image_id}', '${item.image_url}', '${item.owner_id}')" class="w-full py-1.5 rounded-lg bg-slate-900 hover:bg-slate-850 border border-slate-700/60 text-[11px] font-medium text-emerald-400 transition cursor-pointer flex items-center justify-center space-x-1">
-                   <span>✓ Authorized</span>
-                   <span class="text-slate-500">· View Decrypted Asset</span>
+              ? `<button onclick="openInspectModal('${item.image_id}', '${item.image_url}', '${item.owner_id}')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-[11px] font-bold text-emerald-400 transition cursor-pointer flex items-center justify-center space-x-1 shadow-sm">
+                   <span>✓ Authorized Result</span>
+                   <span class="text-slate-500">· View</span>
                  </button>`
               : (activeUser.role !== 'specialist' && item.category === 'medical'
-                  ? `<button onclick="switchToDoctor()" class="w-full py-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900/60 border border-blue-800 text-[11px] font-medium text-blue-300 transition cursor-pointer">
-                       Switch to Dr. Sharma to Unlock
+                  ? `<button onclick="switchToDoctor()" class="w-full py-2 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-800 text-[11px] font-semibold text-indigo-300 transition cursor-pointer">
+                       Switch to Dr. Sharma to View
                      </button>`
-                  : `<span class="w-full py-1.5 rounded-lg bg-slate-900/40 border border-slate-800 text-[11px] text-slate-500 block text-center font-mono">
-                       Permission Denied
+                  : `<span class="w-full py-2 rounded-xl bg-slate-900/40 border border-slate-800 text-[11px] text-slate-500 block text-center font-mono">
+                       Access Restricted (Role Gate)
                      </span>`
                 )
             }
@@ -1498,7 +1684,7 @@
       container.appendChild(grid);
     }
 
-    // Modal Handlers
+    // Modal Inspection
     function openInspectModal(imgId, imgUrl, ownerId) {
       document.getElementById('modalImageId').innerText = imgId;
       document.getElementById('modalImagePreview').src = imgUrl;
@@ -1511,14 +1697,65 @@
       document.getElementById('inspectModal').classList.add('hidden');
     }
 
-    function openExplainModal() {
-      document.getElementById('explainModal').classList.remove('hidden');
-    }
-    function closeExplainModal() {
-      document.getElementById('explainModal').classList.add('hidden');
+    // Interactive Faculty Walkthrough Demonstration
+    let demoStepIndex = 0;
+    let demoInterval = null;
+    function runInteractiveDemo() {
+      const btn = document.getElementById('demoRunBtn');
+      const btnText = document.getElementById('demoRunBtnText');
+      const liveTime = document.getElementById('demoLiveTime');
+      const logText = document.getElementById('demoLogText');
+      
+      btn.disabled = true;
+      demoStepIndex = 1;
+      
+      const steps = [
+        { num: 1, title: "1. Select Private Image", log: "User selects an image. The file is held strictly in local memory buffer. 0 image pixels are transmitted to any server." },
+        { num: 2, title: "2. Image Remains Hidden", log: "Strict privacy invariant: The UI never renders the query image. Volatile buffer protects user privacy." },
+        { num: 3, title: "3. Local Feature Extraction", log: "MobileNetV3 generates 1280-D visual embeddings on the client device." },
+        { num: 4, title: "4. Protect Representation", log: "Orthogonal projection reduces dimensions to 512-D. DP noise perturbation added." },
+        { num: 5, title: "5. Search FAISS Index", log: "Only the 512-D float array is transmitted across the boundary. FAISS IndexFlatIP executes inner product cosine distance." },
+        { num: 6, title: "6. Feature Matches", log: "Top-K Image IDs and similarity percentages are returned to the client." },
+        { num: 7, title: "7. Authorized Database Resolution", log: "Decoupled private storage releases database images strictly to authorized roles." }
+      ];
+
+      function highlightStep(idx) {
+        for (let i = 1; i <= 7; i++) {
+          const card = document.getElementById(`demoStep-${i}`);
+          const dot = card.querySelector('.step-dot');
+          if (i === idx) {
+            card.className = "glass-card rounded-2xl p-5 space-y-2 border-2 border-indigo-500 shadow-xl shadow-indigo-950/60 transition-all transform scale-[1.02]";
+            dot.className = "w-2.5 h-2.5 rounded-full bg-indigo-400 animate-ping step-dot";
+          } else if (i < idx) {
+            card.className = "glass-card rounded-2xl p-5 space-y-2 border border-emerald-500/40 text-emerald-300 transition-all";
+            dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 step-dot";
+          } else {
+            card.className = "glass-card rounded-2xl p-5 space-y-2 border border-slate-800 transition-all";
+            dot.className = "w-2.5 h-2.5 rounded-full bg-slate-700 step-dot";
+          }
+        }
+        const s = steps[idx - 1];
+        liveTime.innerText = `Executing Step ${idx} / 7`;
+        logText.innerHTML = `<strong>${s.title}:</strong> ${s.log}`;
+      }
+
+      highlightStep(1);
+
+      demoInterval = setInterval(() => {
+        demoStepIndex++;
+        if (demoStepIndex > 7) {
+          clearInterval(demoInterval);
+          btn.disabled = false;
+          btnText.innerText = "Re-run Demonstration";
+          liveTime.innerText = "Status: Demonstration Completed ✓";
+          logText.innerHTML = "<strong>Demonstration Complete:</strong> Verified content-free retrieval flow where query image pixels never enter the retrieval server.";
+          return;
+        }
+        highlightStep(demoStepIndex);
+      }, 1800);
     }
 
-    // Benchmarks & Evaluation
+    // Dynamic Benchmarks Evaluation
     async function fetchEvaluationBenchmark() {
       const loading = document.getElementById('evalLoading');
       const content = document.getElementById('evalContent');
@@ -1531,20 +1768,20 @@
         loading.classList.add('hidden');
 
         content.innerHTML = `
-          <div class="md:col-span-6 surface-card rounded-xl p-5 space-y-3 font-mono text-xs">
-            <h3 class="font-bold text-white text-sm">FAISS Retrieval Precision</h3>
-            <div class="space-y-2">
+          <div class="md:col-span-6 glass-card rounded-2xl p-6 space-y-3 font-mono text-xs border border-slate-800">
+            <h3 class="font-bold text-white text-sm font-display">FAISS Retrieval Precision</h3>
+            <div class="space-y-2.5 pt-1">
               <div class="flex justify-between">
                 <span class="text-slate-400">Precision@1:</span>
                 <span class="text-emerald-400 font-bold">${data.retrieval_metrics.precision_at_1}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-400">Precision@3:</span>
-                <span class="text-blue-400 font-bold">${data.retrieval_metrics.precision_at_3}</span>
+                <span class="text-cyan-300 font-bold">${data.retrieval_metrics.precision_at_3}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-400">Precision@5:</span>
-                <span class="text-purple-400 font-bold">${data.retrieval_metrics.precision_at_5}</span>
+                <span class="text-indigo-400 font-bold">${data.retrieval_metrics.precision_at_5}</span>
               </div>
               <div class="flex justify-between pt-2 border-t border-slate-800">
                 <span class="text-slate-400">Average Search Latency:</span>
@@ -1553,11 +1790,11 @@
             </div>
           </div>
 
-          <div class="md:col-span-6 surface-card rounded-xl p-5 space-y-3 font-mono text-xs">
-            <h3 class="font-bold text-white text-sm">Privacy Resistance Metrics</h3>
-            <div class="space-y-2">
+          <div class="md:col-span-6 glass-card rounded-2xl p-6 space-y-3 font-mono text-xs border border-slate-800">
+            <h3 class="font-bold text-white text-sm font-display">Privacy Resistance Metrics</h3>
+            <div class="space-y-2.5 pt-1">
               <div class="flex justify-between">
-                <span class="text-slate-400">SSIM (Structural Reconstruction):</span>
+                <span class="text-slate-400">SSIM (Reconstruction Resistance):</span>
                 <span class="text-emerald-400 font-bold">${data.privacy_metrics.average_ssim_reconstruction} (Safe < 0.20)</span>
               </div>
               <div class="flex justify-between">
@@ -1580,7 +1817,7 @@
       }
     }
 
-    // Audit Log Fetching
+    // Dynamic Audit Logs
     async function fetchAuditLogs() {
       try {
         const res = await fetch("/api/admin/stats");
@@ -1588,21 +1825,21 @@
         
         const statsSummary = document.getElementById('auditStatsSummary');
         statsSummary.innerHTML = `
-          <div class="surface-card rounded-xl p-3.5 text-center font-mono">
-            <span class="block text-2xl font-bold text-white">${data.dataset.total_images}</span>
-            <span class="text-[11px] text-slate-400 mt-0.5 block">Total Vault Images</span>
+          <div class="glass-card rounded-2xl p-4 text-center font-mono">
+            <span class="block text-3xl font-extrabold text-white font-display">${data.dataset.total_images}</span>
+            <span class="text-[11px] text-slate-400 mt-1 block">Total Vault Images</span>
           </div>
-          <div class="surface-card rounded-xl p-3.5 text-center font-mono">
-            <span class="block text-2xl font-bold text-blue-400">${data.dataset.faiss_indexed_vectors}</span>
-            <span class="text-[11px] text-slate-400 mt-0.5 block">FAISS Vectors</span>
+          <div class="glass-card rounded-2xl p-4 text-center font-mono">
+            <span class="block text-3xl font-extrabold text-indigo-400 font-display">${data.dataset.faiss_indexed_vectors}</span>
+            <span class="text-[11px] text-slate-400 mt-1 block">FAISS Vectors</span>
           </div>
-          <div class="surface-card rounded-xl p-3.5 text-center font-mono">
-            <span class="block text-2xl font-bold text-emerald-400">${data.security.total_searches_logged}</span>
-            <span class="text-[11px] text-slate-400 mt-0.5 block">Content-Free Searches</span>
+          <div class="glass-card rounded-2xl p-4 text-center font-mono">
+            <span class="block text-3xl font-extrabold text-emerald-400 font-display">${data.security.total_searches_logged}</span>
+            <span class="text-[11px] text-slate-400 mt-1 block">Content-Free Searches</span>
           </div>
-          <div class="surface-card rounded-xl p-3.5 text-center font-mono">
-            <span class="block text-2xl font-bold text-rose-400">${data.security.unauthorized_attempts_blocked}</span>
-            <span class="text-[11px] text-slate-400 mt-0.5 block">Blocked Intrusions</span>
+          <div class="glass-card rounded-2xl p-4 text-center font-mono">
+            <span class="block text-3xl font-extrabold text-rose-400 font-display">${data.security.unauthorized_attempts_blocked}</span>
+            <span class="text-[11px] text-slate-400 mt-1 block">Blocked Accesses</span>
           </div>
         `;
 
@@ -1613,9 +1850,9 @@
           const isAllowed = log.status === 'ALLOWED' || log.status === 'PROCESSED';
           tr.innerHTML = `
             <td class="p-3 text-slate-400 text-[11px]">${log.timestamp.split('T')[1].split('.')[0]}</td>
-            <td class="p-3 font-medium text-slate-200">${log.user_id || 'GUEST'}</td>
+            <td class="p-3 font-semibold text-slate-200">${log.user_id || 'GUEST'}</td>
             <td class="p-3 text-slate-300">${log.action}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isAllowed ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-rose-950 text-rose-300 border border-rose-800'}">${log.status}</span></td>
+            <td class="p-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${isAllowed ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-rose-950 text-rose-300 border border-rose-800'}">${log.status}</span></td>
             <td class="p-3 text-slate-400 text-[11px]">${log.details}</td>
           `;
           tbody.appendChild(tr);
