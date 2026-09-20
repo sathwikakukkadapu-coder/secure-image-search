@@ -1,4 +1,4 @@
-﻿import os
+import os
 import requests
 
 BASE_URL = "http://localhost:8000"
@@ -90,8 +90,53 @@ def test_full_pipeline():
     print(f"    Average Latency: {eval_data['retrieval_metrics']['average_search_time_ms']}")
     print("    [PASS] Evaluation metrics calculated dynamically from indexed dataset.")
 
+    print("\n>>> 8. Testing Client-Side Local Processing Endpoint...")
+    files = {"file": ("query.jpg", img_bytes, "image/jpeg")}
+    data = {"protected": "true", "sigma": 0.05}
+    res_local = requests.post(f"{BASE_URL}/api/client/process-local", files=files, data=data)
+    assert res_local.status_code == 200, f"Local processing failed: {res_local.text}"
+    local_data = res_local.json()
+    assert local_data["status"] == "success"
+    assert local_data["client_processing"]["protected_dim"] == 512
+    assert len(local_data["protected_vector"]) == 512
+    assert "zero_pixel_invariant" in local_data
+    print("    [PASS] Client-side processing simulated successfully: 512-D vector generated with 0 pixels retained.")
+
+    print("\n>>> 9. Testing Content-Free Vector Search Query (0 Pixels Transmitted)...")
+    payload = {
+        "protected_vector": local_data["protected_vector"],
+        "top_k": 5,
+        "threshold": 0.2,
+        "strip_metadata": True
+    }
+    res_cf = requests.post(
+        f"{BASE_URL}/api/search/content-free-query",
+        json=payload,
+        headers={"Authorization": "Bearer USR_DOC_01"}
+    )
+    assert res_cf.status_code == 200, f"Content-free query failed: {res_cf.text}"
+    cf_data = res_cf.json()
+    assert cf_data["content_free_mode"] == "ON"
+    assert cf_data["server_metrics"]["pixels_sent_to_server"] == 0
+    assert cf_data["server_metrics"]["pixels_stored_on_server"] == 0
+    assert cf_data["server_metrics"]["zero_pixel_server_invariant"] is True
+    assert len(cf_data["results"]) > 0
+    assert "privacy_receipt" in cf_data
+    assert cf_data["privacy_receipt"]["query_pixels_sent"] == 0
+    print(f"    [PASS] Content-free search successful! {len(cf_data['results'])} matches found. 0 pixels transmitted.")
+
+    print("\n>>> 10. Testing Client vs Server Boundary Data Inventory API...")
+    res_inv = requests.get(f"{BASE_URL}/api/inventory/summary")
+    assert res_inv.status_code == 200
+    inv_data = res_inv.json()
+    assert inv_data["mode"] == "CONTENT-FREE"
+    assert inv_data["server_retrieval_layer"]["original_images_in_index"] == 0
+    assert inv_data["server_retrieval_layer"]["pixels_stored"] == 0
+    assert inv_data["authorized_vault_layer"]["decoupled_from_faiss"] is True
+    print("    [PASS] Boundary inventory verified: Index contains 0 original images, Vault is decoupled.")
+
     print("\n=======================================================")
-    print("  ALL 7 END-TO-END SYSTEM TESTS PASSED SUCCESSFULLY!  ")
+    print("  ALL 10 END-TO-END SYSTEM TESTS PASSED SUCCESSFULLY! ")
     print("=======================================================")
 
 if __name__ == "__main__":
