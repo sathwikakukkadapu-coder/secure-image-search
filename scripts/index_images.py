@@ -1,4 +1,4 @@
-﻿import os
+import os
 import sys
 import glob
 from PIL import Image, ImageDraw, ImageFilter
@@ -75,25 +75,47 @@ def generate_sample_images():
                 draw.text((20, 290), label, fill="#f8fafc")
                 img.save(fpath, "JPEG", quality=92)
 
+from scripts.generate_high_res_dataset import generate_all_32_images
+
 def index_all():
     print("==================================================")
     print("  Private Image Search - Dataset Indexing Engine  ")
     print("==================================================")
     
-    generate_sample_images()
+    # 1. Generate 32 High-Resolution Dataset Images (640x640)
+    generate_all_32_images()
     db.init_db()
+    
+    # Clean previous records for a fresh, synchronized index
+    conn = db.get_connection()
+    conn.execute("DELETE FROM retrieval_vectors")
+    conn.execute("DELETE FROM images")
+    conn.commit()
+    conn.close()
     
     extractor = FeatureExtractor.get_instance(model_name="mobilenet_v3_large")
     protector = PrivacyProtectionLayer.get_instance(input_dim=extractor.feature_dim, protected_dim=512)
     retriever = FAISSRetrievalEngine.get_instance(dimension=512)
     vault = PrivateImageVault.get_instance()
     
+    # Reset FAISS in-memory index
+    import faiss
+    retriever.index = faiss.IndexFlatIP(512)
+    retriever.id_map = {}
+    
+    # Clean old private storage files
+    for old_file in glob.glob(os.path.join(vault.storage_dir, "*.*")):
+        try:
+            os.remove(old_file)
+        except Exception:
+            pass
+            
     dataset_dir = os.path.join(BASE_DIR, "dataset")
     categories = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
     
     # Ownership assignment
-    # Medical images owned by Dr. Sharma (specialist)
-    # Vehicles & Nature are public or owned by Alex Verma (researcher)
+    # Medical & Biometrics images owned by Dr. Sharma (specialist)
+    # Vehicles & Nature are public catalog owned by Alex Verma (researcher)
     owner_map = {
         "medical": ("USR_DOC_01", True),      # Private, Doctor owned
         "biometrics": ("USR_DOC_01", True),   # Private, Doctor owned
@@ -103,9 +125,9 @@ def index_all():
     
     indexed_count = 0
     
-    for cat in categories:
+    for cat in sorted(categories):
         cat_path = os.path.join(dataset_dir, cat)
-        img_files = glob.glob(os.path.join(cat_path, "*.*"))
+        img_files = sorted(glob.glob(os.path.join(cat_path, "*.*")))
         
         for img_path in img_files:
             fname = os.path.basename(img_path)
@@ -142,11 +164,11 @@ def index_all():
             db.insert_vector_mapping(img_id, row_id, extractor.model_name)
             
             indexed_count += 1
-            print(f"  [Indexed] {img_id:<24} | Category: {cat:<10} | Private: {is_private} | FAISS Row: {row_id}")
+            print(f"  [Indexed #{indexed_count:02d}] {img_id:<28} | {cat:<10} | Private: {str(is_private):<5} | FAISS Row: {row_id}")
             
     retriever.save_index()
     print("--------------------------------------------------")
-    print(f"Indexing Complete! Successfully indexed {indexed_count} images.")
+    print(f"Indexing Complete! Successfully indexed {indexed_count} high-resolution images.")
     print(f"FAISS Vectors: {retriever.count()} | Storage Vault: {vault.storage_dir}")
     print("Strict Invariant: Zero image pixels in the vector database.")
     print("==================================================")

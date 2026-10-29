@@ -1,14 +1,15 @@
-﻿import os
+import os
 import uuid
 from typing import Tuple, Dict, Any, Optional
 from backend.services.privacy.protector import PrivacyProtectionLayer
 
 class PrivateImageVault:
     """
-    Decoupled Private Image Storage Layer.
+    Decoupled Private Image Storage Layer with True Encryption-at-Rest.
     
     Enforces strict physical separation:
     - Original full-resolution image binaries are stored solely in this private vault.
+    - Images are AES-256-GCM encrypted at rest (ciphertext stored on disk).
     - Vector database (FAISS) holds ZERO image pixels.
     - Retrieval pointers are stored as AES-256 encrypted storage reference handles.
     - Image assets are released only upon passing owner-based or role-based authorization.
@@ -31,7 +32,7 @@ class PrivateImageVault:
 
     def store_image(self, image_bytes: bytes, image_id: str, original_filename: str) -> Tuple[str, str]:
         """
-        Stores image in private vault under randomized UUID filename.
+        Stores image in private vault under randomized UUID filename with AES-256-GCM encryption at rest.
         Returns: (vault_filename: str, encrypted_storage_ref: str)
         """
         ext = os.path.splitext(original_filename)[1].lower()
@@ -41,22 +42,37 @@ class PrivateImageVault:
         safe_name = f"vault_{image_id}_{uuid.uuid4().hex[:8]}{ext}"
         full_path = os.path.join(self.storage_dir, safe_name)
         
+        # Authenticated encryption at rest: nonce (12B) + ciphertext + tag (16B)
+        encrypted_payload = self.protector.encrypt_bytes(image_bytes)
+        
         with open(full_path, "wb") as f:
-            f.write(image_bytes)
+            f.write(encrypted_payload)
             
         encrypted_ref = self.protector.encrypt_string(safe_name)
         return safe_name, encrypted_ref
 
     def retrieve_image_bytes(self, encrypted_storage_ref: str) -> bytes:
-        """Decrypts the storage reference handle and loads raw image bytes from the private vault."""
+        """
+        Decrypts the storage reference handle, loads ciphertext from disk, and decrypts the image bytes.
+        """
         vault_filename = self.protector.decrypt_string(encrypted_storage_ref)
         full_path = os.path.join(self.storage_dir, vault_filename)
         if not os.path.exists(full_path):
             raise FileNotFoundError(f"Vault image {vault_filename} not found in private storage.")
+            
         with open(full_path, "rb") as f:
-            return f.read()
+            stored_data = f.read()
+            
+        # Support seamless migration if reading a legacy unencrypted file
+        if stored_data.startswith(b"\xff\xd8\xff") or stored_data.startswith(b"\x89PNG"):
+            return stored_data
+            
+        try:
+            return self.protector.decrypt_bytes(stored_data)
+        except Exception as e:
+            raise ValueError(f"Vault decryption failed for image asset: {str(e)}")
 
-    def check_authorization(self, user: Dict[str, Any], image_record: Dict[str, Any]) -> Tuple[bool, str]:
+    def check_authorization(self, user: Optional[Dict[str, Any]], image_record: Dict[str, Any]) -> Tuple[bool, str]:
         """
         Evaluates Owner-Based and Role-Based Access Control (RBAC):
         - Public images: permitted to any authenticated user.
@@ -67,7 +83,7 @@ class PrivateImageVault:
             * Otherwise: strictly rejected.
         """
         if not user:
-            return False, "Unauthorized: Authentication required."
+            return False, "Unauthorized: Authentication token required."
             
         is_private = bool(image_record.get("is_private", False))
         if not is_private:

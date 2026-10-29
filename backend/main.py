@@ -1,4 +1,4 @@
-﻿import os
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +15,9 @@ from backend.api.auth import router as auth_router
 from backend.api.search import router as search_router
 from backend.api.admin import router as admin_router
 from backend.api.evaluation import router as eval_router
+from backend.api.privacy import router as privacy_router
+from backend.api.security import router as security_router
+from backend.api.index_mgmt import router as index_mgmt_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -50,6 +53,9 @@ app.include_router(auth_router)
 app.include_router(search_router)
 app.include_router(admin_router)
 app.include_router(eval_router)
+app.include_router(privacy_router)
+app.include_router(security_router)
+app.include_router(index_mgmt_router)
 
 # Mount frontend directory for SPA
 FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))

@@ -1,6 +1,14 @@
-﻿.venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
 .DS_Store
 *.log
+.keys/
+*.key
+*.secret
+backend/services/privacy/vault.key
+backend/database/*.db
+private_storage/vault_*
+vector_db/faiss_index.bin
+vector_db/id_map.json
