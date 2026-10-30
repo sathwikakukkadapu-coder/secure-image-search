@@ -215,11 +215,25 @@ def rebuild_vector_index(current_user: Optional[Dict[str, Any]] = Depends(requir
     
     for cat in sorted(categories):
         cat_path = os.path.join(DATASET_ROOT, cat)
-        img_files = sorted(glob.glob(os.path.join(cat_path, "*.*")))
+        img_files = []
+        for root, _, files in os.walk(cat_path):
+            for f in sorted(files):
+                if f.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                    img_files.append(os.path.join(root, f))
         
-        for img_path in img_files:
+        for img_path in sorted(img_files):
             fname = os.path.basename(img_path)
-            img_id = f"IMG_{cat[:3].upper()}_{os.path.splitext(fname)[0]}"
+            rel_to_cat = os.path.relpath(img_path, cat_path).replace("\\", "/")
+            parts = rel_to_cat.split("/")
+            
+            fn_stem = os.path.splitext(fname)[0]
+            if fn_stem.startswith("IMG_"):
+                img_id = fn_stem
+            elif len(parts) > 1:
+                subcat = parts[0]
+                img_id = f"IMG_{cat[:3].upper()}_{subcat[:3].upper()}_{fn_stem}"
+            else:
+                img_id = f"IMG_{cat[:3].upper()}_{fn_stem}"
             owner_id, is_private = owner_map.get(cat, ("USR_RES_02", False))
             
             try:
@@ -347,14 +361,27 @@ def run_incremental_indexing(current_user: Optional[Dict[str, Any]] = Depends(re
     new_files_indexed = 0
     for cat in sorted(categories):
         cat_path = os.path.join(DATASET_ROOT, cat)
-        img_files = sorted(glob.glob(os.path.join(cat_path, "*.*")))
+        img_files = []
+        for root, _, files in os.walk(cat_path):
+            for f in sorted(files):
+                if f.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                    img_files.append(os.path.join(root, f))
         
-        for img_path in img_files:
+        for img_path in sorted(img_files):
             fname = os.path.basename(img_path)
             if fname in existing_filenames:
                 continue # Already indexed
                 
-            img_id = f"IMG_{cat[:3].upper()}_{os.path.splitext(fname)[0]}"
+            rel_to_cat = os.path.relpath(img_path, cat_path).replace("\\", "/")
+            parts = rel_to_cat.split("/")
+            fn_stem = os.path.splitext(fname)[0]
+            if fn_stem.startswith("IMG_"):
+                img_id = fn_stem
+            elif len(parts) > 1:
+                subcat = parts[0]
+                img_id = f"IMG_{cat[:3].upper()}_{subcat[:3].upper()}_{fn_stem}"
+            else:
+                img_id = f"IMG_{cat[:3].upper()}_{fn_stem}"
             owner_id, is_private = owner_map.get(cat, ("USR_RES_02", False))
             
             try:
