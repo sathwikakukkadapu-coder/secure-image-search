@@ -18,6 +18,7 @@ from backend.api.evaluation import router as eval_router
 from backend.api.privacy import router as privacy_router
 from backend.api.security import router as security_router
 from backend.api.index_mgmt import router as index_mgmt_router
+from backend.api.research import router as research_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -56,11 +57,17 @@ app.include_router(eval_router)
 app.include_router(privacy_router)
 app.include_router(security_router)
 app.include_router(index_mgmt_router)
+app.include_router(research_router)
 
 # Mount frontend directory for SPA
 FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
+# Mount test_dataset directory for faculty presentations & live test queries
+TEST_DATASET_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_dataset"))
+if os.path.exists(TEST_DATASET_DIR):
+    app.mount("/test_dataset", StaticFiles(directory=TEST_DATASET_DIR), name="test_dataset")
 
 @app.get("/")
 def serve_index():

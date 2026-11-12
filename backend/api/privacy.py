@@ -8,9 +8,61 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 import backend.database.db as db
 from backend.services.retrieval.faiss_index import FAISSRetrievalEngine
 from backend.services.privacy.protector import PrivacyProtectionLayer
+from backend.services.privacy.representation import AdvancedPrivacyRepresentation, PrivacyRepresentationScheme
+from backend.services.retrieval.ckks_retriever import CKKSRetrievalEngine
+from backend.services.evaluation.security_evaluator import SecurityEvaluator
+from backend.services.privacy.keyed_projection import KeyedProjectionManager
+from backend.services.evaluation.privacy_leakage_benchmark import PrivacyLeakageBenchmark
 from backend.api.auth import get_current_user, require_researcher_or_admin
 
 router = APIRouter(prefix="/api/privacy", tags=["privacy"])
+
+class LDPTransformRequest(BaseModel):
+    vector: List[float]
+    scheme: str = "ldp_gaussian"
+    epsilon: float = 2.0
+    delta: float = 1e-5
+    sigma: float = 0.05
+
+@router.post("/transform")
+def apply_privacy_transform(req: LDPTransformRequest):
+    """Applies selected privacy representation (LDP Gaussian, LDP Laplace, Non-Invertible RFF, or Baseline)."""
+    mgr = AdvancedPrivacyRepresentation.get_instance(input_dim=len(req.vector), protected_dim=512)
+    vec = np.array(req.vector, dtype=np.float32)
+    protected, meta = mgr.transform(
+        vec,
+        scheme=req.scheme,
+        epsilon=req.epsilon,
+        delta=req.delta,
+        sigma=req.sigma
+    )
+    return {
+        "status": "success",
+        "metadata": meta,
+        "protected_vector": [round(float(v), 5) for v in protected],
+        "protected_dim": len(protected)
+    }
+
+@router.get("/ckks-benchmark")
+def run_ckks_benchmark(candidates: int = Query(8, ge=2, le=64)):
+    """Executes live CKKS Homomorphic Encryption inner-product benchmark with TenSEAL."""
+    engine = CKKSRetrievalEngine.get_instance(vector_dim=512)
+    return engine.benchmark_ckks_pipeline(num_candidates=candidates)
+
+@router.get("/security-attacks")
+def run_security_attacks(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """Executes empirical Feature Inversion, Known-Gallery Identification, and MIA security evaluation."""
+    evaluator = SecurityEvaluator.get_instance()
+    inv_res = evaluator.run_feature_inversion_experiment(num_samples=15)
+    gallery_res = evaluator.run_known_gallery_identification_experiment(gallery_size=50, probe_count=15)
+    access_res = evaluator.run_membership_inference_and_access_audit()
+    return {
+        "status": "completed",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "inversion_attack_benchmark": inv_res,
+        "known_gallery_identification": gallery_res,
+        "access_control_and_mia": access_res
+    }
 
 class PrivacyExperimentRequest(BaseModel):
     sigmas: List[float] = [0.0, 0.02, 0.05, 0.10, 0.20]
@@ -267,3 +319,105 @@ def export_privacy_history(
             lines.append(f"{exp['experiment_id']},{exp['timestamp']},{exp['user_id']},{exp['dataset_name']},{exp['sample_count']},{exp['sigma']},{exp['status']}")
         csv_content = "\n".join(lines)
         return Response(content=csv_content, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=privacy_leakage_experiments.csv"})
+
+
+# ==============================================================================
+# Dedicated Privacy Protection & Leakage Assessment Benchmark Endpoints
+# ==============================================================================
+
+class InversionAttackRequest(BaseModel):
+    image_id: Optional[str] = None
+    iterations: int = 30
+
+class MIARequest(BaseModel):
+    sample_size: int = 40
+
+
+@router.get("/leakage/overview")
+def get_leakage_benchmark_overview(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """Returns active keyed protection metadata, key lifecycle info, and threat model."""
+    mgr = KeyedProjectionManager.get_instance()
+    meta = mgr.get_public_metadata()
+    return {
+        "status": "active",
+        "keyed_protection": meta,
+        "threat_model": {
+            "adversary_objective": "Reconstruct original image pre-image or infer membership/category from stored vectors",
+            "adversary_knowledge": "Access to 512-D float32 vectors stored in FAISS or intercepted queries; secret key P_K remains confidential",
+            "invariants": [
+                "Original 1280-D CNN vectors are never stored in the database",
+                "Secret projection key is held exclusively in isolated key vault (.keys/)",
+                "Query vectors undergo identical keyed transformation on the trusted boundary"
+            ]
+        }
+    }
+
+
+@router.post("/leakage/inversion")
+def run_inversion_attack_benchmark(
+    req: InversionAttackRequest = InversionAttackRequest(),
+    current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
+):
+    """
+    Executes empirical pre-image inversion attack:
+    Compares reconstruction from Raw 1280-D vs Keyed 512-D vs Keyed + Calibrated Noise.
+    Returns SSIM, PSNR (dB), Perceptual Distance, and Base64 preview images.
+    """
+    bench = PrivacyLeakageBenchmark.get_instance()
+    return bench.run_embedding_inversion_attack(image_id=req.image_id, iterations=req.iterations)
+
+
+@router.post("/leakage/membership-inference")
+def run_mia_benchmark(
+    req: MIARequest = MIARequest(),
+    current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
+):
+    """
+    Simulates Membership Inference Attack (MIA):
+    Reports ROC-AUC, accuracy, and ROC curve across Unprotected, Keyed, and Keyed+Noise.
+    """
+    bench = PrivacyLeakageBenchmark.get_instance()
+    return bench.run_membership_inference_attack(sample_size=req.sample_size)
+
+
+@router.post("/leakage/attribute-inference")
+def run_attribute_inference_benchmark(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """
+    Evaluates attribute inference vulnerability (class prediction)
+    across Raw vs Keyed vs Noise vs Random Chance baseline.
+    """
+    bench = PrivacyLeakageBenchmark.get_instance()
+    return bench.run_attribute_inference_attack()
+
+
+@router.post("/leakage/similarity-leakage")
+def run_similarity_leakage_benchmark(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """
+    Evaluates similarity clustering recovery using Normalized Mutual Information (NMI)
+    and Adjusted Rand Index (ARI).
+    """
+    bench = PrivacyLeakageBenchmark.get_instance()
+    return bench.run_similarity_leakage_attack()
+
+
+@router.get("/leakage/tradeoff-curve")
+def get_privacy_utility_tradeoff_curve(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """Returns empirical Privacy vs Retrieval Utility Trade-off curve across noise sigma values."""
+    bench = PrivacyLeakageBenchmark.get_instance()
+    return bench.compute_privacy_utility_tradeoff()
+
+
+@router.post("/key/rotate")
+def rotate_projection_key(current_user: Optional[Dict[str, Any]] = Depends(require_researcher_or_admin)):
+    """Rotates the secret projection key and re-derives the orthonormal projection matrix."""
+    mgr = KeyedProjectionManager.get_instance()
+    res = mgr.rotate_key()
+    db.log_audit(
+        current_user.get("user_id") if current_user else "ADMIN",
+        "KEY_ROTATION",
+        "COMPLETED",
+        f"Projection key rotated to {res['key_id']} (version {res['version']})",
+        category="SECURITY",
+        severity="WARNING"
+    )
+    return res

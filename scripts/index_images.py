@@ -162,8 +162,8 @@ def index_all():
                     pil_img = pil_img.convert("RGB")
                 raw_vector, _, _ = extractor.extract_features(pil_img)
             
-            # 4. Apply Privacy Protection (Orthogonal Projection + Noise)
-            protected_vector, _ = protector.protect_vector(raw_vector, apply_noise=True, sigma=0.05)
+            # 4. Apply Privacy Protection (Orthogonal Projection)
+            protected_vector, _ = protector.protect_vector(raw_vector, apply_noise=False, sigma=0.0)
             
             # 5. Add to FAISS Vector Index (Stores ONLY Float32 Vector, ZERO pixels)
             row_id = retriever.add_vector(protected_vector, img_id)

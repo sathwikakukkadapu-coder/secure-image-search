@@ -248,8 +248,8 @@ def rebuild_vector_index(current_user: Optional[Dict[str, Any]] = Depends(requir
                 with Image.open(img_path) as pil_img:
                     raw_vec, _, _ = extractor.extract_features(pil_img)
                     
-                # 4. Protect Representation
-                prot_vec, _ = protector.protect_vector(raw_vec, apply_noise=True, sigma=0.05)
+                # 4. Protect Representation (Orthogonal Projection)
+                prot_vec, _ = protector.protect_vector(raw_vec, apply_noise=False, sigma=0.0)
                 
                 # 5. Add to staging FAISS
                 vec_arr = prot_vec.reshape(1, 512).astype(np.float32)
@@ -392,7 +392,7 @@ def run_incremental_indexing(current_user: Optional[Dict[str, Any]] = Depends(re
                 with Image.open(img_path) as pil_img:
                     raw_vec, _, _ = extractor.extract_features(pil_img)
                     
-                prot_vec, _ = protector.protect_vector(raw_vec, apply_noise=True, sigma=0.05)
+                prot_vec, _ = protector.protect_vector(raw_vec, apply_noise=False, sigma=0.0)
                 row_id = retriever.add_vector(prot_vec, img_id)
                 
                 db.insert_image(img_id, owner_id, fname, enc_ref, cat, is_private)

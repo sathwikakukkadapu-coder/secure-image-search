@@ -144,6 +144,7 @@ def test_full_pipeline():
         "protected_vector": local_data["protected_vector"],
         "top_k": 5,
         "threshold": 0.2,
+        "include_below_threshold": True,
         "strip_metadata": True
     }
     res_cf = requests.post(

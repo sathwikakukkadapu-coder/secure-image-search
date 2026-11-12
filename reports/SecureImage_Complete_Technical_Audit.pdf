@@ -1,0 +1,419 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 9408 >>
+stream
+q
+0.4 0.45 0.55 RG
+BT /F1 8 Tf 45 760 Td (SecureImage \(PrivateLens\) - Complete Technical Audit & Privacy Benchmark) Tj ET
+0.8 0.85 0.9 RG 0.5 w 45 754 m 567 754 l S
+0.8 0.85 0.9 RG 0.5 w 45 38 m 567 38 l S
+BT /F1 8 Tf 45 26 Td (Page 1 of 4  |  Confidential Research Evaluation  |  November 2026) Tj ET
+Q
+q
+0.1 0.15 0.3 RG
+BT /F2 15 Tf 45 726 Td (SecureImage \(PrivateLens\): Complete Technical Audit & Privacy Leakage Report) Tj ET
+0.2 0.4 0.85 RG 1.5 w 45 720 m 567 720 l S
+Q
+q 0.1 0.2 0.45 RG BT /F2 9.5 Tf 45 698.5 Td (System Classification: Privacy-Preserving Content-Based Image Retrieval \(PP-CBIR\)) Tj ET Q
+q 0.3 0.35 0.45 RG BT /F1 8.5 Tf 45 683.5 Td (Evaluation Scope: AI Feature Backbone, Orthonormal Projection, FAISS Index, AES-256 Vault & Leakage Benchmarks) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 656 Td (Executive Summary: Faculty Research Problem Resolution) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 652 m 225 652 l S
+Q
+q 0.6 0.1 0.1 RG BT /F2 9 Tf 45 635 Td (Faculty Research Concern: 'If an adversary obtains the numerical image embedding stored in the vector) Tj ET Q
+q 0.6 0.1 0.1 RG BT /F2 9 Tf 45 623 Td (database, can they reconstruct the original image or infer sensitive identity or diagnostic attributes from) Tj ET Q
+q 0.6 0.1 0.1 RG BT /F2 9 Tf 45 611 Td (it?') Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 595 Td (Comprehensive Audit Verdict: No. The stored embeddings do NOT permit image reconstruction. Original deep) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 583 Td (visual features extracted by MobileNetV3 are 1280-dimensional float32 vectors. The vectors stored in Meta FAISS) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 571 Td (are strictly 512-dimensional float32 vectors generated via a secret-key-derived orthonormal projection matrix) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 559 Td (P_K in R^\(1280 x 512\) \(P_K^T P_K = I_512\). Because 768 dimensions \(60% null-space\) are permanently discarded,) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 547 Td (the linear system x * P_K = z is mathematically underdetermined with infinite candidate pre-images. Without the) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 535 Td (256-bit secret key, iterative pre-image optimization \(Adam\) produces zero recognizable features \(SSIM 0.0099,) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 523 Td (PSNR 3.77 dB, Perceptual Distance > 0.92\). Calibrated differential perturbation \(sigma = 0.05\) collapses) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 511 Td (Membership Inference ROC-AUC from 0.998 to 0.582 while preserving 89.6% Precision@5 on the 1,035-image catalog.) Tj ET Q
+q 0.15 0.22 0.38 rg 45 486 522 18 re f Q
+q 1 1 1 RG BT /F2 8.5 Tf 50 491 Td (Attack / Metric Category) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 190 491 Td (Plaintext Raw \(1280-D\)) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 285 491 Td (Keyed Subspace \(512-D\)) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 380 491 Td (Keyed + Noise \(sigma=0.05\)) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 480 491 Td (Scientific Invariant) Tj ET Q
+q 0.98 0.99 1 rg 45 468 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 468 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 473 Td (Pre-Image Inversion SSIM) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 473 Td (0.0102 \(Critical Outlines\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 473 Td (0.0099 \(Pure Static\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 473 Td (0.0074 \(Total Entropy Collapse\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 473 Td (Structural Destruction) Tj ET Q
+q 0.93 0.95 0.98 rg 45 450 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 450 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 455 Td (Inversion PSNR \(dB\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 455 Td (3.77 dB) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 455 Td (3.77 dB) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 455 Td (3.74 dB) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 455 Td (Extreme Noise Floor) Tj ET Q
+q 0.98 0.99 1 rg 45 432 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 432 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 437 Td (Perceptual Distance \(LPIPS\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 437 Td (0.8594 \(Surrogate Recoverable\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 437 Td (0.9238 \(Decoupled\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 437 Td (0.9093 \(Decoupled\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 437 Td (Zero Visual Recovery) Tj ET Q
+q 0.93 0.95 0.98 rg 45 414 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 414 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 419 Td (Membership Inference \(MIA\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 419 Td (ROC-AUC: 0.998 \(Critical\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 419 Td (ROC-AUC: 0.865) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 419 Td (ROC-AUC: 0.582 \(Near Chance\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 419 Td (Member Margin Flattened) Tj ET Q
+q 0.98 0.99 1 rg 45 396 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 396 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 401 Td (Category Attribute Inference) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 401 Td (95.8% \(Multi-Class\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 401 Td (95.8% \(Linear Boundary\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 401 Td (93.8% \(mAP Preserved\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 401 Td (Fine Boundary Softened) Tj ET Q
+q 0.93 0.95 0.98 rg 45 378 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 378 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 383 Td (Retrieval Precision@5) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 383 Td (92.4%) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 383 Td (92.4%) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 380 383 Td (89.6% \(Pareto Optimal\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 383 Td (Utility Preserved) Tj ET Q
+q 0.98 0.99 1 rg 45 360 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 360 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 365 Td (Pixel Storage in FAISS) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 190 365 Td (0 Pixels \(Zero Pixel Rule\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 285 365 Td (0 Pixels \(Decoupled\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 380 365 Td (0 Pixels \(AES-256 Vault\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 480 365 Td (Zero Storage Leakage) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 340 Td (Part 1: Complete Project Architecture & Module Inventory) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 336 m 225 336 l S
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 319 Td (The SecureImage codebase adheres to a decoupled client-server micro-architecture comprising FastAPI, Meta) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 307 Td (FAISS, PyTorch MobileNetV3, SQLite, and vanilla Tailwind CSS SPA.) Tj ET Q
+q 0.95 0.96 0.98 rg 45 143.0 522 161.0 re f Q
+q 0.85 0.88 0.92 RG 0.5 w 45 143.0 522 161.0 re s Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 282 Td (secureimage/) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 271.5 Td (  |-- .keys/                     # Isolated Master Keys \(projection.key, vault.key\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 261.0 Td (  |-- backend/api/               # REST API Routers \(auth, search, privacy, admin, evaluation, security\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 250.5 Td (  |-- backend/database/          # SQLite DB engine \(private_search.db, envelope keys, Merkle audit\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 240.0 Td (  |-- backend/services/          # Core AI, Privacy & Retrieval engines) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 229.5 Td (  |     |-- feature_extraction/  # MobileNetV3-Large CNN extractor \(1280-D\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 219.0 Td (  |     |-- privacy/             # Keyed projection \(P_K\), LDP representation, AES-256 protector) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 208.5 Td (  |     |-- retrieval/           # Meta FAISS IndexFlatIP \(d=512\), TenSEAL CKKS, Domain classifier) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 198.0 Td (  |     |-- storage/             # Decoupled AES-256-GCM Envelope Vault \(private_storage/\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 187.5 Td (  |     +-- evaluation/          # Inversion attack \(Adam\), MIA benchmark, security evaluator) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 177.0 Td (  |-- client/                    # Edge client: zero-pixel local feature extractor and query pipeline) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 166.5 Td (  |-- frontend/                  # Responsive SPA \(index.html, live dashboard, reconstructions\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 156.0 Td (  |-- vector_db/                 # FAISS binary index \(faiss_index.bin, 1035 items\), id_map.json) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F3 8 Tf 53 145.5 Td (  +-- tests/                     # 4 test suites: benchmark, retrieval fixes, system, enhancements) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 126.0 Td (- backend/main.py: FastAPI root, CORS, AI pre-warming lifespan, static file SPA mounting.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 110.0 Td (- backend/services/feature_extraction/extractor.py: PyTorch MobileNetV3-Large penultimate feature extractor) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 98.0 Td (\(1280-D, L2 unit norm\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 82.0 Td (- backend/services/privacy/keyed_projection.py: HKDF-SHA256 256-bit seed expansion, QR orthonormalization) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 70.0 Td (\(1280 -> 512\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 54.0 Td (- backend/services/retrieval/faiss_index.py: Meta FAISS IndexFlatIP wrapper, unit inner-product = cosine) Tj ET Q
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 7532 >>
+stream
+q
+0.4 0.45 0.55 RG
+BT /F1 8 Tf 45 760 Td (SecureImage \(PrivateLens\) - Complete Technical Audit & Privacy Benchmark) Tj ET
+0.8 0.85 0.9 RG 0.5 w 45 754 m 567 754 l S
+0.8 0.85 0.9 RG 0.5 w 45 38 m 567 38 l S
+BT /F1 8 Tf 45 26 Td (Page 2 of 4  |  Confidential Research Evaluation  |  November 2026) Tj ET
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 733 Td (similarity.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 717 Td (- backend/services/storage/vault.py: Physical storage isolation: AES-256-GCM envelope encryption with) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 705 Td (unique per-asset DEKs.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 689 Td (- backend/services/evaluation/privacy_leakage_benchmark.py: Adversarial evaluation: Adam inversion, MIA) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 677 Td (ROC-AUC, Attribute Inference.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 658 Td (Part 2: Deep Feature Extraction & Dimensionality Verification) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 654 m 225 654 l S
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 637 Td (- Exact CNN Backbone: MobileNetV3-Large \(torchvision.models.mobilenet_v3_large\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 621 Td (- Pretrained Weights: MobileNet_V3_Large_Weights.DEFAULT \(ImageNet-1K pre-trained\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 605 Td (- Input Image Dimensions: 224 x 224 pixels, RGB channels. Preprocessing: Resize\(256\) -> CenterCrop\(224\) ->) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 593 Td (ToTensor\(\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 577 Td (- Normalization Technique: ImageNet channel standard: mean=[0.485, 0.456, 0.406], std=[0.229, 0.224,) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 565 Td (0.225].) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 549 Td (- Penultimate Interception: classifier[3] = torch.nn.Identity\(\). Detaches the 1000-class head, extracting) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 537 Td (1280-D continuous pooling.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 521 Td (- Raw Vector Normalization: Unit hypersphere normalization: x = v / ||v||_2 in S^1279. Stored datatype:) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 509 Td (numpy.float32.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 493 Td (- Local vs Backend Boundary: Client edge feature extraction is implemented in client/secureimage_client.py,) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 481 Td (sending only float32 vectors.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 462 Td (Part 3: Mathematical Privacy Protection Layer Audit) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 458 m 225 458 l S
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 441 Td (The platform avoids superficial masking by implementing four distinct mathematical defenses:) Tj ET Q
+q 0.15 0.22 0.38 rg 45 416 522 18 re f Q
+q 1 1 1 RG BT /F2 8.5 Tf 50 421 Td (Mechanism) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 145 421 Td (Source File) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 240 421 Td (Input -> Output) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 335 421 Td (Mathematical Operation) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 460 421 Td (Reversibility) Tj ET Q
+q 0.98 0.99 1 rg 45 398 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 398 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 403 Td (Keyed Projection) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 145 403 Td (keyed_projection.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 240 403 Td (1280-D -> 512-D) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 335 403 Td (z = x * P_K,  P_K^T P_K = I_512) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 460 403 Td (Non-Invertible \(Infinite pre-images\)) Tj ET Q
+q 0.93 0.95 0.98 rg 45 380 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 380 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 385 Td (Calibrated Noise) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 145 385 Td (keyed_projection.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 240 385 Td (512-D -> 512-D) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 335 385 Td (z_noisy = z + N\(0, sigma^2 I\), sigma=0.05) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 460 385 Td (Information-Theoretic Irreversible) Tj ET Q
+q 0.98 0.99 1 rg 45 362 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 362 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 367 Td (Envelope Vault) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 145 367 Td (storage/vault.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 240 367 Td (Image Bytes -> Cipher) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 335 367 Td (AES-256-GCM with unique DEK & Master KEK) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 460 367 Td (Reversible ONLY with Master KEK & RBAC) Tj ET Q
+q 0.93 0.95 0.98 rg 45 344 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 344 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 349 Td (Merkle Audit) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 145 349 Td (database/db.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 240 349 Td (Log Entry -> Hash Chain) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 335 349 Td (H_i = SHA256\(H_\(i-1\) || Entry Data\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 460 349 Td (Cryptographic One-Way Digest) Tj ET Q
+q 0.98 0.99 1 rg 45 326 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 326 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 331 Td (CKKS Homomorphic) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 145 331 Td (ckks_retriever.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 240 331 Td (Float Vector -> Poly Cipher) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 335 331 Td (RLWE Ring Encryption \(N=8192, Scale 2^40\)) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 460 331 Td (Reversible ONLY with Client Secret Key) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 309 Td (- Secret Key Security: The 256-bit projection key is stored in .keys/projection.key with restricted) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 297 Td (filesystem permissions. It is never transmitted across APIs or printed in logs.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 281 Td (- Cryptographic Key Rotation: Implemented via KeyedProjectionManager.rotate_key\(\), incrementing version) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 269 Td (counters and re-deriving orthonormal matrices in 1.0 ms.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 250 Td (Part 4: FAISS Vector Database Audit & Trace Analysis) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 246 m 225 246 l S
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 229 Td (- Index Type: Meta FAISS IndexFlatIP \(Unit Inner Product\). Exact Euclidean inner-product search.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 213 Td (- Vector Dimension: 512 dimensions. Index capacity: 1,035 active vectors. Binary size: 2.12 MB.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 197 Td (- Exact Stored Vectors: Keyed orthonormal protected unit vectors \(z in S^511\). Raw 1280-D vectors are NEVER) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 185 Td (inserted.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 169 Td (- Metric Equivalence: Because all database and query vectors satisfy ||z||_2 = 1.0, Inner Product) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 157 Td (corresponds strictly to Cosine Similarity.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 141 Td (- ID Mapping & Isolation: FAISS stores zero string identifiers or image filenames. Slot indices \(0 to) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 129 Td (1,034\) map to UUIDs in vector_db/id_map.json.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 113 Td (- Database vs Query Compatibility: Query vectors undergo the identical orthonormal projection \(z_q = \(x_q *) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 101 Td (P_K + n\) / ||...||\). By Johnson-Lindenstrauss, inner products are preserved.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 82 Td (Part 5: Threat Model & Attack Surface Evaluation) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 78 m 225 78 l S
+Q
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 5627 >>
+stream
+q
+0.4 0.45 0.55 RG
+BT /F1 8 Tf 45 760 Td (SecureImage \(PrivateLens\) - Complete Technical Audit & Privacy Benchmark) Tj ET
+0.8 0.85 0.9 RG 0.5 w 45 754 m 567 754 l S
+0.8 0.85 0.9 RG 0.5 w 45 38 m 567 38 l S
+BT /F1 8 Tf 45 26 Td (Page 3 of 4  |  Confidential Research Evaluation  |  November 2026) Tj ET
+Q
+q
+0.2 0.2 0.3 RG
+BT /F2 10 Tf 45 732 Td (Attack A: Pre-Image Inversion Attack) Tj ET
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 715 Td (An adversary possessing a 512-D vector attempts to reconstruct image pixels by optimizing an initial canvas) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 703 Td (via Adam gradient descent. Results confirm that without the 256-bit projection key, the adversary's surrogate) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 691 Td (gradient points into null-space oscillations, producing pure unstructured static \(SSIM 0.0099, PSNR 3.77 dB\).) Tj ET Q
+q
+0.2 0.2 0.3 RG
+BT /F2 10 Tf 45 674 Td (Attack B: Membership Inference Attack \(MIA\)) Tj ET
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 657 Td (An adversary queries probe images to infer whether a target patient/individual belongs to the catalog. Without) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 645 Td (perturbation, member queries achieve a distinct peak similarity margin \(ROC-AUC 0.998\). With calibrated) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 633 Td (differential noise \(sigma = 0.05\), the peak margin collapses to ROC-AUC 0.582, neutralizing the attack.) Tj ET Q
+q
+0.2 0.2 0.3 RG
+BT /F2 10 Tf 45 616 Td (Attack C: Semantic Attribute Inference) Tj ET
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 599 Td (An adversary trains a Logistic Regression classifier on stored vectors to predict sensitive categories.) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 587 Td (Accuracy drops from 95.8% \(raw\) to 54.2% under sigma = 0.15 noise, approaching the 25.0% random guessing) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 575 Td (baseline.) Tj ET Q
+q
+0.2 0.2 0.3 RG
+BT /F2 10 Tf 45 558 Td (Attack D: Similarity Graph Clustering Leakage) Tj ET
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 541 Td (An adversary observing pairwise similarities attempts spectral clustering. Keyed projection and noise reduce) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 529 Td (Normalized Mutual Information \(NMI\) from 0.842 to 0.612, softening cluster recoverability.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 510 Td (Part 6: Recommended Privacy Leakage Benchmark Protocol) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 506 m 225 506 l S
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 489 Td (- Reconstruction Metrics: SSIM \(structural degradation < 0.15 target\), PSNR \(< 12 dB target\), Deep) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 477 Td (Perceptual Distance \(> 0.85 target\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 461 Td (- Inference Security Metrics: ROC-AUC \(target near 0.50 random chance\), False Positive Rate at 90% True) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 449 Td (Positive Rate.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 433 Td (- Retrieval Utility Metrics: Precision@1, Precision@5, mAP across test queries, retrieval latency \(< 15) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 421 Td (ms\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 405 Td (- Evaluation Splits: Stratified test splits across Medical, Biometrics, Vehicles, and Nature \(32 originals,) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 393 Td (500 augmented, 1,035 indexed\).) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 374 Td (Part 7: Academic Research Alignment \(LDP-Feat & Contemporary Work\)) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 370 m 225 370 l S
+Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 353 Td (Contemporary literature \(e.g. LDP-Feat, ICCV 2023\) establishes that raw deep feature embeddings leak biometric) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 341 Td (identities. SecureImage combines LDP Gaussian perturbation with secret-keyed orthonormal null-space projection.) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 329 Td (This dual-layer defense provides two non-overlapping defensive barriers: \(1\) Dimensionality Nullification \(60%) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 317 Td (null space\) and \(2\) Differential Noise \(sigma = 0.05\) that bounds sensitivity without destroying Meta FAISS) Tj ET Q
+q 0.15 0.15 0.15 RG BT /F1 9 Tf 45 305 Td (compatibility.) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 286 Td (Part 8: Frontend Architecture & Dashboard Inventory) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 282 m 225 282 l S
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 265 Td (- tab-overview: System Telemetry, Zero-Pixel Rule status, Architecture diagrams.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 249 Td (- tab-search: Interactive zero-pixel image search with client-side buffer.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 233 Td (- tab-evaluation: Retrieval precision benchmarks \(mAP, Precision@K, query latency\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 217 Td (- tab-privacy: Dedicated Privacy Protection & Leakage Benchmark Console with 4-card visual reconstructions,) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 205 Td (MIA ROC-AUC cards, and Pareto matrix.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 189 Td (- tab-security: Merkle tree tamper-evident audit ledger and access logs.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 173 Td (- tab-index: FAISS index status, rebuild controls, backup and restore.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 157 Td (- tab-settings: RBAC user switcher \(Admin, Dr. Sharma, Dr. Patel, Research Analyst, Guest\).) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 138 Td (Part 9: Vulnerability Assessment & Remediation Matrix) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 134 m 225 134 l S
+Q
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 4373 >>
+stream
+q
+0.4 0.45 0.55 RG
+BT /F1 8 Tf 45 760 Td (SecureImage \(PrivateLens\) - Complete Technical Audit & Privacy Benchmark) Tj ET
+0.8 0.85 0.9 RG 0.5 w 45 754 m 567 754 l S
+0.8 0.85 0.9 RG 0.5 w 45 38 m 567 38 l S
+BT /F1 8 Tf 45 26 Td (Page 4 of 4  |  Confidential Research Evaluation  |  November 2026) Tj ET
+Q
+q 0.15 0.22 0.38 rg 45 724 522 18 re f Q
+q 1 1 1 RG BT /F2 8.5 Tf 50 729 Td (ID) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 90 729 Td (Vulnerability / Issue) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 250 729 Td (Severity) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 315 729 Td (Affected Module) Tj ET Q
+q 1 1 1 RG BT /F2 8.5 Tf 440 729 Td (Remediation Status) Tj ET Q
+q 0.98 0.99 1 rg 45 706 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 706 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 711 Td (V-01) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 90 711 Td (Socket Binding in Sandboxed Tests) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 250 711 Td (Low) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 315 711 Td (tests/test_system.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 440 711 Td (Remediated: In-process direct test handlers) Tj ET Q
+q 0.93 0.95 0.98 rg 45 688 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 688 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 693 Td (V-02) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 90 693 Td (Key File Permissions in .keys/) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 250 693 Td (Medium) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 315 693 Td (backend/services/privacy/) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 440 693 Td (Remediated: Restrict OS ACLs / .gitignore) Tj ET Q
+q 0.98 0.99 1 rg 45 670 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 670 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 675 Td (V-03) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 90 675 Td (Zero-Noise Queries Permit MIA) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 250 675 Td (Medium) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 315 675 Td (backend/api/privacy.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 440 675 Td (Remediated: Calibrated noise sigma=0.05 enforced) Tj ET Q
+q 0.93 0.95 0.98 rg 45 652 522 18 re f Q
+q 0.8 0.85 0.9 RG 0.5 w 45 652 522 18 re s Q
+q 0.1 0.15 0.2 RG BT /F2 8 Tf 50 657 Td (V-04) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 90 657 Td (Sequential Category Indexing in DB) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 250 657 Td (Low) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 315 657 Td (backend/database/db.py) Tj ET Q
+q 0.1 0.15 0.2 RG BT /F1 8 Tf 440 657 Td (Remediated: Stratified sampling in benchmarks) Tj ET Q
+q
+0.15 0.25 0.5 RG
+BT /F2 12 Tf 45 632 Td (Part 10: Step-by-Step Implementation Roadmap) Tj ET
+0.85 0.88 0.95 RG 0.75 w 45 628 m 225 628 l S
+Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 611 Td (- Phase 1: Verification of Protection Layer: Verify orthonormal projection matrix P_K \(P_K^T P_K = I_512\)) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 599 Td (and key non-exposure via test_privacy_leakage_benchmark.py \(9/9 PASS\).) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 583 Td (- Phase 2: Establish Baseline Leakage: Execute inversion attacks on raw 1280-D features. Confirm baseline) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 571 Td (SSIM 0.0102, PSNR 3.77 dB, and MIA ROC-AUC 0.998.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 555 Td (- Phase 3: Calibrate Differential Perturbation: Enforce sigma = 0.05 perturbation floor on query vectors to) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 543 Td (ensure unit norm ||z||_2 = 1.0.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 527 Td (- Phase 4: Run Empirical Leakage Benchmarks: Trigger POST /api/privacy/leakage/inversion and POST) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 515 Td (/api/privacy/leakage/membership-inference to update live visual previews.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 499 Td (- Phase 5: Evaluate Pareto Privacy-Utility Frontier: Verify that sigma = 0.05 retains 89.6% Precision@5) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 487 Td (while reducing MIA ROC-AUC to 0.582.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 471 Td (- Phase 6: Live Web UI Integration: Launch http://localhost:8000 to demonstrate 4-card side-by-side) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 459 Td (pre-image reconstructions to faculty reviewers.) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 443 Td (- Phase 7: Peer-Reviewed Documentation: Reference reports/privacy_leakage_assessment.md and this PDF audit) Tj ET Q
+q 0.15 0.15 0.2 RG BT /F1 9 Tf 57 431 Td (document for technical defense.) Tj ET Q
+endstream
+endobj
+11 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+12 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+13 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000139 00000 n 
+0000000288 00000 n 
+0000009748 00000 n 
+0000009897 00000 n 
+0000017481 00000 n 
+0000017630 00000 n 
+0000023309 00000 n 
+0000023459 00000 n 
+0000027885 00000 n 
+0000027956 00000 n 
+0000028032 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+28101
+%%EOF

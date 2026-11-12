@@ -1,7 +1,7 @@
 import time
 import hmac
 import hashlib
-from fastapi import APIRouter, HTTPException, Depends, Header, Request
+from fastapi import APIRouter, HTTPException, Depends, Header, Request, Query
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 import backend.database.db as db
@@ -137,17 +137,25 @@ def list_demo_users():
     conn.close()
     return [dict(r) for r in rows]
 
-def get_current_user(authorization: Optional[str] = Header(None)) -> Optional[Dict[str, Any]]:
+def get_current_user(
+    authorization: Optional[str] = Header(None),
+    token: Optional[str] = Query(None)
+) -> Optional[Dict[str, Any]]:
     """
     Extracts and cryptographically validates the active user identity.
+    Accepts token via Authorization Header (Bearer ...) or Query param (?token=...).
     Prevents client-side user ID tampering / impersonation.
     Supports backward compatibility for test suites with 'Bearer USR_...' tokens.
     """
-    if not authorization:
+    raw_token = None
+    if authorization and isinstance(authorization, str):
+        raw_token = authorization.replace("Bearer ", "").replace("bearer_", "").strip()
+    elif token and isinstance(token, str):
+        raw_token = token.replace("Bearer ", "").replace("bearer_", "").strip()
+
+    if not raw_token:
         return db.get_user_by_id("USR_GST_99")
         
-    raw_token = authorization.replace("Bearer ", "").replace("bearer_", "").strip()
-    
     # 1. Cryptographically signed token check
     verified_uid = verify_signed_token(raw_token)
     if verified_uid:

@@ -1,0 +1,6 @@
+{
+  "test_id": "TC03",
+  "status": "BLOCKED",
+  "reason": "Hybrid visual-text ranking fusion algorithm is not implemented. Retrieval pipeline operates strictly on 512-D visual feature vectors.",
+  "checked_routes": []
+}

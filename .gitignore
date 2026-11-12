@@ -12,3 +12,11 @@ backend/database/*.db
 private_storage/vault_*
 vector_db/faiss_index.bin
 vector_db/id_map.json
+vector_db/*_backup.*
+
+# Zip archives and backup files
+*.zip
+*.bak
+test_pdf.html
+test_valid.pdf
+secureimage_dataset/

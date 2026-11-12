@@ -1,0 +1,12 @@
+{
+  "test_id": "TC05",
+  "input_file": "corrupted_payload.jpg",
+  "http_status": 400,
+  "error_detail": "Unsupported or corrupted image file.",
+  "db_records_before": 1035,
+  "db_records_after": 1035,
+  "faiss_vectors_before": 1035,
+  "faiss_vectors_after": 1035,
+  "backend_survived": true,
+  "status": "PASS"
+}

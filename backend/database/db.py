@@ -12,18 +12,34 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+try:
+    from argon2 import PasswordHasher
+    from argon2.exceptions import VerifyMismatchError
+    _argon2_hasher = PasswordHasher(time_cost=2, memory_cost=65536, parallelism=2, hash_len=32)
+except ImportError:
+    _argon2_hasher = None
+
 def hash_password(password: str, salt: Optional[bytes] = None) -> str:
-    """Computes PBKDF2-HMAC-SHA256 with 100,000 iterations and a 16-byte cryptographic salt."""
+    """Hashes password using Argon2id with transparent fallback to PBKDF2."""
+    if _argon2_hasher is not None and salt is None:
+        return _argon2_hasher.hash(password)
     if salt is None:
         salt = os.urandom(16)
     key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)
     return f"pbkdf2:sha256:100000${salt.hex()}${key.hex()}"
 
 def verify_password(password: str, stored_hash: str) -> bool:
-    """Verifies password against stored PBKDF2 hash or legacy SHA-256 with constant-time comparison."""
+    """Verifies password against stored Argon2id, PBKDF2 hash, or legacy SHA-256 with constant-time comparison."""
     if not stored_hash:
         return False
         
+    if stored_hash.startswith("$argon2"):
+        if _argon2_hasher is not None:
+            try:
+                return _argon2_hasher.verify(stored_hash, password)
+            except Exception:
+                return False
+                
     if stored_hash.startswith("pbkdf2:sha256:"):
         parts = stored_hash.split("$")
         if len(parts) == 3:
@@ -146,10 +162,23 @@ def init_db():
         updated_at TEXT NOT NULL
     )
     """)
+
+    # Create image_encryption_keys table for Envelope Encryption (Wrapped DEKs)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS image_encryption_keys (
+        image_id TEXT PRIMARY KEY,
+        wrapped_dek TEXT NOT NULL,
+        dek_nonce TEXT NOT NULL,
+        key_algorithm TEXT NOT NULL DEFAULT 'AES-256-GCM',
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (image_id) REFERENCES images (image_id)
+    )
+    """)
     
     # Pre-seed realistic users with PBKDF2 salted hashes
     seed_users = [
         ("USR_DOC_01", "Dr. R. Sharma", "doctor@hospital.org", hash_password("doctor123"), "specialist"),
+        ("USR_DOC_02", "Dr. Anita Patel", "anita.patel@clinic.org", hash_password("doctor456"), "specialist"),
         ("USR_RES_02", "Alex Verma", "researcher@lab.org", hash_password("research123"), "researcher"),
         ("USR_ADM_00", "System Security Admin", "admin@security.org", hash_password("admin123"), "admin"),
         ("USR_GST_99", "Public Guest", "guest@demo.org", hash_password("guest123"), "guest")
@@ -219,6 +248,17 @@ def get_image(image_id: str) -> Optional[Dict[str, Any]]:
     row = cur.fetchone()
     conn.close()
     return dict(row) if row else None
+
+def get_images_by_ids(image_ids: List[str]) -> Dict[str, Dict[str, Any]]:
+    if not image_ids:
+        return {}
+    conn = get_connection()
+    cur = conn.cursor()
+    placeholders = ",".join("?" for _ in image_ids)
+    cur.execute(f"SELECT * FROM images WHERE image_id IN ({placeholders})", tuple(image_ids))
+    rows = cur.fetchall()
+    conn.close()
+    return {dict(r)["image_id"]: dict(r) for r in rows}
 
 def get_all_images() -> List[Dict[str, Any]]:
     conn = get_connection()
@@ -470,3 +510,24 @@ def get_system_stats() -> Dict[str, Any]:
         "blocked_attempts": blocked_attempts,
         "zero_pixel_database": True
     }
+
+def store_image_encryption_key(image_id: str, wrapped_dek: str, dek_nonce: str, key_algorithm: str = "AES-256-GCM"):
+    """Stores wrapped DEK for Envelope Encryption."""
+    conn = get_connection()
+    cur = conn.cursor()
+    now_str = datetime.utcnow().isoformat()
+    cur.execute("""
+    INSERT OR REPLACE INTO image_encryption_keys (image_id, wrapped_dek, dek_nonce, key_algorithm, created_at)
+    VALUES (?, ?, ?, ?, ?)
+    """, (image_id, wrapped_dek, dek_nonce, key_algorithm, now_str))
+    conn.commit()
+    conn.close()
+
+def get_image_encryption_key(image_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieves wrapped DEK for an image asset."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM image_encryption_keys WHERE image_id = ?", (image_id,))
+    row = cur.fetchone()
+    conn.close()
+    return dict(row) if row else None
