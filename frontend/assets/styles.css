@@ -161,15 +161,10 @@
       }
     }
   
-    /* Moving Cyber Wave Background Canvas */
-    #ambientWaveCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-    }
+    /* Pure CSS Ambient Cyber Gradient (0% CPU, Butter Smooth) */
+body {
+  background: radial-gradient(circle at 50% 0%, rgba(30, 27, 75, 0.45) 0%, rgba(5, 8, 22, 1) 75%), #050816 !important;
+}
     .glass-panel {
       background: linear-gradient(135deg, rgba(15, 20, 36, 0.75) 0%, rgba(9, 13, 26, 0.88) 100%);
       backdrop-filter: blur(20px);
