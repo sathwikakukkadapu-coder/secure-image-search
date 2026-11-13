@@ -1,0 +1,185 @@
+:root {
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      background-color: #050811;
+      color: #f8fafc;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 40% at 50% -5%, rgba(59, 130, 246, 0.22), transparent),
+        radial-gradient(circle 650px at 5% 15%, rgba(168, 85, 247, 0.18), transparent),
+        radial-gradient(circle 600px at 95% 20%, rgba(6, 182, 212, 0.16), transparent),
+        radial-gradient(circle 700px at 50% 85%, rgba(16, 185, 129, 0.10), transparent);
+      background-attachment: fixed;
+    }
+    
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+      letter-spacing: -0.025em;
+    }
+    
+    .font-mono {
+      font-family: var(--font-mono);
+    }
+    
+    /* Vibrant Glass Surfaces */
+    .card-surface {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(11, 18, 33, 0.92) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(71, 85, 105, 0.4);
+      border-radius: 1.125rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .card-surface:hover {
+      border-color: rgba(99, 102, 241, 0.6);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 25px -4px rgba(99, 102, 241, 0.22);
+    }
+
+    .card-surface-elevated {
+      background: linear-gradient(135deg, rgba(20, 30, 55, 0.92) 0%, rgba(13, 20, 38, 0.96) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 1.25rem;
+    }
+
+    .card-surface-interactive {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.90) 100%);
+      border: 1px solid rgba(51, 65, 85, 0.45);
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.22s ease-out;
+    }
+    .card-surface-interactive:hover {
+      background: linear-gradient(135deg, rgba(30, 41, 75, 0.9) 0%, rgba(17, 26, 48, 0.95) 100%);
+      border-color: rgba(99, 102, 241, 0.65);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Vibrant Glowing Badges */
+    .badge-cyan {
+      background: rgba(6, 182, 212, 0.16);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.45);
+      box-shadow: 0 0 10px -2px rgba(6, 182, 212, 0.25);
+    }
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.16);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      box-shadow: 0 0 10px -2px rgba(59, 130, 246, 0.25);
+    }
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      box-shadow: 0 0 10px -2px rgba(16, 185, 129, 0.25);
+    }
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.16);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      box-shadow: 0 0 10px -2px rgba(245, 158, 11, 0.25);
+    }
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.16);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      box-shadow: 0 0 10px -2px rgba(244, 63, 94, 0.25);
+    }
+    .badge-purple {
+      background: rgba(168, 85, 247, 0.16);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 0 10px -2px rgba(168, 85, 247, 0.25);
+    }
+
+    /* Dropzone Vibrant Hover */
+    .dropzone-glow {
+      border: 2px dashed rgba(99, 102, 241, 0.45);
+      background: rgba(15, 23, 42, 0.5);
+      transition: all 0.25s ease-in-out;
+    }
+    .dropzone-glow:hover, .dropzone-glow.drag-over {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Range Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #1e293b;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #38bdf8;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #7dd3fc;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050811;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  
+    /* Moving Cyber Wave Background Canvas */
+    #ambientWaveCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glass-panel {
+      background: linear-gradient(135deg, rgba(15, 20, 36, 0.75) 0%, rgba(9, 13, 26, 0.88) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+      transition: all 0.25s ease;
+    }
+    .glass-panel:hover {
+      border-color: rgba(139, 92, 246, 0.35);
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(124, 58, 237, 0.2);
+    }

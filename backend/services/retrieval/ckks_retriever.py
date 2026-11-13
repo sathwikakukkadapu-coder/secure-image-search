@@ -21,7 +21,13 @@ import os
 import base64
 from typing import List, Dict, Any, Tuple, Optional
 import numpy as np
-import tenseal as ts
+
+try:
+    import tenseal as ts
+    TENSEAL_AVAILABLE = True
+except ImportError:
+    ts = None
+    TENSEAL_AVAILABLE = False
 
 class CKKSRetrievalEngine:
     """
@@ -31,6 +37,11 @@ class CKKSRetrievalEngine:
     _instance = None
 
     def __init__(self, poly_modulus_degree: int = 8192, vector_dim: int = 512):
+        if not TENSEAL_AVAILABLE or ts is None:
+            raise RuntimeError(
+                "TenSEAL is not installed or unavailable in the current environment. "
+                "Install with 'pip install tenseal' to enable CKKS homomorphic encryption operations."
+            )
         self.poly_modulus_degree = poly_modulus_degree
         self.vector_dim = vector_dim
         self.scale = 2**40
@@ -48,7 +59,7 @@ class CKKSRetrievalEngine:
         )
         self.server_context = ts.context_from(self.server_context_bytes)
 
-    def _create_client_context(self) -> ts.Context:
+    def _create_client_context(self):
         ctx = ts.context(
             ts.SCHEME_TYPE.CKKS,
             poly_modulus_degree=self.poly_modulus_degree,
@@ -61,6 +72,11 @@ class CKKSRetrievalEngine:
 
     @classmethod
     def get_instance(cls, poly_modulus_degree: int = 8192, vector_dim: int = 512):
+        if not TENSEAL_AVAILABLE or ts is None:
+            raise RuntimeError(
+                "TenSEAL is not installed or unavailable in the current environment. "
+                "Install with 'pip install tenseal' to enable CKKS homomorphic encryption operations."
+            )
         if cls._instance is None:
             cls._instance = cls(poly_modulus_degree=poly_modulus_degree, vector_dim=vector_dim)
         return cls._instance

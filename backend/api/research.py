@@ -14,7 +14,7 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 from PIL import Image
 from pydantic import BaseModel
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, Response
 from fastapi import APIRouter, Depends, Query, HTTPException, UploadFile, File, Form
 
 import backend.database.db as db
@@ -295,47 +295,79 @@ def run_identification_attack(
         raise HTTPException(status_code=500, detail=f"Identification attack error: {str(e)}")
 
 
-@router.get("/export/csv", response_class=PlainTextResponse)
+@router.get("/export/csv")
 def export_research_csv(
     study_type: str = Query("combined"),
     current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
 ):
     """
     Generates and downloads CSV benchmark data for academic paper reporting.
+    Sets Content-Disposition to attachment and uses safe lookups.
     """
     output_lines = []
     
     if study_type in ["noise", "combined"]:
         from research.noise_analysis.noise_evaluation import NoiseEvaluator
-        data = NoiseEvaluator.get_instance().run_noise_benchmark()
+        try:
+            data = NoiseEvaluator.get_instance().run_noise_benchmark() or {}
+        except Exception:
+            data = {}
+            
         output_lines.append("# --- NOISE-BASED VECTOR PRIVACY BENCHMARK ---")
         output_lines.append("Level,Noise_Sigma,Precision@5,Precision@10,Recall@5,Recall@10,mAP@5,mAP@10,Top1_ID_Acc_Pct,Top5_ID_Acc_Pct,Identity_Protection_Pct,Expected_SSIM,Expected_PSNR_dB,Mean_Latency_ms")
-        for r in data.get("results", []):
-            rm = r["retrieval_metrics"]
-            ia = r["identification_attack"]
-            rr = r["reconstruction_resistance"]
-            lat = r["latency_breakdown"]
-            output_lines.append(f"{r['name']},{r['sigma']},{rm['precision_at_5']},{rm['precision_at_10']},{rm['recall_at_5']},{rm['recall_at_10']},{rm['map_at_5']},{rm['map_at_10']},{ia['top_1_accuracy_percent']},{ia['top_5_accuracy_percent']},{ia['identity_protection_percent']},{rr['ssim']},{rr['psnr_db']},{lat['total_ms']}")
+        for r in (data.get("results") or []):
+            name = r.get("name", "Unknown")
+            sigma = r.get("sigma", 0.0)
+            rm = r.get("retrieval_metrics") or {}
+            ia = r.get("identification_attack") or {}
+            rr = r.get("reconstruction_resistance") or {}
+            lat = r.get("latency_breakdown") or {}
+            
+            p5 = rm.get("precision_at_5", 0.0)
+            p10 = rm.get("precision_at_10", 0.0)
+            r5 = rm.get("recall_at_5", 0.0)
+            r10 = rm.get("recall_at_10", 0.0)
+            m5 = rm.get("map_at_5", 0.0)
+            m10 = rm.get("map_at_10", 0.0)
+            
+            top1_acc = ia.get("top_1_accuracy_percent", "0.0%")
+            top5_acc = ia.get("top_5_accuracy_percent", "0.0%")
+            id_prot = ia.get("identity_protection_percent", "0.0%")
+            
+            ssim = rr.get("ssim", 0.0)
+            psnr = rr.get("psnr_db", 0.0)
+            total_lat = lat.get("total_ms", 0.0)
+            output_lines.append(f"{name},{sigma},{p5},{p10},{r5},{r10},{m5},{m10},{top1_acc},{top5_acc},{id_prot},{ssim},{psnr},{total_lat}")
         output_lines.append("")
 
     if study_type in ["ablation", "combined"]:
         runner = AblationExperimentRunner.get_instance()
-        data = runner.run_full_study()
+        try:
+            data = runner.run_full_study() or {}
+        except Exception:
+            data = {}
+            
         output_lines.append("# --- DIMENSIONALITY REDUCTION ABLATION BENCHMARK ---")
         output_lines.append("Technique,Dimension,Retained_Percent,Precision@5,Precision@10,Recall@5,Recall@10,mAP@5,mAP@10,Avg_Latency_ms,Bytes_Per_Vector")
-        for tech_key, tech_results in data.get("results_by_technique", {}).items():
-            for r in tech_results:
-                dim = r.get("dimension")
-                ret = r.get("retained_percent")
-                tech = r.get("technique")
-                p5 = r.get("precision_at_5")
-                p10 = r.get("precision_at_10")
-                r5 = r.get("recall_at_5")
-                r10 = r.get("recall_at_10")
-                m5 = r.get("map_at_5")
-                m10 = r.get("map_at_10")
-                lat = r.get("avg_latency_ms")
-                bytes_vec = r.get("storage", {}).get("bytes_per_vector", dim * 4 if dim else 0)
+        for tech_key, tech_results in (data.get("results_by_technique") or {}).items():
+            for r in (tech_results or []):
+                dim = r.get("dimension", 0)
+                ret = r.get("retained_percent", 0.0)
+                tech = r.get("technique", tech_key)
+                p5 = r.get("precision_at_5", 0.0)
+                p10 = r.get("precision_at_10", 0.0)
+                r5 = r.get("recall_at_5", 0.0)
+                r10 = r.get("recall_at_10", 0.0)
+                m5 = r.get("map_at_5", 0.0)
+                m10 = r.get("map_at_10", 0.0)
+                lat = r.get("avg_latency_ms", 0.0)
+                storage_dict = r.get("storage") or {}
+                bytes_vec = storage_dict.get("bytes_per_vector", dim * 4 if dim else 0)
                 output_lines.append(f"{tech},{dim},{ret}%,{p5},{p10},{r5},{r10},{m5},{m10},{lat},{bytes_vec}")
 
-    return "\n".join(output_lines)
+    csv_content = "\n".join(output_lines)
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="research_export.csv"'}
+    )

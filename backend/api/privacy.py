@@ -46,8 +46,11 @@ def apply_privacy_transform(req: LDPTransformRequest):
 @router.get("/ckks-benchmark")
 def run_ckks_benchmark(candidates: int = Query(8, ge=2, le=64)):
     """Executes live CKKS Homomorphic Encryption inner-product benchmark with TenSEAL."""
-    engine = CKKSRetrievalEngine.get_instance(vector_dim=512)
-    return engine.benchmark_ckks_pipeline(num_candidates=candidates)
+    try:
+        engine = CKKSRetrievalEngine.get_instance(vector_dim=512)
+        return engine.benchmark_ckks_pipeline(num_candidates=candidates)
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
 @router.get("/security-attacks")
 def run_security_attacks(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):

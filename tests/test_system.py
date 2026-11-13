@@ -20,10 +20,15 @@ def ensure_server_running():
 
     print("[Test Suite] No active server detected. Initializing in-process uvicorn thread...", flush=True)
     import uvicorn
+    import asyncio
     from backend.main import app
     config = uvicorn.Config(app=app, host="127.0.0.1", port=8000, log_level="warning")
     server = uvicorn.Server(config)
-    t = threading.Thread(target=server.run, daemon=True)
+    def run_srv():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(server.serve())
+    t = threading.Thread(target=run_srv, daemon=True)
     t.start()
     
     # Wait for server to be responsive

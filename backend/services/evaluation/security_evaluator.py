@@ -26,7 +26,10 @@ class SecurityEvaluator:
 
     def __init__(self):
         self.rep_mgr = AdvancedPrivacyRepresentation.get_instance(input_dim=1280, protected_dim=512)
-        self.ckks_engine = CKKSRetrievalEngine.get_instance(vector_dim=512)
+        try:
+            self.ckks_engine = CKKSRetrievalEngine.get_instance(vector_dim=512)
+        except Exception:
+            self.ckks_engine = None
 
     @classmethod
     def get_instance(cls):
