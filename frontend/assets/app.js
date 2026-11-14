@@ -50,11 +50,13 @@
 
       // Automatically attach Bearer token if active session token exists
       if (activeUser && activeUser.token && !opts.headers['Authorization']) {
+        opts.headers['Authorization'] = `Bearer ${activeUser.token}`;
       }
 
       try {
-        const res = await apiFetch(url, opts);
+        const res = await window.fetch(url, opts);
         if (!res.ok) {
+          let errorDetail = `HTTP ${res.status}: ${res.statusText}`;
           try {
             const body = await res.clone().json();
             if (body && body.detail) {
