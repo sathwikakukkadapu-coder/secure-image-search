@@ -157,221 +157,439 @@
     <!-- ========================================== -->
     <!-- 1. OVERVIEW & ARCHITECTURE TAB            -->
     <!-- ========================================== -->
-    <section id="tab-overview" class="space-y-8">
+    <!-- 1. OVERVIEW & ARCHITECTURE TAB (REDESIGNED)-->
+    <!-- ========================================== -->
+    <section id="tab-overview" class="space-y-8 animate-fadeIn">
       
-      <!-- Vivid Hero Showcase Banner with Real Domain Images -->
-      <div class="card-surface p-6 sm:p-8 relative overflow-hidden border-indigo-900/60 shadow-2xl">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <!-- HERO AREA: VALUE PROPOSITION & CLIENT-SIDE ZERO-PIXEL PRIVACY FLOW -->
+      <div class="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-gradient-to-br from-[#0c1329] via-[#090d1f] to-[#060913] p-6 sm:p-8 lg:p-10 shadow-2xl">
+        <!-- Subtle Ambient Radial Glows -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
-          <div class="lg:col-span-7 space-y-3.5">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-700/80 text-[11px] text-blue-300 font-mono shadow-sm">
+          <!-- Left Column: Mission, Value Proposition & Capability Badges -->
+          <div class="lg:col-span-6 space-y-4">
+            
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-[11px] text-blue-300 font-mono shadow-inner">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Production Verified AI Platform</span>
-              <span class="text-slate-600">|</span>
-              <span class="text-cyan-300">Zero Query Pixels Leave Client</span>
+              <span class="font-semibold tracking-wide">Production-Grade Privacy Architecture</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-cyan-300 font-bold">Zero-Pixel Boundary</span>
             </div>
             
-            <h1 class="text-2xl sm:text-4xl font-extrabold text-white font-display leading-tight">
-              Privacy-Preserving Visual Retrieval Using <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400">Content-Free Representations</span>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-white font-display leading-[1.15] tracking-tight">
+              Privacy-Preserving Visual Retrieval Using <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300">Content-Free Representations</span>
             </h1>
             
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              PrivateLens enables verifiable visual search over encrypted catalogs. Query images are processed strictly in client memory: MobileNetV3 deep features (1280-D) undergo irreversible orthogonal projection into a 512-D space with differential noise. The retrieval server receives zero raw pixels, searching solely over mathematically protected vector coordinates with FAISS, while catalog assets remain encrypted at rest via AES-256 in a decoupled vault.
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+              Search protected image databases without exposing raw query pixels to the network or storage server. Images are vectorized and perturbated strictly inside client buffer memory; the retrieval server processes only mathematical 512-D coordinates over FAISS, while catalog assets remain encrypted at rest via AES-256.
             </p>
 
-            <div class="flex flex-wrap gap-2 pt-1 text-xs font-mono">
-              <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-emerald-300 flex items-center space-x-1">
-                <span>🛡️</span><span>Zero-Pixel Privacy</span>
-              </span>
-              <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-cyan-300 flex items-center space-x-1">
-                <span>⚡</span><span>FAISS Cosine Proximity</span>
-              </span>
-              <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-purple-300 flex items-center space-x-1">
-                <span>🔐</span><span>AES-256 Decoupled Vault</span>
-              </span>
-              <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-blue-300 flex items-center space-x-1">
-                <span>👤</span><span>Role-Based RBAC</span>
-              </span>
+            <!-- Quick Action Triggers -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button onclick="switchTab('search')" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 shadow-lg shadow-cyan-900/40 transition flex items-center space-x-2 cursor-pointer">
+                <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span>Launch Live Search</span>
+              </button>
+              <button onclick="switchTab('research')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-200 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition flex items-center space-x-2 cursor-pointer">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <span>Explore Research Lab</span>
+              </button>
             </div>
+
+            <!-- Scannable Feature Pillars -->
+            <div class="grid grid-cols-2 gap-2.5 pt-2">
+              <div class="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/90 flex items-start space-x-2.5">
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-sm">🛡️</div>
+                <div>
+                  <div class="text-[11px] font-bold text-slate-200 font-mono">Zero-Pixel Retention</div>
+                  <div class="text-[10px] text-slate-400 leading-snug">Pixels discarded before transmission</div>
+                </div>
+              </div>
+
+              <div class="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/90 flex items-start space-x-2.5">
+                <div class="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 text-sm">⚡</div>
+                <div>
+                  <div class="text-[11px] font-bold text-slate-200 font-mono">FAISS Vector Search</div>
+                  <div class="text-[10px] text-slate-400 leading-snug">Sub-millisecond cosine proximity</div>
+                </div>
+              </div>
+
+              <div class="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/90 flex items-start space-x-2.5">
+                <div class="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 text-sm">🔐</div>
+                <div>
+                  <div class="text-[11px] font-bold text-slate-200 font-mono">AES-256 Vault</div>
+                  <div class="text-[10px] text-slate-400 leading-snug">Decoupled encrypted storage</div>
+                </div>
+              </div>
+
+              <div class="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/90 flex items-start space-x-2.5">
+                <div class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 text-sm">📜</div>
+                <div>
+                  <div class="text-[11px] font-bold text-slate-200 font-mono">Merkle Audit Chain</div>
+                  <div class="text-[10px] text-slate-400 leading-snug">Tamper-evident SHA-256 trail</div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Hero Domain Visual Showcase Strip -->
-          <div class="lg:col-span-5 grid grid-cols-2 gap-3">
-            <div class="relative group rounded-xl overflow-hidden border border-sky-500/40 shadow-lg h-32 cursor-pointer" onclick="switchTab('search')">
-              <img src="/static/assets/medical_preset.jpg" alt="Medical X-ray" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-2.5 flex flex-col justify-end">
-                <span class="badge-blue text-[9px] px-1.5 py-0.5 rounded w-max font-bold font-mono">MEDICAL</span>
-                <span class="text-xs font-bold text-white mt-0.5 truncate">Thoracic Radiographs</span>
+          <!-- Right Column: Visual Explanation of Client-Side Zero-Pixel Flow -->
+          <div class="lg:col-span-6 bg-[#080d1c]/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl relative">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/80"></span>
+                <span class="text-xs font-bold text-white font-mono tracking-wider uppercase">Visual Privacy Pipeline</span>
               </div>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded font-semibold">Strict Boundary Active</span>
             </div>
 
-            <div class="relative group rounded-xl overflow-hidden border border-fuchsia-500/40 shadow-lg h-32 cursor-pointer" onclick="switchTab('search')">
-              <img src="/static/assets/biometric_preset.jpg" alt="Biometrics Face" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-2.5 flex flex-col justify-end">
-                <span class="badge-purple text-[9px] px-1.5 py-0.5 rounded w-max font-bold font-mono">BIOMETRICS</span>
-                <span class="text-xs font-bold text-white mt-0.5 truncate">Facial & Iris Pattern</span>
+            <!-- Pipeline Visual Flowchart -->
+            <div class="space-y-3">
+              
+              <!-- Stage A: Local Client Environment -->
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/50 relative">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center space-x-2 text-xs font-bold text-blue-300 font-mono">
+                    <span class="w-5 h-5 rounded-md bg-blue-600/30 border border-blue-500/40 text-[10px] flex items-center justify-center font-bold text-white">1</span>
+                    <span>Client Buffer (Isolated Edge)</span>
+                  </div>
+                  <span class="text-[9px] font-mono text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-900/60">RAM ONLY</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                  <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                    <div class="text-slate-400">Raw Image</div>
+                    <div class="text-rose-400 font-bold mt-0.5">EXIF Stripped</div>
+                  </div>
+                  <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                    <div class="text-slate-400">CNN Backbone</div>
+                    <div class="text-cyan-300 font-bold mt-0.5">1280-D Feats</div>
+                  </div>
+                  <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                    <div class="text-slate-400">Projection + Noise</div>
+                    <div class="text-purple-300 font-bold mt-0.5">512-D Vector</div>
+                  </div>
+                </div>
+                <div class="mt-2 text-[10px] text-emerald-300 font-mono flex items-center justify-between bg-emerald-950/30 px-2.5 py-1 rounded border border-emerald-900/40">
+                  <span>✓ Raw Image Pixels Permanently Deleted</span>
+                  <span class="font-bold text-emerald-400">0 Pixels Sent</span>
+                </div>
               </div>
+
+              <!-- Connecting Beam: Transmit Only Float Coordinates -->
+              <div class="flex items-center justify-center py-0.5">
+                <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-700/80 text-[10px] font-mono text-cyan-300 shadow-md">
+                  <svg class="w-3.5 h-3.5 text-cyan-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                  <span>Transmitting Encrypted 512-D Coordinate Array (2 KB)</span>
+                </div>
+              </div>
+
+              <!-- Stage B: Search Engine & Decoupled Vault -->
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-indigo-900/50">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center space-x-2 text-xs font-bold text-indigo-300 font-mono">
+                    <span class="w-5 h-5 rounded-md bg-indigo-600/30 border border-indigo-500/40 text-[10px] flex items-center justify-center font-bold text-white">2</span>
+                    <span>Retrieval Server & Storage Vault</span>
+                  </div>
+                  <span class="text-[9px] font-mono text-purple-300 bg-purple-950/60 px-1.5 py-0.5 rounded border border-purple-900/60">ZERO ACCESS</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                  <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                    <div class="text-cyan-400 font-bold">FAISS Vector Index</div>
+                    <div class="text-slate-400 mt-0.5">Computes cosine proximity on coordinates without viewing query.</div>
+                  </div>
+                  <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                    <div class="text-purple-400 font-bold">AES-256 Vault Storage</div>
+                    <div class="text-slate-400 mt-0.5">Original catalog encrypted. Access requires cryptographic token.</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <div class="relative group rounded-xl overflow-hidden border border-amber-500/40 shadow-lg h-32 cursor-pointer" onclick="switchTab('search')">
-              <img src="/static/assets/vehicle_preset.jpg" alt="Automotive Sports Car" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-2.5 flex flex-col justify-end">
-                <span class="badge-amber text-[9px] px-1.5 py-0.5 rounded w-max font-bold font-mono">VEHICLES</span>
-                <span class="text-xs font-bold text-white mt-0.5 truncate">Automotive Transit</span>
-              </div>
-            </div>
-
-            <div class="relative group rounded-xl overflow-hidden border border-emerald-500/40 shadow-lg h-32 cursor-pointer" onclick="switchTab('search')">
-              <img src="/static/assets/nature_preset.jpg" alt="Nature Aurora" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-2.5 flex flex-col justify-end">
-                <span class="badge-emerald text-[9px] px-1.5 py-0.5 rounded w-max font-bold font-mono">NATURE</span>
-                <span class="text-xs font-bold text-white mt-0.5 truncate">Aurora & Landscape</span>
-              </div>
-            </div>
           </div>
 
         </div>
       </div>
 
-      <!-- Real Telemetry Grid -->
+      <!-- BALANCED TELEMETRY METRIC CARDS -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div class="card-surface p-5 space-y-2 border-t-2 border-t-blue-500">
+        <!-- Metric 1: Indexed Images -->
+        <div class="card-surface p-5 space-y-2 border-t-2 border-t-blue-500 rounded-xl shadow-lg relative overflow-hidden group">
           <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-            <span>Indexed Images</span>
-            <span class="badge-blue text-[10px] px-2 py-0.5 rounded font-mono font-bold">SQLite Catalog</span>
+            <span class="flex items-center space-x-1.5">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Catalog Assets</span>
+            </span>
+            <span class="badge-blue text-[10px] px-2 py-0.5 rounded font-mono font-bold">Encrypted DB</span>
           </div>
           <div class="text-2xl sm:text-3xl font-extrabold font-mono text-white" id="statTotalImages">1,035</div>
-          <p class="text-[11px] text-slate-400">4 diverse image domains</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+            <span>4 Domain Categories</span>
+            <span class="text-blue-400 font-mono font-semibold">SQLite Metadata</span>
+          </div>
         </div>
 
-        <div class="card-surface p-5 space-y-2 border-t-2 border-t-cyan-400">
+        <!-- Metric 2: FAISS Vectors -->
+        <div class="card-surface p-5 space-y-2 border-t-2 border-t-cyan-400 rounded-xl shadow-lg relative overflow-hidden group">
           <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-            <span>FAISS Vectors</span>
-            <span class="badge-cyan text-[10px] px-2 py-0.5 rounded font-mono font-bold">512-D Float32</span>
+            <span class="flex items-center space-x-1.5">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span>Vector Coordinates</span>
+            </span>
+            <span class="badge-cyan text-[10px] px-2 py-0.5 rounded font-mono font-bold">512-D FlatIP</span>
           </div>
           <div class="text-2xl sm:text-3xl font-extrabold font-mono text-cyan-400" id="statTotalVectors">1,035</div>
-          <p class="text-[11px] text-slate-400">Zero pixels stored in vector DB</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+            <span>Unit L2 Normalized</span>
+            <span class="text-cyan-400 font-mono font-semibold">2 KB / Vector</span>
+          </div>
         </div>
 
-        <div class="card-surface p-5 space-y-2 border-t-2 border-t-emerald-400">
+        <!-- Metric 3: Index Health -->
+        <div class="card-surface p-5 space-y-2 border-t-2 border-t-emerald-400 rounded-xl shadow-lg relative overflow-hidden group">
           <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-            <span>Index Health</span>
+            <span class="flex items-center space-x-1.5">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Index Status</span>
+            </span>
             <span class="badge-emerald text-[10px] px-2 py-0.5 rounded font-mono font-bold" id="statHealthBadge">HEALTHY</span>
           </div>
           <div class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400">100% Synced</div>
-          <p class="text-[11px] text-slate-400">Zero orphan vectors detected</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+            <span>Orphan Vectors: 0</span>
+            <span class="text-emerald-400 font-mono font-semibold">Integrity Verified</span>
+          </div>
         </div>
 
-        <div class="card-surface p-5 space-y-2 border-t-2 border-t-purple-400">
+        <!-- Metric 4: Audit Trail -->
+        <div class="card-surface p-5 space-y-2 border-t-2 border-t-purple-400 rounded-xl shadow-lg relative overflow-hidden group">
           <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-            <span>Audit Trail</span>
+            <span class="flex items-center space-x-1.5">
+              <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <span>Audit Trail</span>
+            </span>
             <span class="badge-purple text-[10px] px-2 py-0.5 rounded font-mono font-bold">SHA-256 Merkle</span>
           </div>
           <div class="text-2xl sm:text-3xl font-extrabold font-mono text-purple-300" id="statAuditCount">330+ Logs</div>
-          <p class="text-[11px] text-slate-400">Tamper-evident hash chain</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+            <span>Tamper Evident</span>
+            <span class="text-purple-300 font-mono font-semibold">Chained Hashes</span>
+          </div>
         </div>
 
       </div>
 
-      <!-- INTERACTIVE SYSTEM ARCHITECTURE VISUALIZATION -->
-      <div class="card-surface p-6 sm:p-8 space-y-6 border-slate-700/80">
+      <!-- SUPPORTED IMAGE CATALOG DOMAINS -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="text-lg font-bold text-white font-display flex items-center space-x-2">
+              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span>Supported Catalog Domains</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Curated high-resolution datasets indexed in FAISS with calibrated noise and role-based access.</p>
+          </div>
+          <span class="text-xs text-cyan-400 font-mono font-semibold self-start sm:self-auto">Click any domain to test query &rarr;</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Domain 1: Medical -->
+          <div class="group rounded-xl border border-sky-500/30 bg-slate-900/80 hover:border-sky-400 transition-all duration-300 overflow-hidden shadow-lg cursor-pointer flex flex-col justify-between" onclick="switchTab('search'); loadSamplePreset('medical');">
+            <div class="h-36 w-full relative overflow-hidden bg-slate-950">
+              <img src="/static/assets/medical_preset.jpg" alt="Medical Radiographs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+              <span class="absolute top-2.5 left-2.5 badge-blue text-[9px] px-2 py-0.5 rounded font-bold font-mono">MEDICAL</span>
+            </div>
+            <div class="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">Thoracic Radiographs</h4>
+                <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Chest X-rays and lung CT scans. Diagnostic matching with zero patient health information leakage.</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800">
+                <span>Access: Specialist Only</span>
+                <span class="text-sky-400 font-semibold">252 Scans</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain 2: Biometrics -->
+          <div class="group rounded-xl border border-fuchsia-500/30 bg-slate-900/80 hover:border-fuchsia-400 transition-all duration-300 overflow-hidden shadow-lg cursor-pointer flex flex-col justify-between" onclick="switchTab('search'); loadSamplePreset('biometrics');">
+            <div class="h-36 w-full relative overflow-hidden bg-slate-950">
+              <img src="/static/assets/biometric_preset.jpg" alt="Biometrics Face & Iris" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+              <span class="absolute top-2.5 left-2.5 badge-purple text-[9px] px-2 py-0.5 rounded font-bold font-mono">BIOMETRICS</span>
+            </div>
+            <div class="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white group-hover:text-fuchsia-300 transition-colors">Facial & Iris Patterns</h4>
+                <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Biometric identity verification. Orthogonal projection prevents raw face reconstruction attacks.</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800">
+                <span>Access: Private Vault</span>
+                <span class="text-fuchsia-400 font-semibold">252 Assets</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain 3: Vehicles -->
+          <div class="group rounded-xl border border-amber-500/30 bg-slate-900/80 hover:border-amber-400 transition-all duration-300 overflow-hidden shadow-lg cursor-pointer flex flex-col justify-between" onclick="switchTab('search'); loadSamplePreset('vehicles');">
+            <div class="h-36 w-full relative overflow-hidden bg-slate-950">
+              <img src="/static/assets/vehicle_preset.jpg" alt="Automotive Transit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+              <span class="absolute top-2.5 left-2.5 badge-amber text-[9px] px-2 py-0.5 rounded font-bold font-mono">VEHICLES</span>
+            </div>
+            <div class="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Automotive & Transit</h4>
+                <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Cars, commercial transport, and two-wheelers. EXIF location and camera metadata stripped.</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800">
+                <span>Access: Public Catalog</span>
+                <span class="text-amber-400 font-semibold">261 Images</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain 4: Nature -->
+          <div class="group rounded-xl border border-emerald-500/30 bg-slate-900/80 hover:border-emerald-400 transition-all duration-300 overflow-hidden shadow-lg cursor-pointer flex flex-col justify-between" onclick="switchTab('search'); loadSamplePreset('nature');">
+            <div class="h-36 w-full relative overflow-hidden bg-slate-950">
+              <img src="/static/assets/nature_preset.jpg" alt="Aurora & Landscapes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+              <span class="absolute top-2.5 left-2.5 badge-emerald text-[9px] px-2 py-0.5 rounded font-bold font-mono">NATURE</span>
+            </div>
+            <div class="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">Aurora & Landscapes</h4>
+                <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Geospatial terrains, vegetation, water bodies, and weather events across scientific catalogs.</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800">
+                <span>Access: Public Catalog</span>
+                <span class="text-emerald-400 font-semibold">270 Images</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MULTI-TIER ARCHITECTURE & SECURITY BOUNDARIES -->
+      <div class="card-surface p-6 sm:p-8 space-y-6 border-slate-700/80 rounded-2xl shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
           <div>
             <h3 class="text-lg font-bold text-white font-display flex items-center space-x-2">
               <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
               <span>Multi-Tier Architecture & Security Boundaries</span>
             </h3>
-            <p class="text-xs text-slate-400 mt-0.5">Physical and cryptographic separation across client buffer, retrieval gateway, and encrypted vault.</p>
+            <p class="text-xs text-slate-400 mt-0.5">Physical and cryptographic boundary separation across client buffer, retrieval gateway, and encrypted vault.</p>
           </div>
           <span class="px-2.5 py-1 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-700/80 font-mono text-[11px] self-start sm:self-auto">Zero-Knowledge Retrieval Flow</span>
         </div>
 
-        <!-- Architecture Flow Diagram -->
+        <!-- Architecture Flow Pipeline Steps -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-3.5 relative">
           
           <!-- Block 1 -->
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-blue-900/60 space-y-2 relative shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="w-7 h-7 rounded-full bg-blue-600/30 text-blue-300 text-xs font-bold flex items-center justify-center font-mono border border-blue-500/40">1</span>
-              <span class="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 font-bold">ISOLATED</span>
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-blue-900/60 space-y-2 relative shadow-md flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="w-6 h-6 rounded-full bg-blue-600/30 text-blue-300 text-xs font-bold flex items-center justify-center font-mono border border-blue-500/40">1</span>
+                <span class="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 font-bold">ISOLATED</span>
+              </div>
+              <div class="text-xs font-bold text-white">Client Edge Buffer</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Browser local memory. EXIF stripped, MobileNetV3 extracts 1280-D CNN feature vector.</p>
             </div>
-            <div class="text-xs font-bold text-white">Client Edge Buffer</div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Browser local RAM buffer. EXIF metadata stripped, MobileNetV3 1280-D CNN feature vector extracted locally.</p>
-            <div class="text-[10px] font-mono text-blue-300 font-semibold pt-1">0 Pixels Transmitted</div>
+            <div class="text-[10px] font-mono text-blue-300 font-semibold pt-2 border-t border-slate-800">0 Pixels Transmitted</div>
           </div>
 
           <!-- Block 2 -->
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-purple-900/60 space-y-2 relative shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="w-7 h-7 rounded-full bg-purple-600/30 text-purple-300 text-xs font-bold flex items-center justify-center font-mono border border-purple-500/40">2</span>
-              <span class="text-[9px] font-mono text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800 font-bold">TRANSFORM</span>
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-purple-900/60 space-y-2 relative shadow-md flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="w-6 h-6 rounded-full bg-purple-600/30 text-purple-300 text-xs font-bold flex items-center justify-center font-mono border border-purple-500/40">2</span>
+                <span class="text-[9px] font-mono text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800 font-bold">TRANSFORM</span>
+              </div>
+              <div class="text-xs font-bold text-white">Privacy Projection</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Orthogonal projection matrix Q (1280&rarr;512). Eliminates 768 dimensions. Gaussian perturbation &sigma; added.</p>
             </div>
-            <div class="text-xs font-bold text-white">Privacy Projection</div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Irreversible orthogonal projection Q (1280&rarr;512). Null-space removes 768 dimensions. Gaussian perturbation &sigma; added.</p>
-            <div class="text-[10px] font-mono text-purple-300 font-semibold pt-1">512-D Protected Vector</div>
+            <div class="text-[10px] font-mono text-purple-300 font-semibold pt-2 border-t border-slate-800">512-D Protected Vector</div>
           </div>
 
           <!-- Block 3 -->
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-900/60 space-y-2 relative shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="w-7 h-7 rounded-full bg-cyan-600/30 text-cyan-300 text-xs font-bold flex items-center justify-center font-mono border border-cyan-500/40">3</span>
-              <span class="text-[9px] font-mono text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800 font-bold">SEARCH</span>
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-900/60 space-y-2 relative shadow-md flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="w-6 h-6 rounded-full bg-cyan-600/30 text-cyan-300 text-xs font-bold flex items-center justify-center font-mono border border-cyan-500/40">3</span>
+                <span class="text-[9px] font-mono text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800 font-bold">SEARCH</span>
+              </div>
+              <div class="text-xs font-bold text-white">FAISS Vector Engine</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Normalized inner product search (IndexFlatIP) over 1,035 index vectors in &lt;1.5ms.</p>
             </div>
-            <div class="text-xs font-bold text-white">FAISS Vector Engine</div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Normalized inner product search (IndexFlatIP) over 1,035 index vectors. Computes cosine proximity in &lt;1.5ms.</p>
-            <div class="text-[10px] font-mono text-cyan-300 font-semibold pt-1">Zero Pixels Stored</div>
+            <div class="text-[10px] font-mono text-cyan-300 font-semibold pt-2 border-t border-slate-800">Zero Pixels Stored</div>
           </div>
 
           <!-- Block 4 -->
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-900/60 space-y-2 relative shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="w-7 h-7 rounded-full bg-emerald-600/30 text-emerald-300 text-xs font-bold flex items-center justify-center font-mono border border-emerald-500/40">4</span>
-              <span class="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 font-bold">ENCRYPTED</span>
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-900/60 space-y-2 relative shadow-md flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="w-6 h-6 rounded-full bg-emerald-600/30 text-emerald-300 text-xs font-bold flex items-center justify-center font-mono border border-emerald-500/40">4</span>
+                <span class="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 font-bold">ENCRYPTED</span>
+              </div>
+              <div class="text-xs font-bold text-white">Decoupled Vault</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Original images encrypted via AES-256-GCM. Wrapped DEK/KEK key hierarchy keeps disk assets protected.</p>
             </div>
-            <div class="text-xs font-bold text-white">Decoupled Vault</div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Physical catalog images encrypted with AES-256-GCM. Stored under randomized UUID handles in private storage.</p>
-            <div class="text-[10px] font-mono text-emerald-300 font-semibold pt-1">AES-256 Storage Ref</div>
+            <div class="text-[10px] font-mono text-emerald-300 font-semibold pt-2 border-t border-slate-800">Ciphertext At Rest</div>
           </div>
 
           <!-- Block 5 -->
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-900/60 space-y-2 relative shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="w-7 h-7 rounded-full bg-amber-600/30 text-amber-300 text-xs font-bold flex items-center justify-center font-mono border border-amber-500/40">5</span>
-              <span class="text-[9px] font-mono text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800 font-bold">RBAC</span>
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-900/60 space-y-2 relative shadow-md flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="w-6 h-6 rounded-full bg-amber-600/30 text-amber-300 text-xs font-bold flex items-center justify-center font-mono border border-amber-500/40">5</span>
+                <span class="text-[9px] font-mono text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800 font-bold">GATEWAY</span>
+              </div>
+              <div class="text-xs font-bold text-white">RBAC Access Control</div>
+              <p class="text-[11px] text-slate-400 leading-relaxed mt-1">Specialists access authorized medical scans; guests strictly restricted from viewing private assets.</p>
             </div>
-            <div class="text-xs font-bold text-white">Policy Gatekeeper</div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Owner and role authorization check. Specialists access medical scans; guests strictly restricted from private assets.</p>
-            <div class="text-[10px] font-mono text-amber-300 font-semibold pt-1">Signed Token Auth</div>
+            <div class="text-[10px] font-mono text-amber-300 font-semibold pt-2 border-t border-slate-800">Signed Token Auth</div>
           </div>
 
         </div>
       </div>
 
-      <!-- REAL-WORLD USE CASES SHOWCASE WITH FULL VISUAL IMAGERY -->
+      <!-- REAL-WORLD MISSION APPLICATIONS -->
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-bold text-white font-display">Real-World Mission Applications</h3>
             <p class="text-xs text-slate-400">Verifiable visual retrieval across high-consequence operational domains.</p>
           </div>
-          <span class="text-xs text-cyan-400 font-mono font-bold">6 Real-World Domains</span>
+          <span class="text-xs text-cyan-400 font-mono font-bold">6 Practical Scenarios</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           
           <!-- Card 1: Healthcare -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-sky-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/medical_ct.jpg" alt="Healthcare Diagnostics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-blue text-[10px] px-2 py-0.5 rounded font-bold font-mono">MEDICAL IMAGING</span>
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-sky-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/medical_preset.jpg" alt="Healthcare Diagnostics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-blue text-[10px] px-2 py-0.5 rounded font-bold font-mono">MEDICAL IMAGING</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">Healthcare & Clinical Diagnostics</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Hospital PACS retrieval for thoracic radiographs and pulmonary CT scans. Queries match disease patterns without releasing patient identity or protected health information (HIPAA compliant).
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">Healthcare & Clinical Diagnostics</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Hospital PACS retrieval for thoracic radiographs and pulmonary CT scans. Queries match disease patterns without releasing patient identity or protected health information (HIPAA compliant).
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Thoracic Scans</span>
                 <span class="text-emerald-400 font-bold">Zero PHI Leakage</span>
@@ -380,17 +598,21 @@
           </div>
 
           <!-- Card 2: Biometrics -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-fuchsia-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/biometric_profile.jpg" alt="Academic Biometrics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-purple text-[10px] px-2 py-0.5 rounded font-bold font-mono">BIOMETRIC ASSETS</span>
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-fuchsia-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/biometric_preset.jpg" alt="Academic Biometrics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-purple text-[10px] px-2 py-0.5 rounded font-bold font-mono">BIOMETRIC ASSETS</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">Academic Biometrics & Iris Search</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Privacy-preserving facial geometry and biometric pattern matching. Feature vector orthogonalization guarantees that raw facial portraits cannot be reconstructed from query vectors.
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">Academic Biometrics & Iris Search</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Privacy-preserving facial geometry and biometric pattern matching. Feature vector orthogonalization guarantees that raw facial portraits cannot be reconstructed from query vectors.
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Face/Iris Patterns</span>
                 <span class="text-fuchsia-400 font-bold">SSIM &le;0.12 Non-Invertible</span>
@@ -399,17 +621,21 @@
           </div>
 
           <!-- Card 3: Industrial Inspection -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-emerald-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/vehicle_preset.jpg" alt="Industrial Automotive" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-emerald text-[10px] px-2 py-0.5 rounded font-bold font-mono">INDUSTRIAL & TRANSIT</span>
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-emerald-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/vehicle_preset.jpg" alt="Industrial Automotive" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-emerald text-[10px] px-2 py-0.5 rounded font-bold font-mono">INDUSTRIAL & TRANSIT</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">Industrial Inspection & Trade Secrets</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Automated component defect matching across proprietary manufacturing facilities without exposing confidential blueprints, CAD schematics, or industrial design trade secrets.
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">Industrial Inspection & Trade Secrets</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Automated component defect matching across proprietary manufacturing facilities without exposing confidential blueprints, CAD schematics, or industrial design trade secrets.
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Assembly Components</span>
                 <span class="text-emerald-400 font-bold">IP Protection Active</span>
@@ -418,17 +644,21 @@
           </div>
 
           <!-- Card 4: Digital Forensics -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-amber-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/biometric_preset.jpg" alt="Digital Forensics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-amber text-[10px] px-2 py-0.5 rounded font-bold font-mono">DIGITAL FORENSICS</span>
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-amber-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/biometric_preset.jpg" alt="Digital Forensics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-amber text-[10px] px-2 py-0.5 rounded font-bold font-mono">DIGITAL FORENSICS</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">Digital Forensics & Chain of Custody</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Cross-agency evidentiary similarity matching with an immutable SHA-256 Merkle audit trail. Ensures strict chain of custody and verifiable proof that zero unauthorized data is queried.
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">Digital Forensics & Chain of Custody</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Cross-agency evidentiary similarity matching with an immutable SHA-256 Merkle audit trail. Ensures strict chain of custody and verifiable proof that zero unauthorized data is queried.
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Evidence Matching</span>
                 <span class="text-amber-400 font-bold">SHA-256 Merkle Chain</span>
@@ -437,17 +667,21 @@
           </div>
 
           <!-- Card 5: E-Commerce -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-cyan-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/vehicle_bike.jpg" alt="E-Commerce Visual Search" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-cyan text-[10px] px-2 py-0.5 rounded font-bold font-mono">E-COMMERCE CATALOGS</span>
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-cyan-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/vehicle_preset.jpg" alt="E-Commerce Visual Search" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-cyan text-[10px] px-2 py-0.5 rounded font-bold font-mono">E-COMMERCE CATALOGS</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">E-Commerce Visual Product Matching</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Reverse visual search for catalog merchandise without central servers harvesting user personal photo galleries, background bedroom settings, or geo-location tags.
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">E-Commerce Visual Product Matching</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Reverse visual search for catalog merchandise without central servers harvesting user personal photo galleries, background bedroom settings, or geo-location tags.
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Retail Catalogs</span>
                 <span class="text-cyan-400 font-bold">GPS & EXIF Stripped</span>
@@ -455,18 +689,22 @@
             </div>
           </div>
 
-          <!-- Card 6: Nature / Environment -->
-          <div class="card-surface overflow-hidden group border-slate-800 hover:border-emerald-500/60 transition shadow-lg">
-            <div class="h-40 w-full overflow-hidden relative">
-              <img src="/static/assets/nature_preset.jpg" alt="Geospatial Nature" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              <span class="absolute top-3 left-3 badge-emerald text-[10px] px-2 py-0.5 rounded font-bold font-mono">GEOSPATIAL & NATURE</span>
+          <!-- Card 6: Nature / Geospatial -->
+          <div class="card-surface overflow-hidden group border-slate-800 hover:border-emerald-500/60 transition shadow-lg rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="h-36 w-full overflow-hidden relative bg-slate-950">
+                <img src="/static/assets/nature_preset.jpg" alt="Geospatial Nature" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge-emerald text-[10px] px-2 py-0.5 rounded font-bold font-mono">GEOSPATIAL & NATURE</span>
+              </div>
+              <div class="p-5 space-y-2">
+                <h4 class="text-sm font-bold text-white">Geospatial & Environmental Monitoring</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Terrain, waterbody, and geological landscape visual feature classification over public scientific repositories, preserving open research reproducibility.
+                </p>
+              </div>
             </div>
-            <div class="p-5 space-y-2.5">
-              <h4 class="text-sm font-bold text-white">Geospatial & Environmental Monitoring</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Terrain, waterbody, and geological landscape visual feature classification over public scientific repositories, preserving open research reproducibility.
-              </p>
+            <div class="px-5 pb-5">
               <div class="p-2 rounded-lg bg-slate-950/80 text-[10px] font-mono text-slate-400 flex justify-between border border-slate-800">
                 <span>Domain: Nature & Terrain</span>
                 <span class="text-emerald-400 font-bold">Open Catalog Access</span>
@@ -477,20 +715,26 @@
         </div>
       </div>
 
-      <!-- Recent Cryptographic Audit Activity -->
-      <div class="card-surface p-6 space-y-4 border-slate-800">
-        <div class="flex items-center justify-between">
+      <!-- RECENT CRYPTOGRAPHIC AUDIT ACTIVITY -->
+      <div class="card-surface p-6 sm:p-7 space-y-4 border-slate-800 rounded-2xl shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
           <div>
-            <h4 class="text-sm font-bold text-white font-display">Recent Cryptographic Access Logs</h4>
-            <p class="text-xs text-slate-400">Verifiable SHA-256 access logs automatically recorded for every search and retrieval event.</p>
+            <h4 class="text-sm font-bold text-white font-display flex items-center space-x-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>Recent Cryptographic Access Logs</span>
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Verifiable SHA-256 access logs automatically recorded for every search, transformation, and vault retrieval event.</p>
           </div>
-          <button onclick="switchTab('security')" class="text-xs text-blue-400 hover:text-blue-300 font-medium">View Full Audit Chain &rarr;</button>
+          <button onclick="switchTab('security')" class="text-xs text-blue-400 hover:text-blue-300 font-mono font-medium flex items-center space-x-1 cursor-pointer self-start sm:self-auto">
+            <span>View Full Audit Chain</span>
+            <span>&rarr;</span>
+          </button>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs font-mono">
             <thead>
-              <tr class="border-b border-slate-800 text-slate-400">
+              <tr class="border-b border-slate-800 text-slate-400 text-[11px]">
                 <th class="py-2.5 px-3">Timestamp</th>
                 <th class="py-2.5 px-3">User ID</th>
                 <th class="py-2.5 px-3">Category</th>
@@ -510,8 +754,6 @@
 
     </section>
 
-    <!-- ========================================== -->
-    <!-- 2. SECURE IMAGE SEARCH TAB (MAIN DEMO)    -->
     <!-- ========================================== -->
     <section id="tab-search" class="hidden space-y-8">
       
@@ -2067,139 +2309,399 @@
       <!-- ========================================================= -->
       <div id="res-sub-ablation" class="space-y-6">
 
-        <!-- Controls: Technique & Dimension Selector -->
+        <!-- SECTION HEADER & EXPERIMENT RUNNER CONTROL BAR -->
         <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-4">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h3 class="text-sm font-bold text-white uppercase tracking-wider font-display">Ablation Configuration</h3>
-              <p class="text-xs text-slate-400">Select dimensionality reduction method and query image for live cross-dimensional comparison.</p>
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span>SCIENTIFIC BENCHMARK SUITE</span>
+              </div>
+              <h3 class="text-lg sm:text-xl font-extrabold text-white font-display tracking-tight">
+                DIMENSIONALITY ABLATION &amp; RETRIEVAL ANALYSIS
+              </h3>
+              <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
+                Empirical evaluation across nested projection prefixes (16-D to 512-D) and 1280-D raw feature baseline using real catalog images and independent in-memory FAISS indexes. Evaluates retrieval accuracy, latency, and vector storage footprint with and without calibrated privacy noise.
+              </p>
             </div>
-            <div class="flex items-center space-x-3">
-              <span class="text-xs text-slate-400 font-mono">Reduction Technique:</span>
-              <select id="ablationTechniqueSelect" onchange="onAblationTechniqueChange(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-cyan-300 font-bold px-3 py-1.5 rounded-lg focus:outline-none focus:border-cyan-500">
-                <option value="truncation">Technique 1: Truncation (First D Coords)</option>
-                <option value="random_selection">Technique 2: Random Selection (10 Trials)</option>
-                <option value="pca">Technique 3: Principal Component Analysis (PCA)</option>
-              </select>
+
+            <!-- Experiment Actions & Live Status -->
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="btnRunAblation" onclick="runLiveAblationExperiment()" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/40 transition flex items-center space-x-2 cursor-pointer">
+                <svg id="runAblationSpinner" class="w-4 h-4 hidden animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <svg id="runAblationIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="runAblationLabel">Run Experiment</span>
+              </button>
+              <button onclick="downloadResearchCSV('ablation')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center space-x-1.5 cursor-pointer">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span>Export CSV</span>
+              </button>
+              <button onclick="exportAblationJSON()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center space-x-1.5 cursor-pointer">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Export JSON</span>
+              </button>
             </div>
           </div>
 
-          <!-- Dimension Selector Cards (6 Configurations: 512, 384, 256, 128, 64, 32) -->
+          <!-- Dataset & Partition Summary Badges -->
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
-            <div onclick="selectAblationDim(512)" id="dim-card-512" class="cursor-pointer p-3.5 rounded-xl border-2 border-cyan-500 bg-cyan-950/20 text-center space-y-1 transition hover:scale-[1.02]">
-              <div class="text-xs font-mono text-cyan-300 font-bold">512-D (Base)</div>
-              <div class="text-lg font-extrabold text-white font-mono">100%</div>
-              <div class="text-[10px] text-slate-400 font-mono">2.0 KB • 0% Red.</div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Dataset Size</div>
+              <div id="ablation-stat-dataset-size" class="text-sm font-bold text-white font-mono mt-0.5">1,035 Images</div>
             </div>
-            <div onclick="selectAblationDim(384)" id="dim-card-384" class="cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
-              <div class="text-xs font-mono text-slate-300 font-bold">384-D (Exp 1)</div>
-              <div class="text-lg font-extrabold text-white font-mono">75.0%</div>
-              <div class="text-[10px] text-slate-400 font-mono">1.5 KB • 25% Red.</div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Gallery Set (80%)</div>
+              <div id="ablation-stat-gallery-size" class="text-sm font-bold text-cyan-300 font-mono mt-0.5">826 Images</div>
             </div>
-            <div onclick="selectAblationDim(256)" id="dim-card-256" class="cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
-              <div class="text-xs font-mono text-slate-300 font-bold">256-D (Exp 2)</div>
-              <div class="text-lg font-extrabold text-white font-mono">50.0%</div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Evaluation Queries (20%)</div>
+              <div id="ablation-stat-query-size" class="text-sm font-bold text-indigo-300 font-mono mt-0.5">209 Queries</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Dimensions Tested</div>
+              <div id="ablation-stat-dimensions" class="text-sm font-bold text-purple-300 font-mono mt-0.5">7 Configurations</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Data Leakage</div>
+              <div class="text-sm font-bold text-emerald-400 font-mono mt-0.5">0% (Disjoint)</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+              <div class="text-[10px] font-mono text-slate-400 uppercase">Status</div>
+              <div id="ablation-status-badge" class="text-xs font-bold text-emerald-400 font-mono mt-0.5 flex items-center justify-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Completed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls: Domain Selector & Noise Parameter -->
+          <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-mono text-slate-400">Selected Domain:</span>
+                <select id="ablationDomainSelect" onchange="onAblationFilterChange()" class="bg-slate-900 border border-slate-700 text-xs text-cyan-300 font-bold px-3 py-1.5 rounded-lg focus:outline-none focus:border-cyan-500">
+                  <option value="all">Overall (All Domains • Category Ground Truth)</option>
+                  <option value="medical">Medical (Thoracic X-ray vs CT vs MRI)</option>
+                  <option value="biometrics">Biometrics (Faces vs Fingerprints vs Iris)</option>
+                  <option value="vehicles">Vehicles (Cars vs Two-Wheelers vs Commercial)</option>
+                  <option value="nature">Nature (Landscapes vs Wildlife vs Weather)</option>
+                </select>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-mono text-slate-400">Noise Sigma (&sigma;):</span>
+                <select id="ablationSigmaSelect" onchange="onAblationFilterChange()" class="bg-slate-900 border border-slate-700 text-xs text-purple-300 font-mono font-bold px-3 py-1.5 rounded-lg focus:outline-none focus:border-purple-500">
+                  <option value="0.05">&sigma; = 0.05 (Default Differential Noise)</option>
+                  <option value="0.02">&sigma; = 0.02 (Low Noise)</option>
+                  <option value="0.10">&sigma; = 0.10 (Moderate Noise)</option>
+                  <option value="0.20">&sigma; = 0.20 (High Noise)</option>
+                  <option value="0.35">&sigma; = 0.35 (Maximum Noise)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
+              <span>Ground Truth:</span>
+              <span id="ablationRelevanceDesc" class="text-emerald-400 font-semibold">Category Match (Macro Domain)</span>
+            </div>
+          </div>
+
+          <!-- Progress bar (Active during execution) -->
+          <div id="ablationProgressContainer" class="hidden space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span id="ablationProgressText" class="text-cyan-400 animate-pulse">Running retrieval queries across dimensionalities...</span>
+              <span id="ablationProgressPercent" class="text-slate-400">Executing</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
+              <div id="ablationProgressBar" class="bg-gradient-to-r from-cyan-500 to-indigo-500 h-1.5 rounded-full w-full animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 DIMENSION CONFIGURATION SELECTOR CARDS -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider font-display">Evaluated Dimensionalities</span>
+            <span class="text-[11px] font-mono text-slate-400">Click a card to inspect dimension KPIs &amp; rankings</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+            <div onclick="selectAblationDim(1280)" id="dim-card-1280" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-slate-300 font-bold">1280-D</div>
+              <div class="text-base font-extrabold text-white font-mono">Raw Base</div>
+              <div class="text-[10px] text-slate-400 font-mono">5.0 KB • Raw</div>
+            </div>
+            <div onclick="selectAblationDim(512)" id="dim-card-512" class="cursor-pointer p-3 rounded-xl border-2 border-cyan-500 bg-cyan-950/20 text-center space-y-1 transition hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-cyan-300 font-bold">512-D</div>
+              <div class="text-base font-extrabold text-white font-mono">Keyed Base</div>
+              <div class="text-[10px] text-cyan-400 font-mono">2.0 KB • 0% Red.</div>
+            </div>
+            <div onclick="selectAblationDim(256)" id="dim-card-256" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-slate-300 font-bold">256-D</div>
+              <div class="text-base font-extrabold text-white font-mono">50.0%</div>
               <div class="text-[10px] text-slate-400 font-mono">1.0 KB • 50% Red.</div>
             </div>
-            <div onclick="selectAblationDim(128)" id="dim-card-128" class="cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
-              <div class="text-xs font-mono text-slate-300 font-bold">128-D (Exp 3)</div>
-              <div class="text-lg font-extrabold text-white font-mono">25.0%</div>
-              <div class="text-[10px] text-slate-400 font-mono">0.5 KB • 75% Red.</div>
+            <div onclick="selectAblationDim(128)" id="dim-card-128" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-slate-300 font-bold">128-D</div>
+              <div class="text-base font-extrabold text-white font-mono">25.0%</div>
+              <div class="text-[10px] text-emerald-400 font-mono">0.5 KB • 75% Red.</div>
             </div>
-            <div onclick="selectAblationDim(64)" id="dim-card-64" class="cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
-              <div class="text-xs font-mono text-slate-300 font-bold">64-D (Exp 4)</div>
-              <div class="text-lg font-extrabold text-white font-mono">12.5%</div>
-              <div class="text-[10px] text-slate-400 font-mono">0.25 KB • 87.5% Red.</div>
+            <div onclick="selectAblationDim(64)" id="dim-card-64" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-slate-300 font-bold">64-D</div>
+              <div class="text-base font-extrabold text-white font-mono">12.5%</div>
+              <div class="text-[10px] text-emerald-400 font-mono">0.25 KB • 87.5% Red.</div>
             </div>
-            <div onclick="selectAblationDim(32)" id="dim-card-32" class="cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
-              <div class="text-xs font-mono text-purple-300 font-bold">32-D (Exp 5)</div>
-              <div class="text-lg font-extrabold text-white font-mono">6.25%</div>
+            <div onclick="selectAblationDim(32)" id="dim-card-32" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-slate-300 font-bold">32-D</div>
+              <div class="text-base font-extrabold text-white font-mono">6.25%</div>
               <div class="text-[10px] text-emerald-400 font-mono">0.125 KB • 93.8% Red.</div>
             </div>
+            <div onclick="selectAblationDim(16)" id="dim-card-16" class="cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]">
+              <div class="text-[11px] font-mono text-purple-300 font-bold">16-D</div>
+              <div class="text-base font-extrabold text-white font-mono">3.125%</div>
+              <div class="text-[10px] text-emerald-400 font-mono">0.062 KB • 96.9% Red.</div>
+            </div>
           </div>
         </div>
 
-        <!-- Metric KPI Cards for Selected Configuration -->
+        <!-- SELECTED DIMENSION KPI STATS -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="card-surface p-4 rounded-xl border border-slate-800 space-y-1">
-            <span class="text-[11px] font-mono text-slate-400">Mean Average Precision (mAP@5)</span>
-            <div class="text-2xl font-extrabold font-mono text-cyan-400" id="ablation-metric-map5">--%</div>
-            <div class="text-[10px] text-slate-500 font-mono" id="ablation-metric-map5-sub">Relative drop: --</div>
+            <div class="text-[10px] font-mono text-slate-400 uppercase">mAP@10 (Mean Average Precision)</div>
+            <div class="text-2xl font-extrabold font-mono text-cyan-400" id="ablation-metric-map10">--%</div>
+            <div class="text-[10px] text-slate-500 font-mono" id="ablation-metric-map10-sub">Selected Configuration</div>
           </div>
+
           <div class="card-surface p-4 rounded-xl border border-slate-800 space-y-1">
-            <span class="text-[11px] font-mono text-slate-400">Precision@5 / Precision@10</span>
-            <div class="text-2xl font-extrabold font-mono text-emerald-400" id="ablation-metric-p5">--% / --%</div>
-            <div class="text-[10px] text-slate-500 font-mono">Top-k category accuracy</div>
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Precision@5 / Precision@10</div>
+            <div class="text-2xl font-extrabold font-mono text-emerald-400" id="ablation-metric-p10">--% / --%</div>
+            <div class="text-[10px] text-slate-500 font-mono">Macro average across valid queries</div>
           </div>
+
           <div class="card-surface p-4 rounded-xl border border-slate-800 space-y-1">
-            <span class="text-[11px] font-mono text-slate-400">Vector Storage Footprint</span>
-            <div class="text-2xl font-extrabold font-mono text-fuchsia-400" id="ablation-metric-storage">-- KB</div>
-            <div class="text-[10px] text-emerald-400 font-mono" id="ablation-metric-storage-red">--% storage reduction</div>
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Recall@5 / Recall@10</div>
+            <div class="text-2xl font-extrabold font-mono text-indigo-400" id="ablation-metric-r10">--% / --%</div>
+            <div class="text-[10px] text-slate-500 font-mono">Gallery relevance coverage</div>
           </div>
+
           <div class="card-surface p-4 rounded-xl border border-slate-800 space-y-1">
-            <span class="text-[11px] font-mono text-slate-400">FAISS Query Latency</span>
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Query Latency / Storage</div>
             <div class="text-2xl font-extrabold font-mono text-amber-400" id="ablation-metric-latency">-- ms</div>
-            <div class="text-[10px] text-slate-500 font-mono">SIMD inner-product kernel</div>
+            <div class="text-[10px] text-emerald-400 font-mono" id="ablation-metric-storage">-- KB per vector</div>
           </div>
         </div>
 
-        <!-- Comparative Interactive Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="text-xs font-bold text-white uppercase tracking-wider font-display">mAP@5 vs Embedding Dimensions</h4>
-              <span class="text-[10px] font-mono text-cyan-400">All 3 Techniques</span>
+        <!-- COMPLETE EXPERIMENTAL COMPARISON TABLE -->
+        <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 class="text-sm font-bold text-white uppercase tracking-wider font-display">Experimental Performance Grid</h4>
+              <p class="text-xs text-slate-400">Measured across all evaluated dimensionalities with query-gallery exclusion.</p>
             </div>
-            <div class="h-64">
-              <canvas id="ablationMapChart"></canvas>
+
+            <!-- Experiment Toggle Pills -->
+            <div class="flex items-center space-x-1.5 p-1 rounded-xl bg-slate-900 border border-slate-800">
+              <button id="btnTabExpA" onclick="setAblationViewMode('clean')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition">
+                Exp A: Clean (No Noise)
+              </button>
+              <button id="btnTabExpB" onclick="setAblationViewMode('noise')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
+                Exp B: Noise (&sigma;=0.05)
+              </button>
+              <button id="btnTabExpCompare" onclick="setAblationViewMode('compare')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
+                Comparative View
+              </button>
             </div>
           </div>
 
-          <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="text-xs font-bold text-white uppercase tracking-wider font-display">Storage Reduction vs Retrieval Accuracy</h4>
-              <span class="text-[10px] font-mono text-emerald-400">Pareto Tradeoff</span>
-            </div>
-            <div class="h-64">
-              <canvas id="ablationStorageChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- Empirical Metrics Table Across All 5 Configurations -->
-        <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-xs font-bold text-white uppercase tracking-wider font-display">Complete Experimental Evaluation Grid</h4>
-            <span class="text-[10px] font-mono text-slate-400">Query-Peer Exclusion: ENFORCED • 10-Trial Random Mean &plusmn; Std</span>
-          </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs font-mono">
               <thead>
                 <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
                   <th class="py-2.5 px-3">Configuration</th>
                   <th class="py-2.5 px-3">Dimension</th>
-                  <th class="py-2.5 px-3">Retained %</th>
+                  <th class="py-2.5 px-3">Noise &sigma;</th>
                   <th class="py-2.5 px-3">Precision@5</th>
+                  <th class="py-2.5 px-3">Precision@10</th>
                   <th class="py-2.5 px-3">Recall@5</th>
-                  <th class="py-2.5 px-3">mAP@5</th>
+                  <th class="py-2.5 px-3">Recall@10</th>
+                  <th class="py-2.5 px-3">mAP@10</th>
                   <th class="py-2.5 px-3">Latency</th>
                   <th class="py-2.5 px-3">Storage / Vec</th>
                   <th class="py-2.5 px-3">Storage Saved</th>
                 </tr>
               </thead>
-              <tbody id="ablationBenchmarkTableBody" class="divide-y divide-slate-800/60">
-                <tr><td colspan="9" class="py-6 text-center text-slate-500">Loading benchmark evaluation matrix...</td></tr>
+              <tbody id="ablationBenchmarkTableBody" class="divide-y divide-slate-800/60 font-sans">
+                <tr><td colspan="11" class="py-6 text-center text-slate-500 font-mono">Loading real ablation benchmark metrics...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Section: Dynamic Query Visual Comparison Across Dimensions -->
+        <!-- 5 SEPARATE INTERACTIVE CHARTS WITH MEASURED VALUE PANELS BESIDE EACH CHART -->
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider font-display flex items-center space-x-2">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <span>Dimensionality Tradeoff Visualizations (5 Interactive Charts)</span>
+            </h4>
+            <span class="text-[11px] font-mono text-slate-400">Actual measured values displayed alongside charts</span>
+          </div>
+
+          <!-- CHART 1: DIMENSIONS VS PRECISION@10 -->
+          <div class="card-surface p-6 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-display">1. Dimensions vs Precision@10</h5>
+                <p class="text-[11px] text-slate-400">Top-10 retrieval accuracy as embedding dimensions compress from 1280 to 16</p>
+              </div>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">Accuracy Metric</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-8 h-64">
+                <canvas id="chartAblationPrecision"></canvas>
+              </div>
+              <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800/80 p-4 space-y-2">
+                <div class="text-[11px] font-mono font-bold text-slate-300 uppercase pb-1 border-b border-slate-800">Measured Precision@10</div>
+                <div id="panelAblationPrecision" class="space-y-1.5 text-xs font-mono">
+                  <!-- Populated via Javascript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHART 2: DIMENSIONS VS RECALL@10 -->
+          <div class="card-surface p-6 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-display">2. Dimensions vs Recall@10</h5>
+                <p class="text-[11px] text-slate-400">Coverage ratio of ground-truth gallery peers retrieved within Top-10 matches</p>
+              </div>
+              <span class="text-[10px] font-mono text-indigo-400 bg-indigo-950/60 border border-indigo-800/60 px-2 py-0.5 rounded">Coverage Metric</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-8 h-64">
+                <canvas id="chartAblationRecall"></canvas>
+              </div>
+              <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800/80 p-4 space-y-2">
+                <div class="text-[11px] font-mono font-bold text-slate-300 uppercase pb-1 border-b border-slate-800">Measured Recall@10</div>
+                <div id="panelAblationRecall" class="space-y-1.5 text-xs font-mono">
+                  <!-- Populated via Javascript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHART 3: DIMENSIONS VS mAP@10 -->
+          <div class="card-surface p-6 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-display">3. Dimensions vs mAP@10 (Mean Average Precision)</h5>
+                <p class="text-[11px] text-slate-400">Rank-weighted precision accounting for placement position of relevant items</p>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-800/60 px-2 py-0.5 rounded">Rank-Sensitive</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-8 h-64">
+                <canvas id="chartAblationMap"></canvas>
+              </div>
+              <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800/80 p-4 space-y-2">
+                <div class="text-[11px] font-mono font-bold text-slate-300 uppercase pb-1 border-b border-slate-800">Measured mAP@10</div>
+                <div id="panelAblationMap" class="space-y-1.5 text-xs font-mono">
+                  <!-- Populated via Javascript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHART 4: DIMENSIONS VS RETRIEVAL LATENCY -->
+          <div class="card-surface p-6 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-display">4. Dimensions vs Retrieval Latency</h5>
+                <p class="text-[11px] text-slate-400">FAISS Inner-Product SIMD kernel execution latency in milliseconds per query</p>
+              </div>
+              <span class="text-[10px] font-mono text-amber-400 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded">Speed Metric</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-8 h-64">
+                <canvas id="chartAblationLatency"></canvas>
+              </div>
+              <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800/80 p-4 space-y-2">
+                <div class="text-[11px] font-mono font-bold text-slate-300 uppercase pb-1 border-b border-slate-800">Measured Latency (ms)</div>
+                <div id="panelAblationLatency" class="space-y-1.5 text-xs font-mono">
+                  <!-- Populated via Javascript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHART 5: DIMENSIONS VS STORAGE CONSUMPTION -->
+          <div class="card-surface p-6 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-display">5. Dimensions vs Storage Consumption</h5>
+                <p class="text-[11px] text-slate-400">Float32 vector storage consumption and percentage memory reduction relative to 512-D</p>
+              </div>
+              <span class="text-[10px] font-mono text-purple-400 bg-purple-950/60 border border-purple-800/60 px-2 py-0.5 rounded">Efficiency Metric</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-8 h-64">
+                <canvas id="chartAblationStorage"></canvas>
+              </div>
+              <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800/80 p-4 space-y-2">
+                <div class="text-[11px] font-mono font-bold text-slate-300 uppercase pb-1 border-b border-slate-800">Measured Storage Footprint</div>
+                <div id="panelAblationStorage" class="space-y-1.5 text-xs font-mono">
+                  <!-- Populated via Javascript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIVACY VERSUS UTILITY ANALYSIS SECTION -->
+        <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 class="text-sm font-bold text-white uppercase tracking-wider font-display flex items-center space-x-2">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span>Privacy Versus Utility Tradeoff Analysis</span>
+              </h4>
+              <p class="text-xs text-slate-400">Impact of dimensional compression and differential noise perturbation on retrieval accuracy and storage efficiency.</p>
+            </div>
+            <span class="text-[10px] font-mono text-purple-300 bg-purple-950/80 border border-purple-800 px-2.5 py-1 rounded font-semibold">Empirical Perturbation Model</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs font-mono">
+              <thead>
+                <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                  <th class="py-2.5 px-3">Original Dim</th>
+                  <th class="py-2.5 px-3">Reduced Dim</th>
+                  <th class="py-2.5 px-3">Reduction %</th>
+                  <th class="py-2.5 px-3">Noise Std Dev (&sigma;)</th>
+                  <th class="py-2.5 px-3">Clean Accuracy (mAP@10)</th>
+                  <th class="py-2.5 px-3">Protected Accuracy (mAP@10)</th>
+                  <th class="py-2.5 px-3">Accuracy Delta</th>
+                  <th class="py-2.5 px-3">Vector Storage</th>
+                </tr>
+              </thead>
+              <tbody id="privacyUtilityTableBody" class="divide-y divide-slate-800/60 font-sans">
+                <!-- Populated via Javascript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed font-mono">
+            <span class="text-cyan-300 font-bold">Scientific Methodology Notice:</span> Noise injection adds zero-mean Gaussian perturbation &sim; N(0, &sigma;&sup2;&bull;I) to projected coordinates prior to unit L2-normalization. In high-dimensional spaces (512-D), signal energy dominates noise, preserving retrieval utility. In compressed sub-spaces (&le;32-D), noise variance substantially disrupts topological proximity, demonstrating an empirical privacy-utility boundary without claiming formal (&epsilon;, &delta;)-differential privacy proofs.
+          </div>
+        </div>
+
+        <!-- SECTION: DYNAMIC QUERY VISUAL COMPARISON ACROSS DIMENSIONS -->
         <div class="card-surface p-6 rounded-2xl border border-slate-800 space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h4 class="text-sm font-bold text-white font-display">Visual Ranking Comparison Across Dimensionality</h4>
-              <p class="text-xs text-slate-400">Select an image to inspect how Top-5 retrieved matches shift across 512, 384, 256, 128, and 64 dimensions.</p>
+              <p class="text-xs text-slate-400">Select a query preset to inspect how Top-5 retrieved matches shift across 512, 256, 128, 64, 32, and 16 dimensions.</p>
             </div>
             <div class="flex items-center space-x-2">
               <select id="queryComparePresetSelect" onchange="runAblationQueryCompare(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white px-3 py-1.5 rounded-lg focus:outline-none">
@@ -2222,7 +2724,6 @@
 
       </div>
 
-      <!-- ========================================================= -->
       <!-- SUB-TAB 2: IMAGE RECONSTRUCTION ATTACKS (MODULE B)        -->
       <!-- ========================================================= -->
       <div id="res-sub-reconstruction" class="hidden space-y-6">

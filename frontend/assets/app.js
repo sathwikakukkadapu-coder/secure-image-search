@@ -134,7 +134,10 @@
 
     async function exportResearchCSV(studyType = 'combined') {
       if (!checkUserRole(['admin', 'researcher', 'specialist'], 'export research benchmarks')) return;
-      await downloadBlobFile(`/api/research/export/csv?study_type=${studyType}`, `research_export_${studyType}.csv`);
+      const url = studyType === 'ablation'
+        ? `/api/research/ablation/export?format=csv&domain=${currentAblationDomain}&sigma=${currentAblationSigma}`
+        : `/api/research/export/csv?study_type=${studyType}`;
+      await downloadBlobFile(url, `research_export_${studyType}.csv`);
     }
 
     function downloadResearchCSV(studyType = 'combined') {
@@ -1581,66 +1584,214 @@ Previous index backup preserved.`);
       });
     }
 
+    // =========================================================================
+    // RESEARCH MODULE A: DIMENSIONALITY ABLATION & RETRIEVAL ANALYSIS
+    // =========================================================================
+    let currentAblationDim = 512;
+    let currentAblationViewMode = 'clean'; // 'clean', 'noise', 'compare'
+    let currentAblationDomain = 'all';
+    let currentAblationSigma = 0.05;
+    let cachedAblationData = null;
+
+    let chartAblationPrecisionInst = null;
+    let chartAblationRecallInst = null;
+    let chartAblationMapInst = null;
+    let chartAblationLatencyInst = null;
+    let chartAblationStorageInst = null;
+
     function selectAblationDim(dim) {
       currentAblationDim = dim;
-      [512, 384, 256, 128, 64, 32].forEach(d => {
+      [1280, 512, 256, 128, 64, 32, 16].forEach(d => {
         const card = document.getElementById(`dim-card-${d}`);
         if (card) {
           if (d === dim) {
-            card.className = "cursor-pointer p-3.5 rounded-xl border-2 border-cyan-500 bg-cyan-950/20 text-center space-y-1 transition hover:scale-[1.02]";
+            card.className = "cursor-pointer p-3 rounded-xl border-2 border-cyan-500 bg-cyan-950/20 text-center space-y-1 transition scale-[1.02] shadow-lg shadow-cyan-950/40";
           } else {
-            card.className = "cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]";
+            card.className = "cursor-pointer p-3 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-600 hover:scale-[1.02]";
           }
         }
       });
       updateAblationKpis();
     }
 
-    function onAblationTechniqueChange(tech) {
-      currentAblationTech = tech;
-      updateAblationKpis();
+    function setAblationViewMode(mode) {
+      currentAblationViewMode = mode;
+      const btnA = document.getElementById('btnTabExpA');
+      const btnB = document.getElementById('btnTabExpB');
+      const btnC = document.getElementById('btnTabExpCompare');
+
+      if (btnA) btnA.className = mode === 'clean' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnB) btnB.className = mode === 'noise' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-purple-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnC) btnC.className = mode === 'compare' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+
       renderAblationTable();
+      updateAblationKpis();
     }
 
-    function updateAblationKpis() {
-      if (!cachedAblationData) return;
-      const techList = cachedAblationData.results_by_technique[currentAblationTech] || cachedAblationData.results_by_technique['truncation'];
-      const item = techList.find(x => x.dimension === currentAblationDim) || techList[0];
-      const baseItem = techList.find(x => x.dimension === 512) || techList[0];
+    function onAblationFilterChange() {
+      const domSelect = document.getElementById('ablationDomainSelect');
+      const sigSelect = document.getElementById('ablationSigmaSelect');
+      if (domSelect) currentAblationDomain = domSelect.value;
+      if (sigSelect) currentAblationSigma = parseFloat(sigSelect.value);
 
-      const map5El = document.getElementById('ablation-metric-map5');
-      const map5SubEl = document.getElementById('ablation-metric-map5-sub');
-      const p5El = document.getElementById('ablation-metric-p5');
-      const storEl = document.getElementById('ablation-metric-storage');
-      const storRedEl = document.getElementById('ablation-metric-storage-red');
-      const latEl = document.getElementById('ablation-metric-latency');
+      const relDescEl = document.getElementById('ablationRelevanceDesc');
+      if (relDescEl) {
+        if (currentAblationDomain === 'all') {
+          relDescEl.innerText = "Category Match (Macro Domain)";
+          relDescEl.className = "text-emerald-400 font-semibold";
+        } else {
+          relDescEl.innerText = `Subcategory Match (${currentAblationDomain.toUpperCase()})`;
+          relDescEl.className = "text-cyan-400 font-semibold";
+        }
+      }
 
-      if (map5El) map5El.innerText = `${(item.map_at_5 * 100).toFixed(1)}%`;
-      if (map5SubEl) {
-        const drop = ((baseItem.map_at_5 - item.map_at_5) / baseItem.map_at_5) * 100;
-        map5SubEl.innerText = drop <= 0 ? 'Baseline (0.0% drop)' : `-${drop.toFixed(1)}% vs Baseline`;
+      loadAblationBenchmark(false);
+    }
+
+    async function runLiveAblationExperiment() {
+      const btn = document.getElementById('btnRunAblation');
+      const spinner = document.getElementById('runAblationSpinner');
+      const icon = document.getElementById('runAblationIcon');
+      const label = document.getElementById('runAblationLabel');
+      const prog = document.getElementById('ablationProgressContainer');
+      const statusBadge = document.getElementById('ablation-status-badge');
+
+      if (btn) btn.disabled = true;
+      if (spinner) spinner.classList.remove('hidden');
+      if (icon) icon.classList.add('hidden');
+      if (label) label.innerText = "Executing Experiment...";
+      if (prog) prog.classList.remove('hidden');
+      if (statusBadge) {
+        statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span><span>Running...</span>';
+        statusBadge.className = "text-xs font-bold text-cyan-400 font-mono mt-0.5 flex items-center justify-center space-x-1";
       }
-      if (p5El) p5El.innerText = `${(item.precision_at_5 * 100).toFixed(1)}% / ${(item.precision_at_10 * 100).toFixed(1)}%`;
-      if (storEl) storEl.innerText = `${item.storage ? item.storage.kb_per_vector : (item.dimension*4/1024).toFixed(2)} KB`;
-      if (storRedEl) {
-        const redPct = item.storage ? item.storage.storage_reduction_percent : Math.round((1 - item.dimension/512)*100);
-        storRedEl.innerText = `${redPct}% storage saved`;
+
+      try {
+        const payload = {
+          domain: currentAblationDomain,
+          sigma: currentAblationSigma,
+          include_1280: true,
+          force_rerun: true
+        };
+        const res = await apiFetch('/api/research/ablation/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error("Ablation experiment failed to execute on server.");
+        cachedAblationData = await res.json();
+
+        applyAblationDatasetStats();
+        renderAblationTable();
+        updateAblationKpis();
+        renderAblationCharts();
+        renderPrivacyUtilityTable();
+
+        showToast(`Experiment completed! ${cachedAblationData.queries_evaluated} queries evaluated across 7 dimensions.`);
+      } catch (err) {
+        console.error("Experiment execution error:", err);
+        showToast("Experiment execution error: " + err.message);
+      } finally {
+        if (btn) btn.disabled = false;
+        if (spinner) spinner.classList.add('hidden');
+        if (icon) icon.classList.remove('hidden');
+        if (label) label.innerText = "Run Experiment";
+        if (prog) prog.classList.add('hidden');
+        if (statusBadge) {
+          statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Completed</span>';
+          statusBadge.className = "text-xs font-bold text-emerald-400 font-mono mt-0.5 flex items-center justify-center space-x-1";
+        }
       }
-      if (latEl) latEl.innerText = `${item.avg_latency_ms || 0.65} ms`;
     }
 
     async function loadAblationBenchmark(forceRerun = false) {
       try {
-        const url = `/api/research/ablation/benchmark?force_rerun=${forceRerun}`;
+        const url = `/api/research/ablation/benchmark?domain=${currentAblationDomain}&sigma=${currentAblationSigma}&force_rerun=${forceRerun}&include_1280=true`;
         const res = await apiFetch(url, { credentials: 'omit' });
         if (!res.ok) throw new Error("Ablation benchmark fetch failed.");
         cachedAblationData = await res.json();
+
+        applyAblationDatasetStats();
         renderAblationTable();
         updateAblationKpis();
         renderAblationCharts();
-        showToast(forceRerun ? "Research ablation benchmark refreshed!" : "Ablation experimental data loaded.");
+        renderPrivacyUtilityTable();
+
+        if (forceRerun) showToast("Ablation experimental benchmark refreshed.");
       } catch (err) {
         console.error("Ablation benchmark load error:", err);
+      }
+    }
+
+    function applyAblationDatasetStats() {
+      if (!cachedAblationData) return;
+      const dsSizeEl = document.getElementById('ablation-stat-dataset-size');
+      const gSizeEl = document.getElementById('ablation-stat-gallery-size');
+      const qSizeEl = document.getElementById('ablation-stat-query-size');
+      const dimCountEl = document.getElementById('ablation-stat-dimensions');
+      const relDescEl = document.getElementById('ablationRelevanceDesc');
+
+      if (dsSizeEl && cachedAblationData.total_catalog_size) {
+        dsSizeEl.innerText = `${cachedAblationData.total_catalog_size.toLocaleString()} Images`;
+      }
+      if (gSizeEl && cachedAblationData.gallery_size) {
+        gSizeEl.innerText = `${cachedAblationData.gallery_size.toLocaleString()} Images`;
+      }
+      if (qSizeEl && cachedAblationData.queries_evaluated) {
+        qSizeEl.innerText = `${cachedAblationData.queries_evaluated.toLocaleString()} Queries`;
+      }
+      if (dimCountEl && cachedAblationData.dimensions_evaluated) {
+        dimCountEl.innerText = `${cachedAblationData.dimensions_evaluated.length} Configurations`;
+      }
+      if (relDescEl && cachedAblationData.relevance_ground_truth) {
+        relDescEl.innerText = cachedAblationData.relevance_ground_truth;
+      }
+    }
+
+    function updateAblationKpis() {
+      if (!cachedAblationData) return;
+      const cleanList = cachedAblationData.experiment_a_clean || [];
+      const noiseList = cachedAblationData.experiment_b_noise || [];
+
+      const activeList = currentAblationViewMode === 'noise' ? noiseList : cleanList;
+      const item = activeList.find(x => x.dimension === currentAblationDim) || activeList.find(x => x.dimension === 512) || activeList[0];
+      const base512 = activeList.find(x => x.dimension === 512) || activeList[0];
+
+      if (!item) return;
+
+      const map10El = document.getElementById('ablation-metric-map10');
+      const map10SubEl = document.getElementById('ablation-metric-map10-sub');
+      const p10El = document.getElementById('ablation-metric-p10');
+      const r10El = document.getElementById('ablation-metric-r10');
+      const latEl = document.getElementById('ablation-metric-latency');
+      const storEl = document.getElementById('ablation-metric-storage');
+
+      if (map10El) map10El.innerText = `${(item.map_at_10 * 100).toFixed(2)}%`;
+      if (map10SubEl) {
+        if (item.dimension === 512) {
+          map10SubEl.innerText = "Production Keyed Base (512-D)";
+        } else if (item.dimension === 1280) {
+          map10SubEl.innerText = "Unprojected Raw Feature Baseline";
+        } else {
+          const delta = ((item.map_at_10 - base512.map_at_10) / base512.map_at_10) * 100;
+          map10SubEl.innerText = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}% vs 512-D Base`;
+        }
+      }
+
+      if (p10El) {
+        p10El.innerText = `${(item.precision_at_5 * 100).toFixed(1)}% / ${(item.precision_at_10 * 100).toFixed(1)}%`;
+      }
+      if (r10El) {
+        r10El.innerText = `${(item.recall_at_5 * 100).toFixed(2)}% / ${(item.recall_at_10 * 100).toFixed(2)}%`;
+      }
+      if (latEl) {
+        latEl.innerText = `${item.avg_latency_ms.toFixed(3)} ms`;
+      }
+      if (storEl) {
+        const kb = item.storage ? item.storage.kb_per_vector : (item.dimension * 4 / 1024).toFixed(3);
+        const red = item.storage ? item.storage.reduction_percent : 0.0;
+        storEl.innerText = `${kb} KB / vec (${red >= 0 ? red.toFixed(1) + '% saved' : 'Raw'})`;
       }
     }
 
@@ -1649,29 +1800,48 @@ Previous index backup preserved.`);
       const tbody = document.getElementById('ablationBenchmarkTableBody');
       if (!tbody) return;
 
-      const techData = cachedAblationData.results_by_technique[currentAblationTech] || [];
-      const baseMap = techData.length > 0 ? techData[0].map_at_5 : 1.0;
+      const cleanList = cachedAblationData.experiment_a_clean || [];
+      const noiseList = cachedAblationData.experiment_b_noise || [];
 
-      tbody.innerHTML = techData.map(row => {
+      let rowsToRender = [];
+      if (currentAblationViewMode === 'clean') {
+        rowsToRender = cleanList.map(r => ({ ...r, expName: 'Exp A: Clean (Zero Noise)' }));
+      } else if (currentAblationViewMode === 'noise') {
+        rowsToRender = noiseList.map(r => ({ ...r, expName: `Exp B: Noise (σ=${r.noise_sigma || 0.05})` }));
+      } else {
+        // Comparative interleaved
+        cleanList.forEach((c, idx) => {
+          rowsToRender.push({ ...c, expName: 'Exp A: Clean' });
+          if (noiseList[idx]) {
+            rowsToRender.push({ ...noiseList[idx], expName: `Exp B: Noise (σ=${noiseList[idx].noise_sigma || 0.05})` });
+          }
+        });
+      }
+
+      tbody.innerHTML = rowsToRender.map(row => {
         const isSelected = row.dimension === currentAblationDim;
-        const stdStr = row.map_at_5_std !== undefined ? ` &plusmn; ${(row.map_at_5_std * 100).toFixed(2)}%` : '';
-        const storRed = row.storage ? row.storage.storage_reduction_percent : Math.round((1 - row.dimension/512)*100);
-        const storKb = row.storage ? row.storage.kb_per_vector : (row.dimension*4/1024).toFixed(2);
+        const redPct = row.storage ? row.storage.reduction_percent : 0.0;
+        const kbVec = row.storage ? row.storage.kb_per_vector : (row.dimension * 4 / 1024).toFixed(3);
+        const redClass = redPct > 0 ? 'text-emerald-400' : (redPct === 0 ? 'text-slate-400' : 'text-amber-400');
+        const redLabel = redPct > 0 ? `${redPct.toFixed(1)}% saved` : (redPct === 0 ? '0% (Base)' : 'Raw Baseline');
+        const isExpB = row.expName.includes('Exp B');
 
         return `
-          <tr class="${isSelected ? 'bg-cyan-950/30 text-white font-bold' : 'text-slate-300 hover:bg-slate-800/40'} cursor-pointer" onclick="selectAblationDim(${row.dimension})">
+          <tr class="${isSelected ? 'bg-cyan-950/40 text-white font-bold' : 'text-slate-300 hover:bg-slate-800/40'} cursor-pointer transition" onclick="selectAblationDim(${row.dimension})">
             <td class="py-2.5 px-3 flex items-center space-x-1.5">
               ${isSelected ? '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>' : ''}
-              <span>${row.technique || currentAblationTech} (${row.dimension}-D)</span>
+              <span class="${isExpB ? 'text-purple-300' : 'text-cyan-300'} font-semibold">${row.expName}</span>
             </td>
-            <td class="py-2.5 px-3 text-cyan-300">${row.dimension}</td>
-            <td class="py-2.5 px-3">${row.retained_percent}%</td>
-            <td class="py-2.5 px-3 text-emerald-400">${(row.precision_at_5 * 100).toFixed(1)}%</td>
-            <td class="py-2.5 px-3 text-slate-400">${(row.recall_at_5 * 100).toFixed(2)}%</td>
-            <td class="py-2.5 px-3 text-fuchsia-300 font-bold">${(row.map_at_5 * 100).toFixed(1)}%${stdStr}</td>
-            <td class="py-2.5 px-3 text-amber-300">${row.avg_latency_ms || 0.6} ms</td>
-            <td class="py-2.5 px-3">${storKb} KB</td>
-            <td class="py-2.5 px-3 text-emerald-400">${storRed}% saved</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-white">${row.dimension}-D</td>
+            <td class="py-2.5 px-3 font-mono ${isExpB ? 'text-purple-400' : 'text-slate-500'}">&sigma;=${(row.noise_sigma || 0.0).toFixed(2)}</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-400">${(row.precision_at_5 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-300 font-bold">${(row.precision_at_10 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-slate-400">${(row.recall_at_5 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-indigo-300">${(row.recall_at_10 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-cyan-300 font-extrabold">${(row.map_at_10 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-amber-300">${row.avg_latency_ms.toFixed(3)} ms</td>
+            <td class="py-2.5 px-3 font-mono">${kbVec} KB</td>
+            <td class="py-2.5 px-3 font-mono font-semibold ${redClass}">${redLabel}</td>
           </tr>
         `;
       }).join('');
@@ -1679,145 +1849,367 @@ Previous index backup preserved.`);
 
     function renderAblationCharts() {
       if (!cachedAblationData) return;
-      const dims = cachedAblationData.dimensions_tested || [512, 384, 256, 128, 64, 32];
-      const truncData = (cachedAblationData.results_by_technique.truncation || []).map(r => (r.map_at_5 * 100).toFixed(1));
-      const randData = (cachedAblationData.results_by_technique.random_selection || []).map(r => (r.map_at_5 * 100).toFixed(1));
-      const pcaData = (cachedAblationData.results_by_technique.pca || []).map(r => (r.map_at_5 * 100).toFixed(1));
+      const cleanList = cachedAblationData.experiment_a_clean || [];
+      const noiseList = cachedAblationData.experiment_b_noise || [];
 
-      const labels = dims.map(d => {
-        const perc = {512: '100%', 384: '75%', 256: '50%', 128: '25%', 64: '12.5%', 32: '6.25%'}[d] || `${d}-D`;
-        return `${d}-D (${perc})`;
-      });
-      const storRedData = dims.map(d => Math.round((1 - d/512)*1000)/10);
+      // Sort by dimension descending: 1280, 512, 256, 128, 64, 32, 16
+      const sortedClean = [...cleanList].sort((a, b) => b.dimension - a.dimension);
+      const sortedNoise = [...noiseList].sort((a, b) => b.dimension - a.dimension);
 
-      // 1. mAP vs Dim Chart
-      const ctx1 = document.getElementById('ablationMapChart');
-      if (ctx1) {
-        if (ablationMapChartInstance) ablationMapChartInstance.destroy();
-        ablationMapChartInstance = new Chart(ctx1, {
+      const labels = sortedClean.map(r => `${r.dimension}-D`);
+      const dims = sortedClean.map(r => r.dimension);
+
+      // Data arrays
+      const cleanP10 = sortedClean.map(r => (r.precision_at_10 * 100).toFixed(2));
+      const noiseP10 = sortedNoise.map(r => (r.precision_at_10 * 100).toFixed(2));
+
+      const cleanR10 = sortedClean.map(r => (r.recall_at_10 * 100).toFixed(2));
+      const noiseR10 = sortedNoise.map(r => (r.recall_at_10 * 100).toFixed(2));
+
+      const cleanMap10 = sortedClean.map(r => (r.map_at_10 * 100).toFixed(2));
+      const noiseMap10 = sortedNoise.map(r => (r.map_at_10 * 100).toFixed(2));
+
+      const cleanLat = sortedClean.map(r => r.avg_latency_ms.toFixed(3));
+      const storKb = sortedClean.map(r => r.storage ? r.storage.kb_per_vector : (r.dimension * 4 / 1024).toFixed(3));
+      const storRed = sortedClean.map(r => r.storage ? r.storage.reduction_percent : 0.0);
+
+      const chartDefaults = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { grid: { color: 'rgba(30, 41, 59, 0.6)' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 10 } } },
+          y: { grid: { color: 'rgba(30, 41, 59, 0.6)' }, ticks: { color: '#94a3b8', font: { family: 'monospace', size: 10 } } }
+        },
+        plugins: {
+          legend: { labels: { color: '#e2e8f0', font: { family: 'monospace', size: 11 } } },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+            titleFont: { family: 'monospace', size: 11 },
+            bodyFont: { family: 'monospace', size: 11 },
+            borderColor: '#334155',
+            borderWidth: 1
+          }
+        }
+      };
+
+      // 1. Chart 1: Precision@10
+      const ctxP10 = document.getElementById('chartAblationPrecision');
+      if (ctxP10) {
+        if (chartAblationPrecisionInst) chartAblationPrecisionInst.destroy();
+        chartAblationPrecisionInst = new Chart(ctxP10, {
           type: 'line',
           data: {
             labels: labels,
             datasets: [
               {
-                label: 'PCA Reduction',
-                data: pcaData,
+                label: 'Experiment A: Clean (Zero Noise)',
+                data: cleanP10,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: '#10b981',
+                tension: 0.25
+              },
+              {
+                label: `Experiment B: Noise (σ=${currentAblationSigma})`,
+                data: noiseP10,
+                borderColor: '#c084fc',
+                backgroundColor: 'rgba(192, 132, 252, 0.1)',
+                borderWidth: 2,
+                borderDash: [5, 4],
+                pointRadius: 4,
+                pointBackgroundColor: '#c084fc',
+                tension: 0.25
+              }
+            ]
+          },
+          options: chartDefaults
+        });
+
+        // Side panel values
+        const panelP10 = document.getElementById('panelAblationPrecision');
+        if (panelP10) {
+          panelP10.innerHTML = sortedClean.map((r, i) => `
+            <div class="flex items-center justify-between py-1 border-b border-slate-900">
+              <span class="text-slate-400 font-bold">${r.dimension}-D</span>
+              <div class="space-x-2">
+                <span class="text-emerald-400 font-bold">${cleanP10[i]}%</span>
+                <span class="text-purple-300">/ ${noiseP10[i]}%</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 2. Chart 2: Recall@10
+      const ctxR10 = document.getElementById('chartAblationRecall');
+      if (ctxR10) {
+        if (chartAblationRecallInst) chartAblationRecallInst.destroy();
+        chartAblationRecallInst = new Chart(ctxR10, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Experiment A: Clean (Zero Noise)',
+                data: cleanR10,
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: '#6366f1',
+                tension: 0.25
+              },
+              {
+                label: `Experiment B: Noise (σ=${currentAblationSigma})`,
+                data: noiseR10,
+                borderColor: '#e879f9',
+                backgroundColor: 'rgba(232, 121, 249, 0.1)',
+                borderWidth: 2,
+                borderDash: [5, 4],
+                pointRadius: 4,
+                pointBackgroundColor: '#e879f9',
+                tension: 0.25
+              }
+            ]
+          },
+          options: chartDefaults
+        });
+
+        const panelR10 = document.getElementById('panelAblationRecall');
+        if (panelR10) {
+          panelR10.innerHTML = sortedClean.map((r, i) => `
+            <div class="flex items-center justify-between py-1 border-b border-slate-900">
+              <span class="text-slate-400 font-bold">${r.dimension}-D</span>
+              <div class="space-x-2">
+                <span class="text-indigo-400 font-bold">${cleanR10[i]}%</span>
+                <span class="text-purple-300">/ ${noiseR10[i]}%</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 3. Chart 3: mAP@10
+      const ctxMap = document.getElementById('chartAblationMap');
+      if (ctxMap) {
+        if (chartAblationMapInst) chartAblationMapInst.destroy();
+        chartAblationMapInst = new Chart(ctxMap, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Experiment A: Clean mAP@10',
+                data: cleanMap10,
                 borderColor: '#06b6d4',
-                backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: false
+                backgroundColor: 'rgba(6, 182, 212, 0.12)',
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: '#06b6d4',
+                tension: 0.25
               },
               {
-                label: 'Random Selection (10 Trials)',
-                data: randData,
-                borderColor: '#d946ef',
-                backgroundColor: 'rgba(217, 70, 239, 0.1)',
+                label: `Experiment B: Noise mAP@10 (σ=${currentAblationSigma})`,
+                data: noiseMap10,
+                borderColor: '#ec4899',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
                 borderWidth: 2,
-                borderDash: [5, 5],
-                tension: 0.3,
-                fill: false
-              },
+                borderDash: [5, 4],
+                pointRadius: 4,
+                pointBackgroundColor: '#ec4899',
+                tension: 0.25
+              }
+            ]
+          },
+          options: chartDefaults
+        });
+
+        const panelMap = document.getElementById('panelAblationMap');
+        if (panelMap) {
+          panelMap.innerHTML = sortedClean.map((r, i) => `
+            <div class="flex items-center justify-between py-1 border-b border-slate-900">
+              <span class="text-slate-400 font-bold">${r.dimension}-D</span>
+              <div class="space-x-2">
+                <span class="text-cyan-400 font-bold">${cleanMap10[i]}%</span>
+                <span class="text-pink-400">/ ${noiseMap10[i]}%</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 4. Chart 4: Latency
+      const ctxLat = document.getElementById('chartAblationLatency');
+      if (ctxLat) {
+        if (chartAblationLatencyInst) chartAblationLatencyInst.destroy();
+        chartAblationLatencyInst = new Chart(ctxLat, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
               {
-                label: 'Truncation',
-                data: truncData,
+                label: 'FAISS Search Latency (ms)',
+                data: cleanLat,
+                backgroundColor: 'rgba(245, 158, 11, 0.35)',
                 borderColor: '#f59e0b',
-                backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: false
+                borderWidth: 1.5
               }
             ]
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            ...chartDefaults,
             scales: {
-              y: { min: 45, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-              x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-            },
-            plugins: {
-              legend: { labels: { color: '#cbd5e1', font: { size: 10, family: 'monospace' } } }
+              ...chartDefaults.scales,
+              y: { ...chartDefaults.scales.y, title: { display: true, text: 'Query Latency (ms)', color: '#f59e0b' } }
             }
           }
         });
+
+        const panelLat = document.getElementById('panelAblationLatency');
+        if (panelLat) {
+          panelLat.innerHTML = sortedClean.map((r, i) => `
+            <div class="flex items-center justify-between py-1 border-b border-slate-900">
+              <span class="text-slate-400 font-bold">${r.dimension}-D</span>
+              <span class="text-amber-400 font-bold font-mono">${cleanLat[i]} ms</span>
+            </div>
+          `).join('');
+        }
       }
 
-      // 2. Storage vs Accuracy Chart
-      const ctx2 = document.getElementById('ablationStorageChart');
-      if (ctx2) {
-        if (ablationStorageChartInstance) ablationStorageChartInstance.destroy();
-        ablationStorageChartInstance = new Chart(ctx2, {
+      // 5. Chart 5: Storage Footprint
+      const ctxStor = document.getElementById('chartAblationStorage');
+      if (ctxStor) {
+        if (chartAblationStorageInst) chartAblationStorageInst.destroy();
+        chartAblationStorageInst = new Chart(ctxStor, {
           type: 'bar',
           data: {
-            labels: dims.map(d => `${d}-D`),
+            labels: labels,
             datasets: [
               {
-                label: 'Storage Reduction (%)',
-                data: storRedData,
-                backgroundColor: 'rgba(16, 185, 129, 0.3)',
-                borderColor: '#10b981',
-                borderWidth: 1,
+                label: 'Storage Footprint (KB / vector)',
+                data: storKb,
+                backgroundColor: 'rgba(139, 92, 246, 0.35)',
+                borderColor: '#8b5cf6',
+                borderWidth: 1.5,
                 yAxisID: 'y'
               },
               {
-                label: 'Retained mAP (%)',
-                data: pcaData,
+                label: 'Storage Reduction (%)',
+                data: storRed,
                 type: 'line',
-                borderColor: '#38bdf8',
+                borderColor: '#10b981',
                 backgroundColor: 'transparent',
-                borderWidth: 2.5,
+                borderWidth: 2,
+                pointRadius: 4,
                 yAxisID: 'y1'
               }
             ]
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            ...chartDefaults,
             scales: {
-              y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Storage Saved %', color: '#10b981' } },
-              y1: { position: 'right', min: 70, max: 100, grid: { drawOnChartArea: false }, ticks: { color: '#38bdf8' }, title: { display: true, text: 'mAP %', color: '#38bdf8' } },
-              x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-            },
-            plugins: {
-              legend: { labels: { color: '#cbd5e1', font: { size: 10, family: 'monospace' } } }
+              x: chartDefaults.scales.x,
+              y: { ...chartDefaults.scales.y, title: { display: true, text: 'KB / Vector', color: '#8b5cf6' } },
+              y1: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, ticks: { color: '#10b981' }, title: { display: true, text: 'Reduction %', color: '#10b981' } }
             }
           }
         });
+
+        const panelStor = document.getElementById('panelAblationStorage');
+        if (panelStor) {
+          panelStor.innerHTML = sortedClean.map((r, i) => `
+            <div class="flex items-center justify-between py-1 border-b border-slate-900">
+              <span class="text-slate-400 font-bold">${r.dimension}-D</span>
+              <div class="space-x-1.5 font-mono">
+                <span class="text-purple-300 font-bold">${storKb[i]} KB</span>
+                <span class="text-emerald-400">(${storRed[i] >= 0 ? storRed[i].toFixed(1) + '%' : 'Raw'})</span>
+              </div>
+            </div>
+          `).join('');
+        }
       }
     }
 
+    function renderPrivacyUtilityTable() {
+      if (!cachedAblationData) return;
+      const tbody = document.getElementById('privacyUtilityTableBody');
+      if (!tbody) return;
+
+      const cleanList = cachedAblationData.experiment_a_clean || [];
+      const noiseList = cachedAblationData.experiment_b_noise || [];
+
+      // Sort by dimension descending
+      const sortedClean = [...cleanList].sort((a, b) => b.dimension - a.dimension);
+      const sortedNoise = [...noiseList].sort((a, b) => b.dimension - a.dimension);
+
+      tbody.innerHTML = sortedClean.map((c, i) => {
+        const n = sortedNoise[i] || {};
+        const redPct = c.storage ? c.storage.reduction_percent : 0.0;
+        const kbVec = c.storage ? c.storage.kb_per_vector : (c.dimension * 4 / 1024).toFixed(3);
+        const origDim = c.is_raw_baseline ? 1280 : 512;
+        const cleanMap = (c.map_at_10 * 100).toFixed(2);
+        const noiseMap = ((n.map_at_10 || 0) * 100).toFixed(2);
+        const delta = ((n.map_at_10 || 0) - c.map_at_10) * 100;
+        const deltaClass = delta <= -15 ? 'text-rose-400' : (delta <= -5 ? 'text-amber-400' : 'text-slate-300');
+
+        return `
+          <tr class="hover:bg-slate-800/40 text-slate-300">
+            <td class="py-2.5 px-3 font-mono">${origDim}-D</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-cyan-300">${c.dimension}-D</td>
+            <td class="py-2.5 px-3 font-mono ${redPct > 0 ? 'text-emerald-400' : 'text-slate-400'}">${redPct >= 0 ? redPct.toFixed(1) + '%' : 'Raw'}</td>
+            <td class="py-2.5 px-3 font-mono text-purple-300">&sigma;=${(n.noise_sigma || currentAblationSigma).toFixed(2)}</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-400 font-bold">${cleanMap}%</td>
+            <td class="py-2.5 px-3 font-mono text-purple-400 font-bold">${noiseMap}%</td>
+            <td class="py-2.5 px-3 font-mono font-bold ${deltaClass}">${delta.toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono">${kbVec} KB</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
     async function runAblationQueryCompare(presetId = null) {
-      const imgId = presetId || document.getElementById('queryComparePresetSelect').value || 'IMG_MED_XRA_medical_xray_0004';
+      const selectEl = document.getElementById('queryComparePresetSelect');
+      const imgId = presetId || (selectEl ? selectEl.value : 'IMG_MED_XRA_medical_xray_0004');
       const grid = document.getElementById('queryCompareResultsGrid');
       if (!grid) return;
-      grid.innerHTML = '<div class="col-span-5 py-8 text-center text-slate-500 font-mono text-xs">Comparing Top-5 across dimensions...</div>';
+
+      grid.innerHTML = '<div class="col-span-full py-8 text-center text-slate-500 font-mono">Running live multi-dimensional retrieval query across 6 dimensions...</div>';
 
       try {
         const res = await apiFetch('/api/research/ablation/query-compare', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image_id: imgId, technique: currentAblationTech, top_k: 5 })
+          body: JSON.stringify({
+            image_id: imgId,
+            top_k: 5,
+            sigma: currentAblationSigma
+          })
         });
-        if (!res.ok) throw new Error("Comparison query failed");
-        const data = await res.json();
 
-        grid.innerHTML = data.dimensions_compared.map(dim => {
-          const colData = data.comparisons[String(dim)];
-          const matches = colData.top_matches || [];
+        if (!res.ok) throw new Error("Query comparison failed.");
+        const data = await res.json();
+        const rankings = data.rankings_by_dimension || {};
+
+        grid.innerHTML = [512, 256, 128, 64, 32, 16].map(dim => {
+          const dimData = rankings[String(dim)] || { matches: [] };
+          const matches = dimData.matches || [];
+
           return `
             <div class="card-surface p-3 rounded-xl border border-slate-800 space-y-2">
-              <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5">
-                <span class="text-xs font-mono font-bold text-cyan-300">${dim}-D (${colData.retained_percent}%)</span>
-                <span class="text-[9px] font-mono text-emerald-400 font-bold">${colData.storage_reduction_percent}% Saved</span>
+              <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                <span class="text-xs font-mono font-bold text-cyan-300">${dim}-D Space</span>
+                <span class="text-[10px] font-mono text-slate-400">${(dim*4/1024).toFixed(2)} KB</span>
               </div>
-              <div class="space-y-1.5">
-                ${matches.map(m => `
-                  <div class="flex items-center justify-between p-1.5 rounded bg-slate-950/70 border border-slate-800 text-[10px]">
-                    <div class="truncate max-w-[90px] font-mono text-slate-300 font-semibold" title="${m.image_id}">
-                      #${m.rank} ${m.image_id.split('_').slice(-2).join('_')}
+              <div class="space-y-1.5 text-[11px] font-mono">
+                ${matches.map((m, idx) => `
+                  <div class="p-1.5 rounded-lg bg-slate-900/80 border border-slate-800/80 flex items-center justify-between">
+                    <div class="truncate max-w-[110px]" title="${m.image_id}">
+                      <span class="text-slate-500">#${idx+1}</span>
+                      <span class="text-slate-300 font-semibold">${m.image_id.replace('IMG_', '').slice(0, 12)}</span>
                     </div>
-                    <span class="font-mono font-bold text-cyan-400">${m.similarity_percent}</span>
+                    <span class="text-cyan-400 font-bold">${(m.similarity * 100).toFixed(1)}%</span>
                   </div>
                 `).join('')}
               </div>
@@ -1825,7 +2217,17 @@ Previous index backup preserved.`);
           `;
         }).join('');
       } catch (err) {
-        grid.innerHTML = `<div class="col-span-5 text-center text-rose-400 text-xs py-4">${err.message}</div>`;
+        grid.innerHTML = `<div class="col-span-full py-4 text-center text-rose-400 font-mono">Query comparison failed: ${err.message}</div>`;
+      }
+    }
+
+    async function exportAblationJSON() {
+      try {
+        const url = `/api/research/ablation/export?format=json&domain=${currentAblationDomain}&sigma=${currentAblationSigma}`;
+        window.location.href = url;
+        showToast("Exporting JSON experiment record...");
+      } catch (err) {
+        showToast("Export failed: " + err.message);
       }
     }
 

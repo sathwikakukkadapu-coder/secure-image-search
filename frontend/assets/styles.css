@@ -178,3 +178,22 @@ body {
       border-color: rgba(139, 92, 246, 0.35);
       box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(124, 58, 237, 0.2);
     }
+
+/* ============================================================
+   Overview & Architecture Dashboard - Scoped Visual Enhancements
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+#tab-overview .overview-card-hover {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#tab-overview .overview-card-hover:hover {
+  transform: translateY(-2px);
+}
+

@@ -10,6 +10,7 @@ Exposes REST endpoints for:
 import os
 import io
 import time
+import json
 import numpy as np
 from typing import Dict, Any, List, Optional
 from PIL import Image
@@ -36,6 +37,13 @@ class QueryCompareRequest(BaseModel):
     protected_vector: Optional[List[float]] = None
     technique: str = "truncation" # 'truncation', 'random', 'pca'
     top_k: int = 5
+    sigma: float = 0.0
+
+class AblationRunRequest(BaseModel):
+    domain: str = "all"
+    sigma: float = 0.05
+    include_1280: bool = True
+    force_rerun: bool = True
 
 
 
@@ -55,25 +63,100 @@ class InversionRunRequest(BaseModel):
 # ==============================================================================
 @router.get("/ablation/benchmark")
 def get_ablation_benchmark(
+    domain: str = Query("all"),
+    sigma: float = Query(0.05),
     force_rerun: bool = Query(False),
-    num_queries: int = Query(40),
-    num_random_trials: int = Query(10),
+    include_1280: bool = Query(True),
     current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
 ):
     """
-    Returns the complete multi-dimensionality benchmark across Truncation,
-    Random Dimension Selection (10 trials with mean/std), and PCA.
+    Returns the real multi-dimensionality ablation benchmark across actual dataset images.
+    Provides separate results for:
+      - Experiment A: Clean Dimensionality Reduction (Zero Noise)
+      - Experiment B: Calibrated Differential Noise Injection (sigma)
     """
+    if hasattr(sigma, 'default'):
+        sigma = sigma.default
+    sigma = float(sigma)
+    if hasattr(domain, 'default'):
+        domain = domain.default
+    if hasattr(force_rerun, 'default'):
+        force_rerun = force_rerun.default
+    if hasattr(include_1280, 'default'):
+        include_1280 = include_1280.default
+
     runner = AblationExperimentRunner.get_instance()
     try:
-        data = runner.run_full_study(
-            num_queries=num_queries,
-            num_random_trials=num_random_trials,
+        data = runner.run_ablation_study(
+            domain=domain,
+            sigma=sigma,
+            include_1280=include_1280,
             force_rerun=force_rerun
         )
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ablation study error: {str(e)}")
+
+
+@router.post("/ablation/run")
+def run_ablation_experiment(
+    req: AblationRunRequest,
+    current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
+):
+    """
+    Executes a fresh, reproducible dimensionality ablation experiment on the real dataset.
+    """
+    runner = AblationExperimentRunner.get_instance()
+    try:
+        data = runner.run_ablation_study(
+            domain=req.domain,
+            sigma=req.sigma,
+            include_1280=req.include_1280,
+            force_rerun=req.force_rerun
+        )
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ablation execution error: {str(e)}")
+
+
+@router.get("/ablation/export")
+def export_ablation_results(
+    format: str = Query("csv"), # 'csv' or 'json'
+    domain: str = Query("all"),
+    sigma: float = Query(0.05),
+    current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
+):
+    """
+    Exports scientifically reproducible dimensionality ablation experiment records
+    as academic CSV or JSON reports.
+    """
+    if hasattr(sigma, 'default'):
+        sigma = sigma.default
+    sigma = float(sigma)
+    if hasattr(domain, 'default'):
+        domain = domain.default
+    if hasattr(format, 'default'):
+        format = format.default
+
+    runner = AblationExperimentRunner.get_instance()
+    try:
+        data = runner.run_ablation_study(domain=domain, sigma=sigma, force_rerun=False)
+        if format.lower() == "json":
+            return Response(
+                content=json.dumps(data, indent=2),
+                media_type="application/json",
+                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}.json"'}
+            )
+        else:
+            csv_str = runner.export_csv(data)
+            return Response(
+                content=csv_str,
+                media_type="text/csv",
+                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}.csv"'}
+            )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
+
 
 
 @router.post("/ablation/query-compare")
@@ -82,42 +165,21 @@ def compare_query_across_dimensions(
     current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
 ):
     """
-    Executes a multi-dimensional retrieval query across 512, 384, 256, 128, 64-D
+    Executes a multi-dimensional retrieval query across 512, 256, 128, 64, 32, 16-D
     for a chosen query image, returning Top-K matches per dimension for visual inspection.
     """
     runner = AblationExperimentRunner.get_instance()
-    user_token = generate_signed_token(current_user["user_id"]) if current_user else ""
-
-    # Resolve query vector
-    if req.protected_vector and len(req.protected_vector) == 512:
-        q_vec = np.array(req.protected_vector, dtype=np.float32)
-    elif req.image_id:
-        img_rec = db.get_image(req.image_id)
-        if not img_rec:
-            raise HTTPException(status_code=404, detail=f"Image ID {req.image_id} not found in database.")
-        
-        # Look up vector in FAISS id_map
-        retriever = runner.evaluator.retriever
-        rev_map = {v: k for k, v in retriever.id_map.items()}
-        row_id = rev_map.get(req.image_id)
-        if row_id is None:
-            raise HTTPException(status_code=404, detail=f"Vector for {req.image_id} not indexed in FAISS.")
-        q_vec = retriever.index.reconstruct(row_id)
-    else:
-        # Default to first gallery item for demo
-        gallery_vecs, _ = runner.evaluator.get_full_gallery_embeddings()
-        q_vec = gallery_vecs[0]
-
     try:
         res = runner.compare_query_across_dimensions(
-            query_512=q_vec,
-            technique=req.technique,
+            image_id=req.image_id,
+            protected_vector=req.protected_vector,
             top_k=req.top_k,
-            user_token=user_token
+            sigma=req.sigma
         )
         return res
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Query comparison failed: {str(e)}")
+
 
 
 # ==============================================================================
