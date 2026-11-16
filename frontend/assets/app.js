@@ -1544,9 +1544,7 @@ Previous index backup preserved.`);
     // ==========================================
     // MODULE: RESEARCH & PRIVACY ANALYSIS LAB JS
     // ==========================================
-    let cachedAblationData = null;
     let cachedPrivacyData = null;
-    let currentAblationDim = 512;
     let currentAblationTech = 'truncation';
     let ablationMapChartInstance = null;
     let ablationStorageChartInstance = null;
