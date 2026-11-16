@@ -135,7 +135,7 @@
     async function exportResearchCSV(studyType = 'combined') {
       if (!checkUserRole(['admin', 'researcher', 'specialist'], 'export research benchmarks')) return;
       const url = studyType === 'ablation'
-        ? `/api/research/ablation/export?format=csv&domain=${currentAblationDomain}&sigma=${currentAblationSigma}`
+        ? `/api/research/ablation/export?format=csv&domain=${currentAblationDomain}&relevance_mode=${currentAblationRelevance}&sigma=${currentAblationSigma}`
         : `/api/research/export/csv?study_type=${studyType}`;
       await downloadBlobFile(url, `research_export_${studyType}.csv`);
     }
@@ -1588,8 +1588,9 @@ Previous index backup preserved.`);
     // RESEARCH MODULE A: DIMENSIONALITY ABLATION & RETRIEVAL ANALYSIS
     // =========================================================================
     let currentAblationDim = 512;
-    let currentAblationViewMode = 'clean'; // 'clean', 'noise', 'compare'
+    let currentAblationViewMode = 'clean'; // 'clean', 'exp_a', 'exp_b', 'compare'
     let currentAblationDomain = 'all';
+    let currentAblationRelevance = 'domain'; // 'domain', 'subtype'
     let currentAblationSigma = 0.05;
     let cachedAblationData = null;
 
@@ -1616,13 +1617,15 @@ Previous index backup preserved.`);
 
     function setAblationViewMode(mode) {
       currentAblationViewMode = mode;
+      const btnClean = document.getElementById('btnTabExpClean');
       const btnA = document.getElementById('btnTabExpA');
       const btnB = document.getElementById('btnTabExpB');
       const btnC = document.getElementById('btnTabExpCompare');
 
-      if (btnA) btnA.className = mode === 'clean' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
-      if (btnB) btnB.className = mode === 'noise' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-purple-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
-      if (btnC) btnC.className = mode === 'compare' ? 'px-3 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-600 text-white shadow-sm transition' : 'px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnClean) btnClean.className = mode === 'clean' ? 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition' : 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnA) btnA.className = mode === 'exp_a' ? 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white shadow-sm transition' : 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnB) btnB.className = mode === 'exp_b' ? 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-purple-600 text-white shadow-sm transition' : 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
+      if (btnC) btnC.className = mode === 'compare' ? 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-600 text-white shadow-sm transition' : 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition';
 
       renderAblationTable();
       updateAblationKpis();
@@ -1631,16 +1634,21 @@ Previous index backup preserved.`);
     function onAblationFilterChange() {
       const domSelect = document.getElementById('ablationDomainSelect');
       const sigSelect = document.getElementById('ablationSigmaSelect');
+      const relSelect = document.getElementById('ablationRelevanceSelect');
       if (domSelect) currentAblationDomain = domSelect.value;
       if (sigSelect) currentAblationSigma = parseFloat(sigSelect.value);
+      if (relSelect) currentAblationRelevance = relSelect.value;
 
       const relDescEl = document.getElementById('ablationRelevanceDesc');
       if (relDescEl) {
-        if (currentAblationDomain === 'all') {
-          relDescEl.innerText = "Category Match (Macro Domain)";
+        if (currentAblationRelevance === 'subtype') {
+          relDescEl.innerText = "Fine-Grained Semantic Subtype (Explicit Ground Truth)";
+          relDescEl.className = "text-emerald-400 font-semibold";
+        } else if (currentAblationDomain === 'all') {
+          relDescEl.innerText = "Domain Category Match (Macro Domain)";
           relDescEl.className = "text-emerald-400 font-semibold";
         } else {
-          relDescEl.innerText = `Subcategory Match (${currentAblationDomain.toUpperCase()})`;
+          relDescEl.innerText = `Domain Match (${currentAblationDomain.toUpperCase()})`;
           relDescEl.className = "text-cyan-400 font-semibold";
         }
       }
@@ -1662,13 +1670,14 @@ Previous index backup preserved.`);
       if (label) label.innerText = "Executing Experiment...";
       if (prog) prog.classList.remove('hidden');
       if (statusBadge) {
-        statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span><span>Running...</span>';
+        statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span><span>Running 5-Seed Trials...</span>';
         statusBadge.className = "text-xs font-bold text-cyan-400 font-mono mt-0.5 flex items-center justify-center space-x-1";
       }
 
       try {
         const payload = {
           domain: currentAblationDomain,
+          relevance_mode: currentAblationRelevance,
           sigma: currentAblationSigma,
           include_1280: true,
           force_rerun: true
@@ -1688,7 +1697,7 @@ Previous index backup preserved.`);
         renderAblationCharts();
         renderPrivacyUtilityTable();
 
-        showToast(`Experiment completed! ${cachedAblationData.queries_evaluated} queries evaluated across 7 dimensions.`);
+        showToast(`Experiment completed! 5-Seed trials evaluated with bootstrap 95% CIs across all dimensions.`);
       } catch (err) {
         console.error("Experiment execution error:", err);
         showToast("Experiment execution error: " + err.message);
@@ -1707,7 +1716,7 @@ Previous index backup preserved.`);
 
     async function loadAblationBenchmark(forceRerun = false) {
       try {
-        const url = `/api/research/ablation/benchmark?domain=${currentAblationDomain}&sigma=${currentAblationSigma}&force_rerun=${forceRerun}&include_1280=true`;
+        const url = `/api/research/ablation/benchmark?domain=${currentAblationDomain}&relevance_mode=${currentAblationRelevance}&sigma=${currentAblationSigma}&force_rerun=${forceRerun}&include_1280=true`;
         const res = await apiFetch(url, { credentials: 'omit' });
         if (!res.ok) throw new Error("Ablation benchmark fetch failed.");
         cachedAblationData = await res.json();
@@ -1731,6 +1740,8 @@ Previous index backup preserved.`);
       const qSizeEl = document.getElementById('ablation-stat-query-size');
       const dimCountEl = document.getElementById('ablation-stat-dimensions');
       const relDescEl = document.getElementById('ablationRelevanceDesc');
+      const peersMeanEl = document.getElementById('ablationPeersMean');
+      const exclZeroEl = document.getElementById('ablationExcludedZero');
 
       if (dsSizeEl && cachedAblationData.total_catalog_size) {
         dsSizeEl.innerText = `${cachedAblationData.total_catalog_size.toLocaleString()} Images`;
@@ -1744,17 +1755,32 @@ Previous index backup preserved.`);
       if (dimCountEl && cachedAblationData.dimensions_evaluated) {
         dimCountEl.innerText = `${cachedAblationData.dimensions_evaluated.length} Configurations`;
       }
-      if (relDescEl && cachedAblationData.relevance_ground_truth) {
-        relDescEl.innerText = cachedAblationData.relevance_ground_truth;
+      if (relDescEl && cachedAblationData.relevance_description) {
+        relDescEl.innerText = cachedAblationData.relevance_description;
+      }
+
+      const activeList = cachedAblationData.clean_baseline || cachedAblationData.experiment_a_clean || [];
+      if (activeList.length > 0) {
+        const item = activeList[0];
+        if (peersMeanEl && item.relevant_peers_mean !== undefined) {
+          peersMeanEl.innerText = `~${item.relevant_peers_mean} peers`;
+        }
+        if (exclZeroEl && item.queries_excluded_zero_rel !== undefined) {
+          exclZeroEl.innerText = `${item.queries_excluded_zero_rel}`;
+        }
       }
     }
 
     function updateAblationKpis() {
       if (!cachedAblationData) return;
-      const cleanList = cachedAblationData.experiment_a_clean || [];
-      const noiseList = cachedAblationData.experiment_b_noise || [];
+      const cleanList = cachedAblationData.clean_baseline || cachedAblationData.experiment_a_clean || [];
+      const expAList = cachedAblationData.exp_a_noisy_query || cachedAblationData.experiment_b_noise || [];
+      const expBList = cachedAblationData.exp_b_noisy_both || [];
 
-      const activeList = currentAblationViewMode === 'noise' ? noiseList : cleanList;
+      let activeList = cleanList;
+      if (currentAblationViewMode === 'exp_a') activeList = expAList;
+      else if (currentAblationViewMode === 'exp_b') activeList = expBList;
+
       const item = activeList.find(x => x.dimension === currentAblationDim) || activeList.find(x => x.dimension === 512) || activeList[0];
       const base512 = activeList.find(x => x.dimension === 512) || activeList[0];
 
@@ -1767,12 +1793,13 @@ Previous index backup preserved.`);
       const latEl = document.getElementById('ablation-metric-latency');
       const storEl = document.getElementById('ablation-metric-storage');
 
-      if (map10El) map10El.innerText = `${(item.map_at_10 * 100).toFixed(2)}%`;
+      const stdStr = item.map_at_10_std ? ` ± ${(item.map_at_10_std * 100).toFixed(1)}%` : '';
+      if (map10El) map10El.innerText = `${(item.map_at_10 * 100).toFixed(1)}%${stdStr}`;
       if (map10SubEl) {
-        if (item.dimension === 512) {
+        if (item.map_at_10_ci95) {
+          map10SubEl.innerText = `95% CI: [${(item.map_at_10_ci95[0]*100).toFixed(1)}%, ${(item.map_at_10_ci95[1]*100).toFixed(1)}%] • ${item.trials_evaluated || 5} Seeds`;
+        } else if (item.dimension === 512) {
           map10SubEl.innerText = "Production Keyed Base (512-D)";
-        } else if (item.dimension === 1280) {
-          map10SubEl.innerText = "Unprojected Raw Feature Baseline";
         } else {
           const delta = ((item.map_at_10 - base512.map_at_10) / base512.map_at_10) * 100;
           map10SubEl.innerText = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}% vs 512-D Base`;
@@ -1783,7 +1810,7 @@ Previous index backup preserved.`);
         p10El.innerText = `${(item.precision_at_5 * 100).toFixed(1)}% / ${(item.precision_at_10 * 100).toFixed(1)}%`;
       }
       if (r10El) {
-        r10El.innerText = `${(item.recall_at_5 * 100).toFixed(2)}% / ${(item.recall_at_10 * 100).toFixed(2)}%`;
+        r10El.innerText = `${(item.recall_at_5 * 100).toFixed(1)}% / ${(item.recall_at_10 * 100).toFixed(1)}%`;
       }
       if (latEl) {
         latEl.innerText = `${item.avg_latency_ms.toFixed(3)} ms`;
@@ -1800,20 +1827,26 @@ Previous index backup preserved.`);
       const tbody = document.getElementById('ablationBenchmarkTableBody');
       if (!tbody) return;
 
-      const cleanList = cachedAblationData.experiment_a_clean || [];
-      const noiseList = cachedAblationData.experiment_b_noise || [];
+      const cleanList = cachedAblationData.clean_baseline || cachedAblationData.experiment_a_clean || [];
+      const expAList = cachedAblationData.exp_a_noisy_query || cachedAblationData.experiment_b_noise || [];
+      const expBList = cachedAblationData.exp_b_noisy_both || [];
 
       let rowsToRender = [];
       if (currentAblationViewMode === 'clean') {
-        rowsToRender = cleanList.map(r => ({ ...r, expName: 'Exp A: Clean (Zero Noise)' }));
-      } else if (currentAblationViewMode === 'noise') {
-        rowsToRender = noiseList.map(r => ({ ...r, expName: `Exp B: Noise (σ=${r.noise_sigma || 0.05})` }));
+        rowsToRender = cleanList.map(r => ({ ...r, expName: 'Clean Baseline (Clean Q / Clean G)', badgeColor: 'text-emerald-400' }));
+      } else if (currentAblationViewMode === 'exp_a') {
+        rowsToRender = expAList.map(r => ({ ...r, expName: `Exp A: Noisy Q (σ=${(r.noise_sigma || currentAblationSigma).toFixed(2)}) / Clean G`, badgeColor: 'text-blue-400' }));
+      } else if (currentAblationViewMode === 'exp_b') {
+        rowsToRender = expBList.map(r => ({ ...r, expName: `Exp B: Noisy Q / Noisy G (σ=${(r.noise_sigma || currentAblationSigma).toFixed(2)})`, badgeColor: 'text-purple-400' }));
       } else {
-        // Comparative interleaved
+        // Comparative interleaved: Clean, Exp A, Exp B for each dimension
         cleanList.forEach((c, idx) => {
-          rowsToRender.push({ ...c, expName: 'Exp A: Clean' });
-          if (noiseList[idx]) {
-            rowsToRender.push({ ...noiseList[idx], expName: `Exp B: Noise (σ=${noiseList[idx].noise_sigma || 0.05})` });
+          rowsToRender.push({ ...c, expName: 'Clean Baseline', badgeColor: 'text-emerald-400' });
+          if (expAList[idx]) {
+            rowsToRender.push({ ...expAList[idx], expName: `Exp A (Noisy Q)`, badgeColor: 'text-blue-400' });
+          }
+          if (expBList[idx]) {
+            rowsToRender.push({ ...expBList[idx], expName: `Exp B (Noisy Q+G)`, badgeColor: 'text-purple-400' });
           }
         });
       }
@@ -1824,21 +1857,21 @@ Previous index backup preserved.`);
         const kbVec = row.storage ? row.storage.kb_per_vector : (row.dimension * 4 / 1024).toFixed(3);
         const redClass = redPct > 0 ? 'text-emerald-400' : (redPct === 0 ? 'text-slate-400' : 'text-amber-400');
         const redLabel = redPct > 0 ? `${redPct.toFixed(1)}% saved` : (redPct === 0 ? '0% (Base)' : 'Raw Baseline');
-        const isExpB = row.expName.includes('Exp B');
+        const stdMap = row.map_at_10_std ? `<span class="text-[10px] text-slate-500 block font-normal">±${(row.map_at_10_std * 100).toFixed(1)}%</span>` : '';
 
         return `
           <tr class="${isSelected ? 'bg-cyan-950/40 text-white font-bold' : 'text-slate-300 hover:bg-slate-800/40'} cursor-pointer transition" onclick="selectAblationDim(${row.dimension})">
             <td class="py-2.5 px-3 flex items-center space-x-1.5">
               ${isSelected ? '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>' : ''}
-              <span class="${isExpB ? 'text-purple-300' : 'text-cyan-300'} font-semibold">${row.expName}</span>
+              <span class="${row.badgeColor || 'text-cyan-300'} font-semibold">${row.expName}</span>
             </td>
             <td class="py-2.5 px-3 font-mono font-bold text-white">${row.dimension}-D</td>
-            <td class="py-2.5 px-3 font-mono ${isExpB ? 'text-purple-400' : 'text-slate-500'}">&sigma;=${(row.noise_sigma || 0.0).toFixed(2)}</td>
-            <td class="py-2.5 px-3 font-mono text-emerald-400">${(row.precision_at_5 * 100).toFixed(2)}%</td>
-            <td class="py-2.5 px-3 font-mono text-emerald-300 font-bold">${(row.precision_at_10 * 100).toFixed(2)}%</td>
-            <td class="py-2.5 px-3 font-mono text-slate-400">${(row.recall_at_5 * 100).toFixed(2)}%</td>
-            <td class="py-2.5 px-3 font-mono text-indigo-300">${(row.recall_at_10 * 100).toFixed(2)}%</td>
-            <td class="py-2.5 px-3 font-mono text-cyan-300 font-extrabold">${(row.map_at_10 * 100).toFixed(2)}%</td>
+            <td class="py-2.5 px-3 font-mono text-slate-400">&sigma;=${(row.noise_sigma || 0.0).toFixed(2)}</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-400">${(row.precision_at_5 * 100).toFixed(1)}%</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-300 font-bold">${(row.precision_at_10 * 100).toFixed(1)}%</td>
+            <td class="py-2.5 px-3 font-mono text-slate-400">${(row.recall_at_5 * 100).toFixed(1)}%</td>
+            <td class="py-2.5 px-3 font-mono text-indigo-300">${(row.recall_at_10 * 100).toFixed(1)}%</td>
+            <td class="py-2.5 px-3 font-mono text-cyan-300 font-extrabold">${(row.map_at_10 * 100).toFixed(1)}%${stdMap}</td>
             <td class="py-2.5 px-3 font-mono text-amber-300">${row.avg_latency_ms.toFixed(3)} ms</td>
             <td class="py-2.5 px-3 font-mono">${kbVec} KB</td>
             <td class="py-2.5 px-3 font-mono font-semibold ${redClass}">${redLabel}</td>
@@ -1849,25 +1882,30 @@ Previous index backup preserved.`);
 
     function renderAblationCharts() {
       if (!cachedAblationData) return;
-      const cleanList = cachedAblationData.experiment_a_clean || [];
-      const noiseList = cachedAblationData.experiment_b_noise || [];
+      const cleanList = cachedAblationData.clean_baseline || cachedAblationData.experiment_a_clean || [];
+      const expAList = cachedAblationData.exp_a_noisy_query || cachedAblationData.experiment_b_noise || [];
+      const expBList = cachedAblationData.exp_b_noisy_both || [];
 
       // Sort by dimension descending: 1280, 512, 256, 128, 64, 32, 16
       const sortedClean = [...cleanList].sort((a, b) => b.dimension - a.dimension);
-      const sortedNoise = [...noiseList].sort((a, b) => b.dimension - a.dimension);
+      const sortedExpA = [...expAList].sort((a, b) => b.dimension - a.dimension);
+      const sortedExpB = [...expBList].sort((a, b) => b.dimension - a.dimension);
 
       const labels = sortedClean.map(r => `${r.dimension}-D`);
       const dims = sortedClean.map(r => r.dimension);
 
       // Data arrays
-      const cleanP10 = sortedClean.map(r => (r.precision_at_10 * 100).toFixed(2));
-      const noiseP10 = sortedNoise.map(r => (r.precision_at_10 * 100).toFixed(2));
+      const cleanP10 = sortedClean.map(r => (r.precision_at_10 * 100).toFixed(1));
+      const expAP10 = sortedExpA.map(r => (r.precision_at_10 * 100).toFixed(1));
+      const expBP10 = sortedExpB.map(r => (r.precision_at_10 * 100).toFixed(1));
 
-      const cleanR10 = sortedClean.map(r => (r.recall_at_10 * 100).toFixed(2));
-      const noiseR10 = sortedNoise.map(r => (r.recall_at_10 * 100).toFixed(2));
+      const cleanR10 = sortedClean.map(r => (r.recall_at_10 * 100).toFixed(1));
+      const expAR10 = sortedExpA.map(r => (r.recall_at_10 * 100).toFixed(1));
+      const expBR10 = sortedExpB.map(r => (r.recall_at_10 * 100).toFixed(1));
 
-      const cleanMap10 = sortedClean.map(r => (r.map_at_10 * 100).toFixed(2));
-      const noiseMap10 = sortedNoise.map(r => (r.map_at_10 * 100).toFixed(2));
+      const cleanMap10 = sortedClean.map(r => (r.map_at_10 * 100).toFixed(1));
+      const expAMap10 = sortedExpA.map(r => (r.map_at_10 * 100).toFixed(1));
+      const expBMap10 = sortedExpB.map(r => (r.map_at_10 * 100).toFixed(1));
 
       const cleanLat = sortedClean.map(r => r.avg_latency_ms.toFixed(3));
       const storKb = sortedClean.map(r => r.storage ? r.storage.kb_per_vector : (r.dimension * 4 / 1024).toFixed(3));
@@ -1902,7 +1940,7 @@ Previous index backup preserved.`);
             labels: labels,
             datasets: [
               {
-                label: 'Experiment A: Clean (Zero Noise)',
+                label: 'Clean Baseline (Clean Q / Clean G)',
                 data: cleanP10,
                 borderColor: '#10b981',
                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -1912,8 +1950,18 @@ Previous index backup preserved.`);
                 tension: 0.25
               },
               {
-                label: `Experiment B: Noise (σ=${currentAblationSigma})`,
-                data: noiseP10,
+                label: `Exp A: Noisy Q / Clean G (σ=${currentAblationSigma})`,
+                data: expAP10,
+                borderColor: '#06b6d4',
+                backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: '#06b6d4',
+                tension: 0.25
+              },
+              {
+                label: `Exp B: Noisy Q / Noisy G (σ=${currentAblationSigma})`,
+                data: expBP10,
                 borderColor: '#c084fc',
                 backgroundColor: 'rgba(192, 132, 252, 0.1)',
                 borderWidth: 2,
@@ -1933,9 +1981,10 @@ Previous index backup preserved.`);
           panelP10.innerHTML = sortedClean.map((r, i) => `
             <div class="flex items-center justify-between py-1 border-b border-slate-900">
               <span class="text-slate-400 font-bold">${r.dimension}-D</span>
-              <div class="space-x-2">
+              <div class="space-x-1.5 text-[11px]">
                 <span class="text-emerald-400 font-bold">${cleanP10[i]}%</span>
-                <span class="text-purple-300">/ ${noiseP10[i]}%</span>
+                <span class="text-cyan-300">/ ${expAP10[i] || '--'}%</span>
+                <span class="text-purple-300">/ ${expBP10[i] || '--'}%</span>
               </div>
             </div>
           `).join('');
@@ -1952,24 +2001,34 @@ Previous index backup preserved.`);
             labels: labels,
             datasets: [
               {
-                label: 'Experiment A: Clean (Zero Noise)',
+                label: 'Clean Baseline (Clean Q / Clean G)',
                 data: cleanR10,
-                borderColor: '#6366f1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
                 borderWidth: 2.5,
                 pointRadius: 4,
-                pointBackgroundColor: '#6366f1',
+                pointBackgroundColor: '#10b981',
                 tension: 0.25
               },
               {
-                label: `Experiment B: Noise (σ=${currentAblationSigma})`,
-                data: noiseR10,
-                borderColor: '#e879f9',
-                backgroundColor: 'rgba(232, 121, 249, 0.1)',
+                label: `Exp A: Noisy Q / Clean G (σ=${currentAblationSigma})`,
+                data: expAR10,
+                borderColor: '#06b6d4',
+                backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: '#06b6d4',
+                tension: 0.25
+              },
+              {
+                label: `Exp B: Noisy Q / Noisy G (σ=${currentAblationSigma})`,
+                data: expBR10,
+                borderColor: '#c084fc',
+                backgroundColor: 'rgba(192, 132, 252, 0.1)',
                 borderWidth: 2,
                 borderDash: [5, 4],
                 pointRadius: 4,
-                pointBackgroundColor: '#e879f9',
+                pointBackgroundColor: '#c084fc',
                 tension: 0.25
               }
             ]
@@ -1982,9 +2041,10 @@ Previous index backup preserved.`);
           panelR10.innerHTML = sortedClean.map((r, i) => `
             <div class="flex items-center justify-between py-1 border-b border-slate-900">
               <span class="text-slate-400 font-bold">${r.dimension}-D</span>
-              <div class="space-x-2">
-                <span class="text-indigo-400 font-bold">${cleanR10[i]}%</span>
-                <span class="text-purple-300">/ ${noiseR10[i]}%</span>
+              <div class="space-x-1.5 text-[11px]">
+                <span class="text-emerald-400 font-bold">${cleanR10[i]}%</span>
+                <span class="text-cyan-300">/ ${expAR10[i] || '--'}%</span>
+                <span class="text-purple-300">/ ${expBR10[i] || '--'}%</span>
               </div>
             </div>
           `).join('');
@@ -2001,24 +2061,34 @@ Previous index backup preserved.`);
             labels: labels,
             datasets: [
               {
-                label: 'Experiment A: Clean mAP@10',
+                label: 'Clean Baseline (Clean Q / Clean G)',
                 data: cleanMap10,
-                borderColor: '#06b6d4',
-                backgroundColor: 'rgba(6, 182, 212, 0.12)',
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
                 borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: '#10b981',
+                tension: 0.25
+              },
+              {
+                label: `Exp A: Noisy Q / Clean G (σ=${currentAblationSigma})`,
+                data: expAMap10,
+                borderColor: '#06b6d4',
+                backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                borderWidth: 2,
                 pointRadius: 4,
                 pointBackgroundColor: '#06b6d4',
                 tension: 0.25
               },
               {
-                label: `Experiment B: Noise mAP@10 (σ=${currentAblationSigma})`,
-                data: noiseMap10,
-                borderColor: '#ec4899',
-                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                label: `Exp B: Noisy Q / Noisy G (σ=${currentAblationSigma})`,
+                data: expBMap10,
+                borderColor: '#c084fc',
+                backgroundColor: 'rgba(192, 132, 252, 0.1)',
                 borderWidth: 2,
                 borderDash: [5, 4],
                 pointRadius: 4,
-                pointBackgroundColor: '#ec4899',
+                pointBackgroundColor: '#c084fc',
                 tension: 0.25
               }
             ]
@@ -2031,9 +2101,10 @@ Previous index backup preserved.`);
           panelMap.innerHTML = sortedClean.map((r, i) => `
             <div class="flex items-center justify-between py-1 border-b border-slate-900">
               <span class="text-slate-400 font-bold">${r.dimension}-D</span>
-              <div class="space-x-2">
-                <span class="text-cyan-400 font-bold">${cleanMap10[i]}%</span>
-                <span class="text-pink-400">/ ${noiseMap10[i]}%</span>
+              <div class="space-x-1.5 text-[11px]">
+                <span class="text-emerald-400 font-bold">${cleanMap10[i]}%</span>
+                <span class="text-cyan-300">/ ${expAMap10[i] || '--'}%</span>
+                <span class="text-purple-300">/ ${expBMap10[i] || '--'}%</span>
               </div>
             </div>
           `).join('');
@@ -2223,7 +2294,7 @@ Previous index backup preserved.`);
 
     async function exportAblationJSON() {
       try {
-        const url = `/api/research/ablation/export?format=json&domain=${currentAblationDomain}&sigma=${currentAblationSigma}`;
+        const url = `/api/research/ablation/export?format=json&domain=${currentAblationDomain}&relevance_mode=${currentAblationRelevance}&sigma=${currentAblationSigma}`;
         window.location.href = url;
         showToast("Exporting JSON experiment record...");
       } catch (err) {

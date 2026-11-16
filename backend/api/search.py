@@ -1,3 +1,4 @@
+import os
 import io
 import time
 from typing import Optional, List, Dict, Any
@@ -32,6 +33,7 @@ async def process_image_locally(
     strip_metadata: bool = Form(True),
     sigma: float = Form(0.05),
     apply_noise: bool = Form(True),
+    include_debug_vectors: bool = Form(False),
     current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
 ):
     """
@@ -112,7 +114,7 @@ async def process_image_locally(
         image_bytes=contents
     )
     
-    return {
+    response_payload = {
         "status": "success",
         "detected_domain": domain_info["domain"],
         "detected_domain_display": domain_info["display_name"],
@@ -135,8 +137,6 @@ async def process_image_locally(
             }
         },
         "protected_vector": vector_list,
-        "original_vector": clean_list,
-        "delta_vector": delta_list,
         "vector_sample_preview": [round(v, 4) for v in vector_list[:12]],
         "clean_sample_preview": [round(v, 4) for v in clean_list[:12]],
         "delta_sample_preview": [round(v, 4) for v in delta_list[:12]],
@@ -151,6 +151,15 @@ async def process_image_locally(
         "vector_barcode": barcode_str,
         "zero_pixel_invariant": "Original image pixels retained in volatile client memory only"
     }
+
+    # Section 7 Security Requirement: Do not expose unperturbed original feature vectors or delta vectors
+    # across the network interface in production or normal operation.
+    env = os.getenv("ENVIRONMENT", "development").lower()
+    if include_debug_vectors and env != "production":
+        response_payload["original_vector"] = clean_list
+        response_payload["delta_vector"] = delta_list
+
+    return response_payload
 
 @router.post("/search/content-free-query")
 async def execute_content_free_search(

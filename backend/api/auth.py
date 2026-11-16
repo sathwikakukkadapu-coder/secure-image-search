@@ -1,3 +1,4 @@
+import os
 import time
 import hmac
 import hashlib
@@ -46,6 +47,42 @@ def verify_signed_token(token_str: str) -> Optional[str]:
         if hmac.compare_digest(expected_sig, parts[3]):
             return user_id
     return None
+
+def get_current_user(
+    authorization: Optional[str] = Header(None),
+    token: Optional[str] = Query(None)
+) -> Optional[Dict[str, Any]]:
+    """
+    Extracts and cryptographically validates the active user identity.
+    Accepts token via Authorization Header (Bearer ...) or Query param (?token=...).
+    Enforces HMAC-SHA256 signature verification to prevent client-side user ID tampering / impersonation.
+    Raw user-ID token fallback is removed in standard and production operation.
+    """
+    raw_token = None
+    if authorization and isinstance(authorization, str):
+        raw_token = authorization.replace("Bearer ", "").replace("bearer_", "").strip()
+    elif token and isinstance(token, str):
+        raw_token = token.replace("Bearer ", "").replace("bearer_", "").strip()
+
+    if not raw_token:
+        return db.get_user_by_id("USR_GST_99")
+        
+    # 1. Cryptographically signed token check
+    verified_uid = verify_signed_token(raw_token)
+    if verified_uid:
+        user = db.get_user_by_id(verified_uid)
+        if user:
+            return user
+
+    # 2. Strict check: Raw user-ID token fallback is disabled by default.
+    # Only allow raw token fallback if explicitly enabled for legacy test automation:
+    if os.environ.get("ALLOW_TEST_TOKENS") == "1":
+        user = db.get_user_by_id(raw_token)
+        if user:
+            return user
+        
+    # Default to Guest if token cannot be verified
+    return db.get_user_by_id("USR_GST_99")
 
 class LoginRequest(BaseModel):
     email: str
@@ -105,6 +142,24 @@ class DemoSwitchRequest(BaseModel):
 def demo_switch_user(req: DemoSwitchRequest, request: Request = None):
     """Generates a verified session token for switching active demo roles."""
     ip_addr = request.client.host if request and request.client else "127.0.0.1"
+    
+    # Security Control: Disable unauthenticated role switching in production mode
+    env_mode = os.environ.get("ENVIRONMENT", os.environ.get("SECUREIMAGE_ENV", "development")).lower()
+    if env_mode == "production":
+        db.log_audit(
+            req.user_id,
+            "ROLE_SWITCH",
+            "BLOCKED",
+            "Demo role switching is disabled in production mode",
+            category="AUTHENTICATION",
+            severity="WARN",
+            ip_address=ip_addr
+        )
+        raise HTTPException(
+            status_code=403,
+            detail="Demo role switching is disabled in production mode. Please authenticate via /api/auth/login with valid credentials."
+        )
+
     user = db.get_user_by_id(req.user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User account not found.")
@@ -128,48 +183,19 @@ def demo_switch_user(req: DemoSwitchRequest, request: Request = None):
     }
 
 @router.get("/users")
-def list_demo_users():
-    """Provides user accounts for quick testing and demonstration."""
+def list_demo_users(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)):
+    """Provides user accounts with role-based visibility controls."""
+    env_mode = os.environ.get("ENVIRONMENT", os.environ.get("SECUREIMAGE_ENV", "development")).lower()
+    if env_mode == "production":
+        if not current_user or current_user.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="User catalog is restricted to administrators in production.")
+
     conn = db.get_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id, name, email, role FROM users")
     rows = cur.fetchall()
     conn.close()
     return [dict(r) for r in rows]
-
-def get_current_user(
-    authorization: Optional[str] = Header(None),
-    token: Optional[str] = Query(None)
-) -> Optional[Dict[str, Any]]:
-    """
-    Extracts and cryptographically validates the active user identity.
-    Accepts token via Authorization Header (Bearer ...) or Query param (?token=...).
-    Prevents client-side user ID tampering / impersonation.
-    Supports backward compatibility for test suites with 'Bearer USR_...' tokens.
-    """
-    raw_token = None
-    if authorization and isinstance(authorization, str):
-        raw_token = authorization.replace("Bearer ", "").replace("bearer_", "").strip()
-    elif token and isinstance(token, str):
-        raw_token = token.replace("Bearer ", "").replace("bearer_", "").strip()
-
-    if not raw_token:
-        return db.get_user_by_id("USR_GST_99")
-        
-    # 1. Cryptographically signed token check
-    verified_uid = verify_signed_token(raw_token)
-    if verified_uid:
-        user = db.get_user_by_id(verified_uid)
-        if user:
-            return user
-
-    # 2. Backward compatibility for legacy test suite or explicit user IDs
-    user = db.get_user_by_id(raw_token)
-    if user:
-        return user
-        
-    # Default to Guest if token cannot be verified
-    return db.get_user_by_id("USR_GST_99")
 
 def require_authenticated(current_user: Optional[Dict[str, Any]] = Depends(get_current_user)) -> Dict[str, Any]:
     if not current_user or current_user.get("user_id") == "USR_GST_99":

@@ -2389,9 +2389,17 @@
               </div>
 
               <div class="flex items-center space-x-2">
+                <span class="text-xs font-mono text-slate-400">Relevance Rule:</span>
+                <select id="ablationRelevanceSelect" onchange="onAblationFilterChange()" class="bg-slate-900 border border-slate-700 text-xs text-emerald-300 font-bold px-3 py-1.5 rounded-lg focus:outline-none focus:border-emerald-500">
+                  <option value="domain">Domain-Level (Medical, Biometrics, Vehicles, Nature)</option>
+                  <option value="subtype">Fine-Grained Subtype (X-Ray, CT, MRI, Face, Iris...)</option>
+                </select>
+              </div>
+
+              <div class="flex items-center space-x-2">
                 <span class="text-xs font-mono text-slate-400">Noise Sigma (&sigma;):</span>
                 <select id="ablationSigmaSelect" onchange="onAblationFilterChange()" class="bg-slate-900 border border-slate-700 text-xs text-purple-300 font-mono font-bold px-3 py-1.5 rounded-lg focus:outline-none focus:border-purple-500">
-                  <option value="0.05">&sigma; = 0.05 (Default Differential Noise)</option>
+                  <option value="0.05">&sigma; = 0.05 (Default Additive Gaussian)</option>
                   <option value="0.02">&sigma; = 0.02 (Low Noise)</option>
                   <option value="0.10">&sigma; = 0.10 (Moderate Noise)</option>
                   <option value="0.20">&sigma; = 0.20 (High Noise)</option>
@@ -2400,9 +2408,14 @@
               </div>
             </div>
 
-            <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
-              <span>Ground Truth:</span>
-              <span id="ablationRelevanceDesc" class="text-emerald-400 font-semibold">Category Match (Macro Domain)</span>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-xs font-mono text-slate-400">
+              <div class="flex items-center space-x-1.5">
+                <span>Ground Truth:</span>
+                <span id="ablationRelevanceDesc" class="text-emerald-400 font-semibold">Domain Category Match</span>
+              </div>
+              <div id="ablationPeerStatsBadge" class="text-[11px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                Peers: <span id="ablationPeersMean" class="text-cyan-300 font-bold">--</span> | Excluded: <span id="ablationExcludedZero" class="text-amber-400 font-bold">0</span>
+              </div>
             </div>
           </div>
 
@@ -2501,14 +2514,17 @@
 
             <!-- Experiment Toggle Pills -->
             <div class="flex items-center space-x-1.5 p-1 rounded-xl bg-slate-900 border border-slate-800">
-              <button id="btnTabExpA" onclick="setAblationViewMode('clean')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition">
-                Exp A: Clean (No Noise)
+              <button id="btnTabExpClean" onclick="setAblationViewMode('clean')" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-600 text-white shadow-sm transition">
+                Clean Baseline
               </button>
-              <button id="btnTabExpB" onclick="setAblationViewMode('noise')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
-                Exp B: Noise (&sigma;=0.05)
+              <button id="btnTabExpA" onclick="setAblationViewMode('exp_a')" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
+                Exp A: Noisy Q / Clean G
               </button>
-              <button id="btnTabExpCompare" onclick="setAblationViewMode('compare')" class="px-3 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
-                Comparative View
+              <button id="btnTabExpB" onclick="setAblationViewMode('exp_b')" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
+                Exp B: Noisy Q / Noisy G
+              </button>
+              <button id="btnTabExpCompare" onclick="setAblationViewMode('compare')" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-slate-400 hover:text-white transition">
+                All 3 Compared
               </button>
             </div>
           </div>

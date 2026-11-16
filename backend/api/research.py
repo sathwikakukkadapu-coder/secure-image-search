@@ -41,6 +41,7 @@ class QueryCompareRequest(BaseModel):
 
 class AblationRunRequest(BaseModel):
     domain: str = "all"
+    relevance_mode: str = "domain" # "domain" or "subtype"
     sigma: float = 0.05
     include_1280: bool = True
     force_rerun: bool = True
@@ -64,6 +65,7 @@ class InversionRunRequest(BaseModel):
 @router.get("/ablation/benchmark")
 def get_ablation_benchmark(
     domain: str = Query("all"),
+    relevance_mode: str = Query("domain"),
     sigma: float = Query(0.05),
     force_rerun: bool = Query(False),
     include_1280: bool = Query(True),
@@ -72,14 +74,17 @@ def get_ablation_benchmark(
     """
     Returns the real multi-dimensionality ablation benchmark across actual dataset images.
     Provides separate results for:
-      - Experiment A: Clean Dimensionality Reduction (Zero Noise)
-      - Experiment B: Calibrated Differential Noise Injection (sigma)
+      - Clean Baseline: Clean Query vs Clean Gallery
+      - Experiment A: Noisy Query vs Clean Gallery (Additive Gaussian noise on query)
+      - Experiment B: Noisy Query vs Noisy Gallery (Independent Gaussian noise on both)
     """
     if hasattr(sigma, 'default'):
         sigma = sigma.default
     sigma = float(sigma)
     if hasattr(domain, 'default'):
         domain = domain.default
+    if hasattr(relevance_mode, 'default'):
+        relevance_mode = relevance_mode.default
     if hasattr(force_rerun, 'default'):
         force_rerun = force_rerun.default
     if hasattr(include_1280, 'default'):
@@ -89,6 +94,7 @@ def get_ablation_benchmark(
     try:
         data = runner.run_ablation_study(
             domain=domain,
+            relevance_mode=relevance_mode,
             sigma=sigma,
             include_1280=include_1280,
             force_rerun=force_rerun
@@ -110,6 +116,7 @@ def run_ablation_experiment(
     try:
         data = runner.run_ablation_study(
             domain=req.domain,
+            relevance_mode=req.relevance_mode,
             sigma=req.sigma,
             include_1280=req.include_1280,
             force_rerun=req.force_rerun
@@ -123,6 +130,7 @@ def run_ablation_experiment(
 def export_ablation_results(
     format: str = Query("csv"), # 'csv' or 'json'
     domain: str = Query("all"),
+    relevance_mode: str = Query("domain"),
     sigma: float = Query(0.05),
     current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
 ):
@@ -135,24 +143,26 @@ def export_ablation_results(
     sigma = float(sigma)
     if hasattr(domain, 'default'):
         domain = domain.default
+    if hasattr(relevance_mode, 'default'):
+        relevance_mode = relevance_mode.default
     if hasattr(format, 'default'):
         format = format.default
 
     runner = AblationExperimentRunner.get_instance()
     try:
-        data = runner.run_ablation_study(domain=domain, sigma=sigma, force_rerun=False)
+        data = runner.run_ablation_study(domain=domain, relevance_mode=relevance_mode, sigma=sigma, force_rerun=False)
         if format.lower() == "json":
             return Response(
                 content=json.dumps(data, indent=2),
                 media_type="application/json",
-                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}.json"'}
+                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}_{relevance_mode}.json"'}
             )
         else:
             csv_str = runner.export_csv(data)
             return Response(
                 content=csv_str,
                 media_type="text/csv",
-                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}.csv"'}
+                headers={"Content-Disposition": f'attachment; filename="ablation_benchmark_{domain}_{relevance_mode}.csv"'}
             )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")

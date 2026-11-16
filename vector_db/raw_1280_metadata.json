@@ -1,0 +1,12 @@
+{
+  "model_name": "mobilenet_v3_large",
+  "feature_dim": 1280,
+  "total_images": 1035,
+  "preprocessing_version": "v2.5.0-imagenet-224x224-bicubic",
+  "matrix_sha256": "d612f12dfa121e5ea467336bc645df59b14eeffd5ed29c63636b70acd13198c0",
+  "id_map_sha256": "9816ff3dfa605d6d6a276bf14adf68ba2d9034ff9e14e064a22c2e9db1c5b316",
+  "is_finite": true,
+  "row_alignment_verified": true,
+  "image_id_count": 1035,
+  "created_at": "2026-11-15T21:26:00Z"
+}
